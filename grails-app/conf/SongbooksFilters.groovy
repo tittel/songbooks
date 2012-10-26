@@ -10,9 +10,11 @@ class SongbooksFilters {
 
 		httpsProtocol(uri:"/**") {
 			before = {
-				if (Environment.currentEnvironment == Environment.PRODUCTION && request.requestURL.toString().startsWith("http://")) {
-					response.sendRedirect(request.requestURL.replaceAll("^http://", "https://"))
-					return false
+				if (Environment.currentEnvironment == Environment.PRODUCTION) {
+					if (request.requestURL.toString().startsWith("http://")) {
+						response.sendRedirect(request.requestURL.replaceAll("^http://", "https://"))
+						return false
+					}
 				}
 				return true
 			}
