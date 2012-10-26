@@ -1,12 +1,26 @@
 import grails.converters.JSON
 import grails.converters.XML
+import grails.util.Environment
 
 class SongbooksFilters {
 	def USERNAME = "foo"
 	def PASSWORD = "bar"
 
 	def filters = {
-		httpAuth(uri:"/**") {
+
+		httpsProtocol(uri:"/**") {
+			before = {
+				if (Environment.currentEnvironment == Environment.PRODUCTION && !request.secure) {
+					if (!request.secure) {
+						response.sendRedirect(request.requestURL.replaceAll("^http://", "https://"))
+						return false
+					}
+				}
+				return true
+			}
+		}
+
+		basicAuth(uri:"/**") {
 			before = {
 				def authHeader = request.getHeader('Authorization')
 				if (authHeader) {
