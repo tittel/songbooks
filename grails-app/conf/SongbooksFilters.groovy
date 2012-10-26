@@ -7,18 +7,6 @@ class SongbooksFilters {
 	def PASSWORD = "bar"
 
 	def filters = {
-
-		httpsProtocol(uri:"/**") {
-			before = {
-				if (Environment.currentEnvironment == Environment.PRODUCTION && !request.secure) {
-					log.error request.requestURL.toString()
-//					response.sendRedirect(request.requestURL.replaceAll("^http://", "https://"))
-					return false
-				}
-				return true
-			}
-		}
-
 		basicAuth(uri:"/**") {
 			before = {
 				def authHeader = request.getHeader('Authorization')
