@@ -9,16 +9,19 @@ class SongbooksFilters {
 	def filters = {
 		basicAuth(uri:"/**") {
 			before = {
-				def authHeader = request.getHeader('Authorization')
-				if (authHeader) {
-					def usernamePassword = new String(authHeader.split(' ')[1].decodeBase64())
-					if (usernamePassword == "$USERNAME:$PASSWORD") {
-						return true
+				if (Environment.currentEnvironment == Environment.PRODUCTION) {
+					def authHeader = request.getHeader('Authorization')
+					if (authHeader) {
+						def usernamePassword = new String(authHeader.split(' ')[1].decodeBase64())
+						if (usernamePassword == "$USERNAME:$PASSWORD") {
+							return true
+						}
 					}
+					response.setHeader('WWW-Authenticate', 'basic realm="songbooks"')
+					response.sendError(response.SC_UNAUTHORIZED)
+					return false
 				}
-				response.setHeader('WWW-Authenticate', 'basic realm="songbooks"')
-				response.sendError(response.SC_UNAUTHORIZED)
-				return false
+				return true
 			}
 		}
 		jsonFormat(controller: 'DISABLED', action: '*', search: true) {
