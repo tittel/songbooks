@@ -1,7 +1,7 @@
 define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/search-template.html' ], function($, _, Backbone, state, searchTemplate) {
 	var SearchView = Backbone.View.extend({
 		initialize : function() {
-			_.bindAll(this, "render", "textEntered", "delayedSearch", "queryChanged"); // remember: every function that uses 'this' as the current object should be in here
+			_.bindAll(this, "render", "textEntered", "delayedSearch", "queryChanged");
 	        state.bind("change:query", this.queryChanged);
 	        this.render();
 	    },

@@ -8,7 +8,7 @@ define([ 'Underscore', 'Backbone' ], function(_, Backbone) {
 		initialize : function() {
 		},
 		url: function() {
-			return "songbooks/" + this.id + ".json";
+			return "api/songbook/" + this.id + ".json";
 		}
 	});
 	return SongbookModel;

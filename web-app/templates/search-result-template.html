@@ -7,7 +7,7 @@
 	</div>
 	<% _.each(songs, function(song) { %>
 	<div class="hit">
-		<a href="songs/<%= song.get('id') %>"><%= song.get("name") || "NO NAME" %></a>
+		<a href="song/<%= song.get('id') %>"><%= song.get("name") || "NO NAME" %></a>
 		<div class="author"><%= song.get("author") || "NO AUTHOR" %></div>
 		<div class="fragment"><%= song.get("fragment") %></div>
 	</div>

@@ -12,7 +12,8 @@ class SongController {
 		if (song.save(flush:true)) {
 			flash.message = message(code: 'default.created.message', args: [message(code: 'song.label', default: 'Song'), song.id])
 			response.setHeader("Location", createLink(controller:"") + "/api/song/" + song.id)
-			render(status: 201)
+			//render(status: 201)
+			response.redirect(status:201, url:createLink(controller:"") + "/api/song/" + song.id)
 		}
 		else {
 			render(status: 403, text: "Could not create new Song due to errors:\n ${song.errors}")
@@ -42,8 +43,11 @@ class SongController {
 				render flash as JSON
 			}
 			else {
-				song.properties = params
-		
+				song.properties = request.JSON
+				
+				println "incoming text -> " + request.JSON
+				println "updated text -> " + song.text
+				
 				if (song.save(flush: true)) {
 					render(status:204)
 				}

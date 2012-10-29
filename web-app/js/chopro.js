@@ -21,7 +21,9 @@ function choproToHtml($, source) {
     // replace eot
     source = source.replace(/\s*{(eot|end_of_tabs)}\s*/g, "\n</pre>\n\n");
     // replace comments
-    source = source.replace(/{(c|comment):(.*?)}/g, "\n\n<div class='comment'>$2</div>\n\n");
+    source = source.replace(/{(c|comment|ci):(.*?)}/g, "\n\n<div class='comment'>$2</div>\n\n");
+    // replace chord definitions
+    source = source.replace(/{define[:]?(.*?)}/g, "\n\n<div class='chord-definition'>$1</div>\n\n");
     
     var $source = $("<div class='songview'>" + source + "</div>");
     
@@ -56,6 +58,11 @@ function choproToHtml($, source) {
         	}
     	});
     });
+    
+    // create chord definitions
+    $(".chord-definition", $source).each(function() {
+    	$(this).html(createChordImage($, $(this).text().trim()));
+    });
     return $source;
 }
 
@@ -75,8 +82,6 @@ function createCells($, line) {
 		cells = line;
 	}
 	else {
-//		console.log(split);
-
 		var chords = "";
 		var lyrics = "";
 		var lastAddedWasChord = split[0].length > 0 && "[" == split[0][0];
@@ -104,4 +109,87 @@ function createCells($, line) {
 		cells = "<div class='chords'>" + chords + "</div>" + (lyrics.length > 0 ? "<div class='lyrics'>" + lyrics + "</div>" : ""); 
 	}
 	return cells;
+}
+
+function createChordImage($, def) {
+	var svg = "";
+	// collapse white space
+	def = def.replace(/\s+/g, " ");
+	var split = def.split(" ");
+	var name = null, offset = null, frets = null;
+	if (split.length === 10 && "base-fret" === split[1] && "frets" === split[3]) {
+		name = split[0];
+		offset = parseInt(split[2]);
+		frets = split.slice(4);
+	}
+	else if (split.length === 8) {
+		name = split[0];
+		offset = parseInt(split[1]);
+		frets = split.slice(2).reverse();
+	}
+	if (name && name.length > 0 && !isNaN(offset) && frets && frets.length === 6) {
+		var clampAtFret = 26;
+		var maxFret = 0;
+		$.each(frets, function (index, value) {
+			var pos = parseInt(value);
+			if (!isNaN(pos) ) {
+				// robustness: clamp fret value to some maximum (else we could be drawing endlessly)
+				if (pos > clampAtFret) {
+					pos = clampAtFret;
+					frets[index] = pos;
+				}
+				if (pos > maxFret) {
+					maxFret = pos;
+				}
+			}
+		});
+		maxFret++;
+
+		var numVerticalLines = 6;
+		var numHorizontalLines = Math.max(maxFret, 4) + 1;
+		
+		var w = 80;
+		var h = 1.6 * w;
+		var strokeWidth = 2;
+		var nameFontsize = 0.2 * w;
+		var offsetFontsize = 0.14 * w;
+		var topFretFontsize = 0.13 * w;
+		var padding = { top:1.4 * nameFontsize + topFretFontsize, right:0.5 * topFretFontsize, bottom:strokeWidth/2, left:offsetFontsize * 1.5 };
+		var fretDiff = (h - padding.top - padding.bottom) / (numHorizontalLines - 1);
+		var radius = 0.5 * topFretFontsize;
+
+		svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>";
+		// draw chord name
+		svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>";
+		// chord offset
+		if (!isNaN(offset) && offset > 0) {
+			svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='text-anchor:end; font-size:" + offsetFontsize + "px; font-weight:bold'>" + offset + "</text>";
+		}
+		
+		// draw chord positions (circles and top fret notations)
+		$.each(frets, function (index, value) {
+			var fret = parseInt(value);
+			var x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)));
+			if (isNaN(fret) || fret < 0) {
+				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>\u274C</text>";
+			}
+			else if (0 === fret) {
+				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />";
+			}
+			else {
+				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.35 * fretDiff + fret * fretDiff) + "' r='" + radius + "' fill='black' />";
+			}
+		});
+		// draw grid
+		for (var i = 0; i < numHorizontalLines; i++) {
+			var y = padding.top + i * fretDiff;
+			svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>";
+		}
+		for (var i = 0; i < numVerticalLines; i++) {
+			var x = padding.left + i * ((w - padding.left - padding.right) / (numVerticalLines - 1));
+			svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>";
+		}
+		svg += "</svg>";
+	}
+	return svg;
 }

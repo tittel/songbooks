@@ -19,7 +19,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 
 						// if exactly one song in results, directly display it
 						if (songs.models.length == 1) {
-							Backbone.history.navigate("songs/" + songs.models[0].id, true);
+							Backbone.history.navigate("song/" + songs.models[0].id, true);
 						}
 						else {
 							var compiledTemplate = _.template(searchListTemplate, { songs : songs.models, _ : _ });
@@ -36,7 +36,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 			queryChanged : function() {
 				console.log("query changed");
 				if (state.get("query").length > 0) {
-					Backbone.history.navigate(this.collection.url().replace(".json", ""), {trigger:true});
+					Backbone.history.navigate(this.collection.url().replace(".json", "").replace("api/", ""), {trigger:true});
 				}
 			},
 			songbookChanged : function() {

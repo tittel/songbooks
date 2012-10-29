@@ -6,8 +6,8 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			},
 			routes : {
 				'search*params' : 'searchAction',
-				'songs/:songId' : 'songsAction',
-				'songbooks/:songbookId' : 'songbooksAction',
+				'song/:songId' : 'songsAction',
+				'songbook/:songbookId' : 'songbooksAction',
 				'' : 'homeAction',
 				'*actions' : 'defaultAction'
 			},
@@ -77,7 +77,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			Backbone.emulateJSON = false;
 			Backbone.emulateHTTP = false;
 			Backbone.history = Backbone.history || new Backbone.History({});
-			Backbone.history.start({pushState:true, root:"/songbooks"});
+			Backbone.history.start({pushState:true, root:contextPath});
 			r.captureLinks();
 		};
 		return {
