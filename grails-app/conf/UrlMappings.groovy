@@ -1,3 +1,5 @@
+import org.apache.jasper.compiler.Node.ParamsAction;
+
 class UrlMappings {
 	static mappings = {
 		"/api/$controller" {
@@ -5,6 +7,14 @@ class UrlMappings {
 		}
 		"/api/$controller/$id" {
 			action = [GET: "show", PUT: "update", DELETE: "delete", POST: "save"]
+		}
+		"/api/songbook/$id/song" {
+			controller = "songbook"
+			action = [GET:"listSong", POST:"createSong"]
+		}
+		"/api/songbook/$id/song/$songId" {
+			controller = "songbook"
+			action = [DELETE:"deleteSong"]
 		}
 		"/import" {
 			controller = "import"
@@ -21,6 +31,7 @@ class UrlMappings {
         }
 */		
 		"/"(view:"/index")
+		"/info"(view:"/info")
 		"500"(view:'/error')
 	}
 }

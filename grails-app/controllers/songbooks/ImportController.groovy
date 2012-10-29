@@ -25,7 +25,7 @@ class ImportController {
 						importedSongs << importSong(text)
 					}
 					catch(e) {
-						log.error e
+						log.warn e
 					}
                 }
                 zipentry = stream.getNextEntry();
@@ -36,7 +36,7 @@ class ImportController {
 				importedSongs << importSong(uploadedFile.inputStream.text)
 			}
 			catch(e) {
-				log.error e
+				log.warn e
 			}
 		}
 		[importedSongs:importedSongs]
@@ -50,9 +50,11 @@ class ImportController {
 			song.id = m[0][1]
 		}
 */
+/*		
 		if (Song.get(song)) {
 			song.text = text
 		}
+*/
 		song.save(flush:true)
 		return song
 	}
