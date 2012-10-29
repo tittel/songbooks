@@ -10,6 +10,9 @@ class Song {
 		author blank:false
 		text blank:false
 	}
+	static mapping = {
+		text type:"text"
+	}
 
 	String name
 	String author
