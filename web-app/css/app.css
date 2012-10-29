@@ -1,0 +1,69 @@
+html { font-family:sans-serif }
+h1, h2 { color:#555 }
+/*h1 + h2 { margin-top:-0.6em }*/
+h2 { font-size:1.2em }
+a { color:blue }
+
+#page { min-width:1000px }
+
+#toolbar-container { display:table; width:100%; font-size:20px; margin-bottom:1em; height:3em; padding:0 0.3em }
+#toolbar { display:table-row }
+#toolbar > * { display:table-cell; text-align:center; vertical-align:middle }
+#toolbar .slider { padding:0 0.8em; width:8em }
+#toolbar .slider .value { margin-bottom:0.8em; font-size:11px }
+#toolbar #select-songbook-container { font-size:11px }
+.query { border:1px solid #555; font-size:1.8em }
+
+#message { position:fixed; top:5px; right:5px; width:10em }
+.message { padding:0.5em; margin-bottom:1em }
+
+#content { clear:both; position:relative; font-size:20px }
+
+#home { text-align:center }
+#home #logo { margin:0.4em 0; font-size:6em; color:#555; font-variant:small-caps }
+
+#searchresult .stats { font-size:0.5em; color:#999; margin-bottom:5px }
+#searchresult .hit { padding-bottom:0.5em }
+#searchresult .hit .author { color:#5A5; font-size:0.7em }
+.searchhint { font-size:0.8em; opacity:0.5 }
+
+.fg-button { clear:left; margin:0 4px 40px 20px; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+/*.fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }*/
+a.fg-button { float:left;  }
+button.fg-button { width:auto; overflow:visible; } /* removes extra button width in IE */
+
+.fg-button-icon-left { padding-left: 2.1em; }
+.fg-button-icon-right { padding-right: 2.1em; }
+.fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+.fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; }	 /* solo icon buttons must have block properties for the text-indent to work */	
+
+/*.fg-button.ui-state-loading .ui-icon { background: url(spinner_bar.gif) no-repeat 0 0; }*/
+
+#song { white-space:pre; font-family:monospace; width:100%; height:50em }
+#songview { word-wrap:break-word;
+	-moz-column-rule:4px solid #F5F5F5; -webkit-column-rule:4px solid #F5F5F5; column-rule:4px solid #F5F5F5;
+/*
+	-moz-column-rule-color:#F5F5F5; -webkit-column-rule-color:#F5F5F5; column-rule-color:#F5F5F5;
+	-moz-column-rule-style:dashed; -webkit-column-rule-style:dashed; column-rule-style:dashed;
+	-moz-column-rule-width:2px; -webkit-column-rule-width:2px; column-rule-width:2px;
+*/	
+}
+.songview .verse { margin-bottom:2em }
+.songview .chorus { border-radius:5px; border:2px solid #888; padding:0.5em; margin-bottom:2em }
+.songview .chorus, .songview .chorus .lyrics span.fragment { background-color:#F5F5F5 }
+.songview .chorus, .songview .line { column-break-inside:avoid; -webkit-column-break-inside:avoid; -moz-column-break-inside:avoid; -o-column-break-inside:avoid; -ms-column-break-inside:avoid }
+.songview .comment { font-style:italic; position:absolute; right:0; border-radius:5px; border:2px solid #880; background-color:#FF8; padding:0.5em }
+.songview .tabs { font-size:0.8em; margin-bottom:2em; white-space:pre-wrap }
+.songview .tabs .chordline { display:none }
+
+.songview .line { display:table }
+.songview .lyrics, .songview .chords { display:table-row }
+.songview .lyrics > span, .songview .chords > span { display:table-cell; white-space:pre }
+.songview .chords > span { padding-right:0.5em; font-size:0.8em; color:#444 }
+
+.songview .lyrics > span { position:relative }
+.songview .lyrics span.sep { display:block; width:100%; position:absolute; margin-top:0.9em; z-index:-1; height:2px }
+.songview .lyrics > span:not(:last-child) span.sep { border-top:0.08em solid black }
+.songview .lyrics span.fragment { background-color:#EBEBEB }
+

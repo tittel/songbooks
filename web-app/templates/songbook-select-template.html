@@ -1,0 +1,7 @@
+<label for="select-songbook">Songbook:</label>
+<select id="select-songbook">
+	<option value="">None</option>
+	<% _.each(songbooks, function(songbook) { %>
+	<option value="<%= songbook.get('id') %>"><%= songbook.get("name") || "NO NAME" %></option>
+	<% }); %>
+</select>
