@@ -15,7 +15,7 @@ class SongbookController {
 			render(status: 201)
 		}
 		else {
-			render(status: 403, text: "Could not create new Songbook due to errors:\n ${songbook.errors}")
+			render(status: 400, text: "Could not create new Songbook due to errors:\n ${songbook.errors}")
 		}
 	}
 	
@@ -27,7 +27,7 @@ class SongbookController {
 	}
 	
 	def save(Long id) {
-		update(id,null)
+		update(id, null)
 	}
 
 	def update(Long id, Long version) {
@@ -37,20 +37,18 @@ class SongbookController {
 				songbook.errors.rejectValue("version", "default.optimistic.locking.failure",
 						  [message(code: 'songbook.label', default: 'Songbook')] as Object[],
 						  "Another user has updated this Songbook while you were editing")
-				response.status = 403
-				flash.message = "Could not update Songbook due to errors:\n ${songbook.errors}"
-				render flash as JSON
+				// 409 = HTTP status "Conflict"
+				render(status:409, text:"Could not update Songbook due to errors:\n ${songbook.errors}")
 			}
 			else {
 				songbook.properties = params
 		
-				if (songbook.save(flush: true)) {
+				if (songbook.save(flush:true)) {
 					render(status:204)
 				}
 				else {
 					response.status = 500
-					flash.message = "Could not update Songbook due to errors:\n ${songbook.errors}"
-					render flash as JSON
+					render(status:500, text:"Could not update Songbook due to errors:\n ${songbook.errors}")
 				}
 			}
 		}
@@ -60,15 +58,11 @@ class SongbookController {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
 			try {
-				songbook.delete(flush: true)
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id])
-				response.status = 200
-				render flash as JSON
+				songbook.delete(flush:true)
+				render(status:200, text:message(code: 'default.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
 			}
 			catch (e) {
-				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id])
-				response.status = 500
-				render flash as JSON
+				render(status:500, text:message(code: 'default.not.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
 			}
 		}
 	}
@@ -87,13 +81,11 @@ class SongbookController {
 			if (song) {
 				songbook.songs.add(song)
 				songbook.save(flush:true)
-				render(status: 201, text: 'song added to songbook')
+				render(status: 200, text: 'song added to songbook')
 			}
 			else {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), params.songId])
-				response.status = 404;
 				log.warn "song '$params.songId' not found."
-				render flash as JSON
+				render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), params.songId]))
 			}
 		}
 	}
@@ -108,10 +100,8 @@ class SongbookController {
 				render(status: 200, text: 'song deleted from songbook')
 			}
 			else {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), songId])
-				response.status = 404;
 				log.warn "song '$songId' not found."
-				render flash as JSON
+				render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), params.songId]))
 			}
 		}
 	}
@@ -119,10 +109,8 @@ class SongbookController {
 	def retrieveSongbook(Long id) {
 		def songbook = Songbook.get(id)
 		if (!songbook) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'songbook.label', default: 'Songbook'), id])
-			response.status = 404;
 			log.warn "songbook $id not found."
-			render flash as JSON
+			render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
 		}
 		return songbook;
 	}

@@ -46,7 +46,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			        			new Message({message:"Song saved."});
 			        		},
 							error: function(model, response) {
-								new ErrorMessage({ message : "Error saving song: " + response.status + " (" + response.statusText + ")" });
+								console.log(response);
+								new ErrorMessage({ message : "<strong>Error saving song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 							}
 			        	});
 					}

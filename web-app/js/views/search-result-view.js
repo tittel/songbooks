@@ -11,7 +11,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 			},
 			render : function() {
 				state.set("viewState", "search");
-				this.$el.text("Loading...");
 
 				var that = this;
 				this.collection.fetch({
@@ -28,7 +27,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 						$(".query").focus();
 					},
 					error: function(model, response) {
-						new ErrorMessage({ message : "Error searching songs: " + response.status + " (" + response.statusText + ")" });
+						new ErrorMessage({ message : "<strong>Error searching songs</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 						Backbone.history.navigate("", true);
 					}
 				});

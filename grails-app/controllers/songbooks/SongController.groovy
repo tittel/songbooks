@@ -8,15 +8,18 @@ class SongController {
 	}
 	
 	def create() {
-		def song = Song.parse(params.text, true)
-		if (song.save(flush:true)) {
-			flash.message = message(code: 'default.created.message', args: [message(code: 'song.label', default: 'Song'), song.id])
-			response.setHeader("Location", createLink(controller:"") + "/api/song/" + song.id)
-			//render(status: 201)
-			response.redirect(status:201, url:createLink(controller:"") + "/api/song/" + song.id)
+		def song = new Song()
+		try {
+			song.text = request.JSON.text
+			if (song.save(flush:true)) {
+				response.redirect(status:201, url:createLink(controller:"") + "/api/song/" + song.id, text:message(code: 'default.created.message', args: [message(code: 'song.label', default: 'Song'), song.id]))
+			}
+			else {
+				render(status: 403, text: "Could not create new Song due to errors:\n ${song.errors}")
+			}
 		}
-		else {
-			render(status: 403, text: "Could not create new Song due to errors:\n ${song.errors}")
+		catch(e) {
+			render(status:400, text:"Please specify name and author of the song with respective chopro tags")
 		}
 	}
 
@@ -28,7 +31,7 @@ class SongController {
 	}
 
 	def save(Long id) {
-		update(id,null)
+		update(id, null)
 	}
 
 	def update(Long id, Long version) {
@@ -38,20 +41,22 @@ class SongController {
 				song.errors.rejectValue("version", "default.optimistic.locking.failure",
 						  [message(code: 'song.label', default: 'Song')] as Object[],
 						  "Another user has updated this Song while you were editing")
-				response.status = 403
-				flash.message = "Could not update Song due to errors:\n ${song.errors}"
-				render flash as JSON
+				// 409 = HTTP status "Conflict"
+				render(status:409, text:"Could not update Song due to errors:\n ${song.errors}")
 			}
 			else {
-				song.properties = request.JSON
-				
-				if (song.save(flush: true)) {
-					render(status:204)
+				try {
+					song.text = request.JSON.text
+					
+					if (song.save(flush:true)) {
+						render(status:204)
+					}
+					else {
+						render(status:500, text:"Could not update Song due to errors:\n ${song.errors}")
+					}
 				}
-				else {
-					response.status = 500
-					flash.message = "Could not update Song due to errors:\n ${song.errors}"
-					render flash as JSON
+				catch(e) {
+					render(status:400, text:"Please specify name and author of the song with respective chopro tags")
 				}
 			}
 		}
@@ -61,15 +66,11 @@ class SongController {
 		def song = retrieveSong(id)
 		if (song) {
 			try {
-				song.delete(flush: true)
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'song.label', default: 'Song'), id])
-				response.status = 200
-				render flash as JSON
+				song.delete(flush:true)
+				render(status:200, text:message(code: 'default.deleted.message', args: [message(code: 'song.label', default: 'Song'), id]))
 			}
 			catch (e) {
-				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'song.label', default: 'Song'), id])
-				response.status = 500
-				render flash as JSON
+				render(status:500, text:message(code: 'default.not.deleted.message', args: [message(code: 'song.label', default: 'Song'), id]))
 			}
 		}
 	}
@@ -78,9 +79,7 @@ class SongController {
 		def song = Song.get(id)
 		if (!song) {
 			log.warn "song $id not found."
-			response.status = 404
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), id])
-			render flash as JSON
+			render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), id]))
 		}
 		return song
 	}

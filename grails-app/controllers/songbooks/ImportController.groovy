@@ -33,29 +33,15 @@ class ImportController {
 		}
 		else {
 			try {
-				importedSongs << importSong(uploadedFile.inputStream.text)
+				Song song = new Song()
+				song.text = uploadedFile.inputStream.text
+				song.save(flush:true)
+				importedSongs << song
 			}
 			catch(e) {
 				log.warn e
 			}
 		}
 		[importedSongs:importedSongs]
-	}
-	
-	def importSong(text) {
-		def song = Song.parse(text)
-/*		
-		def m = name =~ /sbid_(\d*)\.chopro/
-		if (m.matches()) {
-			song.id = m[0][1]
-		}
-*/
-/*		
-		if (Song.get(song)) {
-			song.text = text
-		}
-*/
-		song.save(flush:true)
-		return song
 	}
 }

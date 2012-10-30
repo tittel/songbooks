@@ -29,7 +29,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 					 	}
 					},
 					error: function(model, response) {
-						new ErrorMessage({ message : "Error loading songbooks: " + response.status + " (" + response.statusText + ")" });
+						new ErrorMessage({ message : "<strong>Error loading songbooks</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 					}
 				});
 			},

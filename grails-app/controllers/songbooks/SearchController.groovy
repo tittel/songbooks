@@ -8,7 +8,7 @@ class SearchController {
 		def result = [total:0, results:[]]
 		if (params.q?.trim()) {
 			try {
-				def hits = Song.search(params.q, params)
+				def hits = Song.searchEvery(params.q, params)
 				result.total = hits.total
 				result.results = hits.results
 			}

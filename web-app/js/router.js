@@ -24,7 +24,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 						songView.render();
 					},
 					error : function(model, response) {
-						new ErrorMessage({ message : "Error loading song: " + response.status + " (" + response.statusText + ")" });
+						new ErrorMessage({ message : "<strong>Error loading song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 						Backbone.history.navigate("", true);
 					}
 				});
@@ -35,7 +35,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 						songbookView.render();
 					},
 					error : function(model, response) {
-						new ErrorMessage({ message : "Error loading songbook: " + response.status + " (" + response.statusText + ")" });
+						new ErrorMessage({ message : "<strong>Error loading songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 						Backbone.history.navigate("", true);
 					}
 				});
@@ -45,8 +45,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			},
 			defaultAction : function(actions) {
 				// We have no matching route, lets redirect to home page
-				console.log("404 -> " + actions);
-				new ErrorMessage({ message : "Unknown page: " + actions });
+				new ErrorMessage({ message : "<strong>Unknown page:</strong> " + actions });
 				Backbone.history.navigate("", true);
 			},
 			captureLinks : function() {

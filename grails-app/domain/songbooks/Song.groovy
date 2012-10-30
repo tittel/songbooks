@@ -20,18 +20,10 @@ class Song {
 	Date dateCreated
 	Date lastUpdated
 	
-	static Song parse(text, safe=false) throws Exception {
-		def name = ""
-		def author = ""
-		try {
-			name = (text =~ "\\{(t|title):(.*?)\\}")[0][2]
-			author = (text =~ "\\{(st|subtitle):(.*?)\\}")[0][2]
-		}
-		catch(e) {
-			if (!safe) {
-				throw e
-			}
-		}
-		return new Song(name:name, author:author, text:text)
+	public void setText(String text) {
+		println "SETTER CALLED"
+		name = (text =~ "\\{(t|title):(.*?)\\}")[0][2]
+		author = (text =~ "\\{(st|subtitle):(.*?)\\}")[0][2]
+		this.text = text
 	}
 }
