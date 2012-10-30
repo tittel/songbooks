@@ -16,7 +16,7 @@ html, body { font-family:sans-serif; font-size:16px }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
 .query { font-size:1.1em !important }
 
-#content { position:relative; font-size:1.2em }
+#content { font-size:1.2em }
 #content #home { text-align:center }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
 
@@ -26,7 +26,7 @@ html, body { font-family:sans-serif; font-size:16px }
 #searchresult .hit .fragment { color:#333; font-size:0.7em }
 .searchhint { font-size:0.8em; opacity:0.5 }
 
-#song { white-space:pre; font-family:monospace; height:24em; width:98.5%; font-size:1.1em; line-height:1em }
+#song { white-space:pre; font-family:monospace; position:absolute; width:97%; top:80px; left:0.4em; right:0.4em; bottom:0; font-size:1.1em; line-height:1em }
 .songview { word-wrap:break-word; line-height:1.2em;
 	-moz-column-rule:0.2em solid #F5F5F5; -webkit-column-rule:0.2em solid #F5F5F5; column-rule:0.2em solid #F5F5F5;
 }
