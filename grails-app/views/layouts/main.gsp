@@ -17,9 +17,12 @@
 <%--
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
---%>
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'style.css')}" type="text/css">
-		<base href="${g.createLink(absolute:true)}" />
+--%>
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.9.1.custom.min.css')}" type="text/css">
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.min.css')}" type="text/css">
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'app.css')}" type="text/css">
+		<base href="${g.createLink(uri:"/", absolute:true)}" />
 		<g:layoutHead/>
 		<r:layoutResources />
 	</head>

@@ -2,7 +2,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'views/message-view' ], function ($,
   return Message.extend({
 		className : "error",
 		icon : "ui-icon-alert",
-		messageClass : "ui-state-error",
+		messageClass : "alert-error",
 		defaultMessage : 'Something went wrong. Please try again.'
 	});
 });

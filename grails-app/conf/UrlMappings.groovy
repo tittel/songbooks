@@ -30,8 +30,10 @@ class UrlMappings {
             }
         }
 */		
-		"/"(view:"/index")
 		"/info"(view:"/info")
-		"500"(view:'/error')
+		"/song/**"(view:"/index")
+		"/songbook/**"(view:"/index")
+		"/search**"(view:"/index")
+		"/"(view:"/index")
 	}
 }

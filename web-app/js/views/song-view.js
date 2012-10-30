@@ -9,7 +9,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				state.channel.on("button:save", this.save);
 				state.channel.on("button:edit", this.edit);
 		        state.bind("change:columns", this.setColumns);
-		        state.bind("change:fontsize", this.setFontSize);
+		        state.bind("change:zoom", this.setZoom);
 
 //				this.model.bind('change', this.render);
 		    },
@@ -26,10 +26,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				}
 				else {
 					this.$el.html(choproToHtml($, this.model.get("text")));
-				    // give chordlines that "contain" chords a fixed height
-				    $(".textline:has(.chord)", this.$el).prev(".chordline").height("1em");
 					this.setColumns();
-					this.setFontSize();
+					this.setZoom();
 				}
 			},
 			edit : function() {
@@ -59,8 +57,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				var cols = "" + state.get("columns");
 				$(".songview").css({ "-moz-column-count" : cols, "-webkit-column-count" : cols, "column-count" : cols });
 			},
-			setFontSize : function() {
-				$(".songview").css({ "font-size" : state.get("fontsize") + "em" });
+			setZoom : function() {
+				$(".songview").css({ "font-size" : state.get("zoom") + "em" });
 			}
 		});
 		return new SongView;

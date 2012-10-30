@@ -4,10 +4,10 @@ define(['jQuery', 'Underscore', 'Backbone' ], function ($, _, Backbone){
 		displayLength: 5000,
 		defaultMessage: '',
 		icon : "ui-icon-info",
-		messageClass : "ui-state-highlight",
+		messageClass : "alert-success",
 
 		initialize: function() {
-			_.bindAll(this, 'render');
+			_.bindAll(this, "render");
 			this.message = this.options.message || this.defaultMessage;
 			this.render();
 		},
@@ -16,7 +16,7 @@ define(['jQuery', 'Underscore', 'Backbone' ], function ($, _, Backbone){
 			console.log("rendering message: " + this.message);
 			var _self = this;
 			var msg = $('<div>')
-				.addClass(this.messageClass + " ui-corner-all message")
+				.addClass(this.messageClass + " alert message")
 				.append("<span class='ui-icon " + this.icon + "' style='float:left; margin-right:.3em;'></span>" + this.message)
 				.css('z-index', 100000)
 				.hide();

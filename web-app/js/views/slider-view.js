@@ -8,6 +8,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate' ], function($, _,
 	    },
 		render : function() {
 		    $("<div class='value'>").appendTo(this.$el);
+
 		    $("<div>").appendTo(this.$el).slider({
 				value : this.$el.data("value") || 1,
 				min : this.$el.data("min") || 0,

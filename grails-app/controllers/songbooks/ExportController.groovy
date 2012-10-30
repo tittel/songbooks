@@ -7,7 +7,6 @@ import java.util.zip.ZipOutputStream
 
 class ExportController {
 	def index() {
-		new Songbook(name:"Songbook von Stephan", author:"Stephan").save()
 		response.setHeader("Content-Type", "application/zip")
 		response.setHeader("Content-disposition", "attachment;filename=songbooks-export-${formatDate(format:'yyMMdd-HHmm')}.zip")
 		new ZipOutputStream(response.outputStream).withStream { zipOutputStream ->

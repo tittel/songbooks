@@ -25,7 +25,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 					 		}
 					 	});
 					 	if (!found) {
-					 		this.selectSongbook();
+					 		that.selectSongbook();
 					 	}
 					},
 					error: function(model, response) {

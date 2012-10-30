@@ -6,7 +6,7 @@ define([ 'Underscore', 'Backbone' ], function(_, Backbone) {
 			"r" : true,
 			"viewState" : null,
 			"columns" : localStorage["columns"] ? parseInt(localStorage["columns"]) : 1,
-			"fontsize" : localStorage["fontsize"] ? parseFloat(localStorage["fontsize"]) : 1
+			"zoom" : localStorage["zoom"] ? parseFloat(localStorage["zoom"]) : 1
 		},
 		initialize : function() {
 		},

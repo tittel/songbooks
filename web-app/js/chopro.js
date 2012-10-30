@@ -1,6 +1,8 @@
 function choproToHtml($, source) {
     // cleanup: trim source
     source = $.trim(source);
+    // cleanup: replace html tags (against injection etc.) 
+    source = source.replace(/</g, "\u2264").replace(/>/g, "\u2265");
     // cleanup: remove leading whitespace in every line
     source = source.replace(/^[ \t]+/mg, "");
     // cleanup: replace whitespace between adjacent chopro tags by single newline

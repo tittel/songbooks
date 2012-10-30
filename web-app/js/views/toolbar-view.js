@@ -2,7 +2,7 @@
 define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/toolbar-template.html', 'views/search-view', 'views/slider-view', 'views/songbook-select-view', 'views/menu-view'],
 	function($, _, Backbone, state, toolbarTemplate, SearchView, SliderView, SongbookSelectView, MenuView) {
 		var SongToolbarView = Backbone.View.extend({
-			el : "#toolbar-container",
+			el : "#toolbar",
 			initialize : function() {
 				_.bindAll(this, "render", "viewStateChanged", "toggleEdit"); // remember: every function that uses 'this' as the current object should be in here
 		        this.render();
@@ -13,8 +13,10 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 		    },
 			render : function() {
 				this.$el.html(_.template(toolbarTemplate));
+				$("#button-edit *:first-child", this.$el).addClass("icon-edit");
 				
 				// make buttons
+/*
 				$(".button", this.$el).each(function() {
 					$(this).button({
 						text: false,
@@ -23,7 +25,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 						}
 					});
 				});
-				
+*/				
 			 	// render sliders
 			 	$(".slider", this.$el).each(function() {
 				    new SliderView({ el:this });
@@ -39,13 +41,13 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			    new MenuView({ el:$("#menu-container", this.$el) });
 			},
 			toggleEdit : function() {
-		    	var $button = $("#button-edit", this.$el);
-		    	if ("Edit" == $button.button("option", "label")) {
-			    	$button.button("option", {label:"Save", icons:{ primary:"ui-icon-disk" }});
+		    	var $icon = $("#button-edit *:first-child", this.$el);
+		    	if ($icon.hasClass("icon-edit")) {
+			    	$icon.removeClass("icon-edit").addClass("icon-check");
 			    	state.channel.trigger("button:edit");
 		    	}
 		    	else {
-		        	$button.button("option", {label:"Edit", icons:{ primary:"ui-icon-pencil" }});
+			    	$icon.removeClass("icon-check").addClass("icon-edit");
 			    	state.channel.trigger("button:save");
 		    	}
 			},
