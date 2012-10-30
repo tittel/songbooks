@@ -21,8 +21,9 @@ html, body { font-family:sans-serif; font-size:16px }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
 
 #searchresult .stats { font-size:0.5em; color:#999; margin-bottom:5px }
-#searchresult .hit { padding-bottom:0.5em }
+#searchresult .hit { padding-bottom:0.7em }
 #searchresult .hit .author { color:#5A5; font-size:0.7em }
+#searchresult .hit .fragment { color:#888; font-size:0.7em }
 .searchhint { font-size:0.8em; opacity:0.5 }
 
 #song { white-space:pre; font-family:monospace; height:24em; width:98.5%; font-size:1.1em; line-height:1em }

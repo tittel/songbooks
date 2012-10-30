@@ -21,7 +21,6 @@ class Song {
 	Date lastUpdated
 	
 	public void setText(String text) {
-		println "SETTER CALLED"
 		name = (text =~ "\\{(t|title):(.*?)\\}")[0][2]
 		author = (text =~ "\\{(st|subtitle):(.*?)\\}")[0][2]
 		this.text = text
