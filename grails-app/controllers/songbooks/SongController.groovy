@@ -45,9 +45,6 @@ class SongController {
 			else {
 				song.properties = request.JSON
 				
-				println "incoming text -> " + request.JSON
-				println "updated text -> " + song.text
-				
 				if (song.save(flush: true)) {
 					render(status:204)
 				}
