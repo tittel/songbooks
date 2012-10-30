@@ -12,11 +12,12 @@ class SearchController {
 				def hit = sr[index]
 				def nameHighlight = highlighter.fragment("name")
 				def authorHighlight = highlighter.fragment("author")
+				def textHighlight = highlighter.fragment("text")
 			    highlights[index] = [
 					id: hit.id, 
 			        name: nameHighlight ? nameHighlight : hit.name,
 			        author: authorHighlight ? authorHighlight : hit.author,
-			        text: highlighter.fragment("text") + "&hellip;"
+			        text: textHighlight ? textHighlight + "&hellip;" : ""
 			    ]
 			})
 			result.total = highlights.size()
