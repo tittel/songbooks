@@ -13,6 +13,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			},
 			searchAction : function(params) {
 				var queryString = {};
+				// set params as properties of queryString to be able to access and filter them by name
 				params.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function($0, $1, $2, $3) { queryString[$1] = $3; });
 				state.set("query", queryString.q || "", {silent: true});
 				state.set("songbookId", queryString.songbookId || "", {silent: true});

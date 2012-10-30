@@ -2,7 +2,7 @@ html, body { font-family:sans-serif; font-size:16px }
 
 #page { min-width:1000px; padding:0.4em }
 
-#message { position:fixed; bottom:0; right:40px; width:12em }
+#message { position:fixed; right:0; bottom:40px; width:12em }
 .message { margin-bottom:0; margin-top:1em }
 .spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:32px; width:32px; padding:3px; position:fixed; right:0; bottom:0; text-indent:-9999px }
 
@@ -13,17 +13,16 @@ html, body { font-family:sans-serif; font-size:16px }
 #toolbar .slider .ui-slider-handle { width:2em; height:2em; top:-0.7em; margin-left:-1em; cursor:pointer }
 #toolbar .slider .ui-slider { background-color:#FFF; cursor:pointer }
 #toolbar #menu-container { position:absolute; top:0.5em; right:0.5em}
-/*#select-songbook-container label { float:left }*/
 .query { font-size:1.1em !important }
 
 #content { position:relative; font-size:20px }
 #content #home { text-align:center }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
 
-#searchresult .stats { font-size:0.5em; color:#999; margin-bottom:5px }
-#searchresult .hit { padding-bottom:0.7em }
-#searchresult .hit .author { color:#5A5; font-size:0.7em }
-#searchresult .hit .fragment { color:#888; font-size:0.7em }
+#searchresult .stats { font-size:0.7em; color:#333; margin-bottom:5px }
+#searchresult .hit { padding-bottom:1em }
+#searchresult .hit .author { color:#093; font-size:0.7em }
+#searchresult .hit .fragment { color:#333; font-size:0.7em }
 .searchhint { font-size:0.8em; opacity:0.5 }
 
 #song { white-space:pre; font-family:monospace; height:24em; width:98.5%; font-size:1.1em; line-height:1em }

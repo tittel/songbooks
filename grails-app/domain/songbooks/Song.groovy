@@ -4,6 +4,7 @@ class Song {
 	static searchable = {
 		name boost:2.0
 		author boost:2.0
+		//text analyzer:"songTextAnalyzer"
 	}
 	static constraints = {
 		name blank:false

@@ -8,19 +8,18 @@ class SearchController {
 		def result = [total:0, results:[]]
 		if (params.q?.trim()) {
 			def highlights = []
-			def songHighlighter = { highlighter, index, sr ->
+			def songs = Song.searchEvery(params.q, withHighlighter: { highlighter, index, sr ->
 				def hit = sr[index]
+				def nameHighlight = highlighter.fragment("name")
+				def authorHighlight = highlighter.fragment("author")
 			    highlights[index] = [
 					id: hit.id, 
-			        name: hit.name,
-			        author: hit.author,
-			        text: highlighter.fragment("text")
+			        name: nameHighlight ? nameHighlight : hit.name,
+			        author: authorHighlight ? authorHighlight : hit.author,
+			        text: highlighter.fragment("text") + "&hellip;"
 			    ]
-			}
-			def songs = Song.searchEvery(result:"every", withHighlighter:songHighlighter) {
-			    queryString(params.q)
-			}
-			result.total = songs.size()
+			})
+			result.total = highlights.size()
 			result.results = highlights
 /*			
 			try {
