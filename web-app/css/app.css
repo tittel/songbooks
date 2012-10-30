@@ -2,9 +2,9 @@ html, body { font-family:sans-serif; font-size:16px }
 
 #page { min-width:1000px; padding:0.4em }
 
-#message { position:fixed; right:0; bottom:40px; width:12em }
+#message { position:fixed; right:0.4em; bottom:0.4em; width:12em }
 .message { margin-bottom:0; margin-top:1em }
-.spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:32px; width:32px; padding:3px; position:fixed; right:0; bottom:0; text-indent:-9999px }
+.spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:32px; width:32px; padding:2px; position:fixed; right:0.4em; bottom:0.4em; text-indent:-9999px; z-index:1 }
 
 #toolbar { padding:0.5em; position:relative; height:45px }
 #toolbar > * { display:inline-block }
@@ -16,11 +16,11 @@ html, body { font-family:sans-serif; font-size:16px }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
 .query { font-size:1.1em !important }
 
-#content { position:relative; font-size:20px }
+#content { position:relative; font-size:1.2em }
 #content #home { text-align:center }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
 
-#searchresult .stats { font-size:0.7em; color:#333; margin-bottom:5px }
+#searchresult .stats { font-size:0.7em; color:#333; margin-bottom:1em }
 #searchresult .hit { padding-bottom:1em }
 #searchresult .hit .author { color:#093; font-size:0.7em }
 #searchresult .hit .fragment { color:#333; font-size:0.7em }
@@ -28,15 +28,15 @@ html, body { font-family:sans-serif; font-size:16px }
 
 #song { white-space:pre; font-family:monospace; height:24em; width:98.5%; font-size:1.1em; line-height:1em }
 .songview { word-wrap:break-word; line-height:1.2em;
-	-moz-column-rule:4px solid #F5F5F5; -webkit-column-rule:4px solid #F5F5F5; column-rule:4px solid #F5F5F5;
+	-moz-column-rule:0.2em solid #F5F5F5; -webkit-column-rule:0.2em solid #F5F5F5; column-rule:0.2em solid #F5F5F5;
 }
 .songview h1 { color:#04C; line-height:1em; font-size:1.5em }
 .songview h2 { color:#333; line-height:1em; font-size:1.2em }
 .songview .verse { margin-bottom:1em }
-.songview .chorus { border-radius:5px; border:2px solid #888; padding:0.5em 0.5em 1em 0.5em; margin-bottom:2em }
+.songview .chorus { border-radius:0.5em; border:0.15em solid #888; padding:0.5em 0.5em 1em 0.5em; margin-bottom:2em }
 .songview .chorus, .songview .chorus .lyrics span.fragment { background-color:#F5F5F5 }
 .songview .chorus, .songview .line { column-break-inside:avoid; -webkit-column-break-inside:avoid; -moz-column-break-inside:avoid; -o-column-break-inside:avoid; -ms-column-break-inside:avoid }
-.songview .comment { font-style:italic; border-radius:5px; background-color:#FFA; padding:0.5em; margin:0 1em 1em 0; display:inline-block }
+.songview .comment { font-style:italic; border-radius:0.5em; background-color:#FFA; padding:0.5em; margin:0 1em 1em 0; display:inline-block }
 .songview .tabs { font-size:0.8em; margin-bottom:2em; white-space:pre-wrap; border:none; background:inherit }
 .songview .chord-definition { display:inline-block; width:4em; height:6em; margin:0 1em 1em 0; opacity:0.8 }
 

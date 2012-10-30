@@ -1,7 +1,7 @@
 define(['jQuery', 'Underscore', 'Backbone' ], function ($, _, Backbone){
 	return Backbone.View.extend({
 		id: 'message',
-		displayLength: 5000,
+		displayLength: 8000,
 		defaultMessage: '',
 		icon : "ui-icon-info",
 		messageClass : "alert-success",
