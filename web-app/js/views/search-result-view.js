@@ -11,6 +11,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/search-r
 			},
 			render : function() {
 				state.set("viewState", "search");
+				$(this.el).empty();
 
 				var that = this;
 				this.model.fetch({

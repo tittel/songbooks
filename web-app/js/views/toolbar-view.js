@@ -15,17 +15,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 				this.$el.html(_.template(toolbarTemplate));
 				$("#button-edit *:first-child", this.$el).addClass("icon-edit");
 				
-				// make buttons
-/*
-				$(".button", this.$el).each(function() {
-					$(this).button({
-						text: false,
-						icons: {
-							primary: $(this).data("icon")
-						}
-					});
-				});
-*/				
 			 	// render sliders
 			 	$(".slider", this.$el).each(function() {
 				    new SliderView({ el:this });
@@ -54,7 +43,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			viewStateChanged : function() {
 				var view = state.get("viewState");
 	        	// unconditionally reset edit button from "save" to "edit" on any view change
-	        	$("#button-edit", this.$el).button("option", {label:"Edit", icons:{ primary:"ui-icon-pencil" }});
+	        	$("#button-edit *:first-child", this.$el).removeClass("icon-check").addClass("icon-edit");
 	        	// iterate over "data-view" attribute of toolbar children and show/hide them correspondingly
 	        	this.$el.find("*[data-views]").each(function() {
 	        		var $this = $(this);

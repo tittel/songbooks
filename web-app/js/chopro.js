@@ -173,7 +173,7 @@ function createChordImage($, def) {
 			var fret = parseInt(value);
 			var x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)));
 			if (isNaN(fret) || fret < 0) {
-				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>\u274C</text>";
+				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>";
 			}
 			else if (0 === fret) {
 				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />";
