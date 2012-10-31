@@ -49,7 +49,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 				}
 				
 				// set edit song button state depending on view
-				if ("song-edit" == view) {
+				if ("song-edit" == view || "songbook" == view) {
 					$("#button-edit *:first-child", this.$el).removeClass("icon-pencil").addClass("icon-ok");
 				}
 				else {

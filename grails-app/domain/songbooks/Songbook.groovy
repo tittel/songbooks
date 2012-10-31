@@ -9,6 +9,7 @@ class Songbook {
 
 	String name
 	String author
+	String props
 	Date dateCreated
 	Date lastUpdated
 }

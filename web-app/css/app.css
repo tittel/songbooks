@@ -13,13 +13,18 @@ a { color:#04C }
 #toolbar .slider .value { margin-bottom:0.7em; font-size:0.8em; color:#555 }
 #toolbar .slider .ui-slider-handle { width:2em; height:2em; top:-0.7em; margin-left:-1em; cursor:pointer }
 #toolbar .slider .ui-slider { background-color:#FFF; cursor:pointer }
+#toolbar .query { width:10em }
+#toolbar #select-songbook-container { text-align:center }
+#toolbar #select-songbook-container label { font-size:0.8em; color:#555 }
 #toolbar #menu-container { position:absolute; top:0.5em; right:0.5em }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
+#toolbar #menu-container .dropdown-menu a { cursor:pointer }
 .query { font-size:1.1em !important }
 
 #content { font-size:1.2em }
 #content #home { text-align:center }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
+#content #home .query { width:15em }
 
 #searchresult .stats { font-size:0.7em; color:#333; margin-bottom:1em }
 #searchresult .hit { padding-bottom:1em }

@@ -9,7 +9,7 @@
 	<li id="menu-song-add-remove" data-views="song" data-display="display" data-display-on="list-item"><a><i class="icon-plus"></i> Add to songbook</a></li>
 	<li class="divider"></li>
 	<li class="nav-header">Songbook</li>
-	<li id="menu-songbook-create"><a><i class="icon-asterisk"></i> New &hellip;</a></li>
+	<li><a href="songbook/new"><i class="icon-asterisk"></i> New &hellip;</a></li>
 	<li class="dropdown-submenu pull-left"><a><i class="icon-book"></i> Select</a>
 		<ul class="dropdown-menu">
 			<li><label class="checkbox"> <input type="checkbox"> Check me out
@@ -25,13 +25,14 @@
 <div id="deleteDialog" class="modal hide fade" tabindex="-1" role="dialog">
 	<div class="modal-header">
 		 <button type="button" class="close" data-dismiss="modal">×</button>
-		 <h3 id="myModalLabel">Confirm</h3>
+		 <h3>Please confirm</h3>
 	</div>
 	<div class="modal-body">
-		 <p>Really delete song?</p>
+		 <p>Do you really want to delete this song?</p>
+		 <p>It will be deleted from the database, not just from your songbook.</p>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal">Close</button>
-		<button id="deleteButton" class="btn btn-primary" data-dismiss="modal">Delete</button>
+		<button id="deleteButton" class="btn btn-primary" data-dismiss="modal">Yes, delete it!</button>
 	</div>
 </div>

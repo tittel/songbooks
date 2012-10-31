@@ -4,11 +4,12 @@ import grails.converters.JSON
 
 class SongbookController {
 	def list() {
+		Songbook.get(1).songs.add(Song.get(1))
 		render Songbook.list() as JSON
 	}
 	
 	def create() {
-		def songbook = new Songbook(params)
+		def songbook = new Songbook(request.JSON)
 		if (songbook.save(flush:true)) {
 			response.status = 201
 			response.setHeader("Location", createLink(controller:"") + "/api/songbook/" + songbook.id);
@@ -59,7 +60,7 @@ class SongbookController {
 		if (songbook) {
 			try {
 				songbook.delete(flush:true)
-				render(status:200, text:message(code: 'default.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
+				render(status:204, text:message(code: 'default.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
 			}
 			catch (e) {
 				render(status:500, text:message(code: 'default.not.deleted.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))

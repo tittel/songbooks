@@ -1,6 +1,6 @@
 // Filename: router.js
-define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-model', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/song-edit-view', 'views/songbook-view', 'views/toolbar-view' ],
-	function($, _, Backbone, state, SongModel, ErrorMessage, homeView, searchResultView, songView, songEditView, songbookView, toolbarView) {
+define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-model', 'models/songbook-model', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/song-edit-view', 'views/songbook-view', 'views/toolbar-view' ],
+	function($, _, Backbone, state, SongModel, SongbookModel, ErrorMessage, homeView, searchResultView, songView, songEditView, songbookView, toolbarView) {
 		var AppRouter = Backbone.Router.extend({
 			initialize : function() {
 			},
@@ -37,15 +37,21 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mode
 				}
 			},
 			songbookAction : function(songbookId) {
-				songbookView.model.set("id", songbookId).fetch({
-					success : function() {
-						songbookView.render();
-					},
-					error : function(model, response) {
-						new ErrorMessage({ message : "<strong>Error loading songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
-						Backbone.history.navigate("", true);
-					}
-				});
+				if ("new" == songbookId) {
+					songbookView.model = new SongbookModel();
+					songbookView.render();
+				}
+				else {
+					songbookView.model.set("id", songbookId).fetch({
+						success : function() {
+							songbookView.render();
+						},
+						error : function(model, response) {
+							new ErrorMessage({ message : "<strong>Error loading songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+							Backbone.history.navigate("", true);
+						}
+					});
+				}
 			},
 			homeAction : function() {
 				homeView.render();

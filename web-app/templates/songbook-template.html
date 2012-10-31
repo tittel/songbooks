@@ -1,0 +1,3 @@
+<p><label for="name">Name:</label><input type="text" id="name" value="<%= songbook.get("name") %>" placeholder="Some descriptive name..."></p>
+<p><label for="author">Author:</label><input type="text" id="author" value="<%= songbook.get("author") %>" placeholder="Your name..."></p>
+<p><label for="props">Properties:</label><textarea id="props"><%= JSON.stringify(songbook.get("props")) %></textarea></p>
