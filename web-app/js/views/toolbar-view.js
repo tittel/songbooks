@@ -13,7 +13,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 		    },
 			render : function() {
 				this.$el.html(_.template(toolbarTemplate));
-				$("#button-edit *:first-child", this.$el).addClass("icon-edit");
+				$("#button-edit *:first-child", this.$el).addClass("icon-pencil");
 				
 			 	// render sliders
 			 	$(".slider", this.$el).each(function() {
@@ -31,19 +31,26 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			},
 			toggleEdit : function() {
 		    	var $icon = $("#button-edit *:first-child", this.$el);
-		    	if ($icon.hasClass("icon-edit")) {
-			    	$icon.removeClass("icon-edit").addClass("icon-check");
+		    	if ($icon.hasClass("icon-pencil")) {
+			    	$icon.removeClass("icon-pencil").addClass("icon-ok");
 			    	state.channel.trigger("button:edit");
 		    	}
 		    	else {
-			    	$icon.removeClass("icon-check").addClass("icon-edit");
+			    	$icon.removeClass("icon-ok").addClass("icon-pencil");
 			    	state.channel.trigger("button:save");
 		    	}
 			},
 			viewStateChanged : function() {
 				var view = state.get("viewState");
+				// set toolbar style depending on view
+				if ("home" == view) {
+					this.$el.removeClass("well well-large");
+				}
+				else {
+					this.$el.addClass("well well-large");
+				}
 	        	// unconditionally reset edit button from "save" to "edit" on any view change
-	        	$("#button-edit *:first-child", this.$el).removeClass("icon-check").addClass("icon-edit");
+	        	$("#button-edit *:first-child", this.$el).removeClass("icon-ok").addClass("icon-pencil");
 	        	// iterate over "data-view" attribute of toolbar children and show/hide them correspondingly
 	        	this.$el.find("*[data-views]").each(function() {
 	        		var $this = $(this);

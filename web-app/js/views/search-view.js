@@ -10,7 +10,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 	    },
 		render : function() {
 			this.$el.html(_.template(searchTemplate));
-			$(".query").focus();
+			$(".query", this.$el).focus();
 		},
 		textEntered : function(e) {
 			if (e.which == 13) {

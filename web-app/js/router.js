@@ -6,20 +6,20 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			},
 			routes : {
 				'search*params' : 'searchAction',
-				'song/:songId' : 'songsAction',
-				'songbook/:songbookId' : 'songbooksAction',
+				'song/:songId' : 'songAction',
+				'songbook/:songbookId' : 'songbookAction',
 				'' : 'homeAction',
 				'*actions' : 'defaultAction'
 			},
 			searchAction : function(params) {
 				var queryString = {};
 				// set params as properties of queryString to be able to access and filter them by name
-				params.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function($0, $1, $2, $3) { queryString[$1] = $3; });
+				params.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function($0, $1, $2, $3) { queryString[$1] = decodeURIComponent($3); });
 				state.set("query", queryString.q || "", {silent: true});
 				state.set("songbookId", queryString.songbookId || "", {silent: true});
 				searchView.render();
 			},
-			songsAction : function(songId) {
+			songAction : function(songId) {
 				songView.model.set("id", songId).fetch({
 					success : function() {
 						songView.render();
@@ -30,7 +30,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 					}
 				});
 			},
-			songbooksAction : function(songbookId) {
+			songbookAction : function(songbookId) {
 				songbookView.model.set("id", songbookId).fetch({
 					success : function() {
 						songbookView.render();

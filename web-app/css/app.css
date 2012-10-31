@@ -7,7 +7,7 @@ a { color:#04C }
 .spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:32px; width:32px; padding:2px; position:fixed; right:0.4em; bottom:0.4em; text-indent:-9999px; z-index:1 }
 
 #toolbar { padding:0.5em; position:relative; height:45px }
-#toolbar.home { background:none; border:none; -webkit-box-shadow:none; -moz-box-shadow:none; box-shadow:none }
+#toolbar:not(.well) { border:1px solid transparent }
 #toolbar > * { display:inline-block }
 #toolbar .slider { padding:0 1.5em; width:8em; text-align:center; vertical-align:middle; margin-top:-1em }
 #toolbar .slider .value { margin-bottom:0.7em; font-size:0.8em; color:#555 }

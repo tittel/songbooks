@@ -10,9 +10,9 @@ class SongbookController {
 	def create() {
 		def songbook = new Songbook(params)
 		if (songbook.save(flush:true)) {
-			flash.message = message(code: 'default.created.message', args: [message(code: 'songbook.label', default: 'Songbook'), songbook.id])
-			response.setHeader("Location", createLink(controller:"") + "/api/songbook/" + songbook.id)
-			render(status: 201)
+			response.status = 201
+			response.setHeader("Location", createLink(controller:"") + "/api/songbook/" + songbook.id);
+			render songbook as JSON // Backbone needs the model to interpret the response as a success
 		}
 		else {
 			render(status: 400, text: "Could not create new Songbook due to errors:\n ${songbook.errors}")

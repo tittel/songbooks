@@ -10,16 +10,20 @@ class SongController {
 	def create() {
 		def song = new Song()
 		try {
+			println "incoming text -> " + request.JSON.text
 			song.text = request.JSON.text
 			if (song.save(flush:true)) {
-				response.redirect(status:201, url:createLink(controller:"") + "/api/song/" + song.id, text:message(code: 'default.created.message', args: [message(code: 'song.label', default: 'Song'), song.id]))
+				response.status = 201
+				response.setHeader("Location", createLink(controller:"") + "/api/song/" + song.id);
+				render song as JSON // Backbone needs the model to interpret the response as a success
 			}
 			else {
 				render(status: 403, text: "Could not create new Song due to errors:\n ${song.errors}")
 			}
 		}
 		catch(e) {
-			render(status:400, text:"Please specify name and author of the song with respective chopro tags")
+			println e
+			render(status:400, text:"Please specify name and author of the song with\n<b>{t:<i>Name</i>}</b> and\n<b>{st:<i>Author</i>}</b>")
 		}
 	}
 
