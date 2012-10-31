@@ -71,7 +71,7 @@ class SongController {
 		if (song) {
 			try {
 				song.delete(flush:true)
-				render(status:200, text:message(code: 'default.deleted.message', args: [message(code: 'song.label', default: 'Song'), id]))
+				render(status:204, text:message(code: 'default.deleted.message', args: [message(code: 'song.label', default: 'Song'), id]))
 			}
 			catch (e) {
 				render(status:500, text:message(code: 'default.not.deleted.message', args: [message(code: 'song.label', default: 'Song'), id]))

@@ -1,6 +1,6 @@
 // Filename: router.js
-define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/songbook-view', 'views/toolbar-view' ],
-	function($, _, Backbone, state, ErrorMessage, homeView, searchView, songView, songbookView, toolbarView) {
+define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-model', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/song-edit-view', 'views/songbook-view', 'views/toolbar-view' ],
+	function($, _, Backbone, state, SongModel, ErrorMessage, homeView, searchResultView, songView, songEditView, songbookView, toolbarView) {
 		var AppRouter = Backbone.Router.extend({
 			initialize : function() {
 			},
@@ -17,18 +17,24 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 				params.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function($0, $1, $2, $3) { queryString[$1] = decodeURIComponent($3); });
 				state.set("query", queryString.q || "", {silent: true});
 				state.set("songbookId", queryString.songbookId || "", {silent: true});
-				searchView.render();
+				searchResultView.render();
 			},
 			songAction : function(songId) {
-				songView.model.set("id", songId).fetch({
-					success : function() {
-						songView.render();
-					},
-					error : function(model, response) {
-						new ErrorMessage({ message : "<strong>Error loading song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
-						Backbone.history.navigate("", true);
-					}
-				});
+				if ("new" == songId) {
+					songView.model = new SongModel();
+					songEditView.render();
+				}
+				else {
+					songView.model.set("id", songId).fetch({
+						success : function() {
+							songView.render();
+						},
+						error : function(model, response) {
+							new ErrorMessage({ message : "<strong>Error loading song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+							Backbone.history.navigate("", true);
+						}
+					});
+				}
 			},
 			songbookAction : function(songbookId) {
 				songbookView.model.set("id", songbookId).fetch({
@@ -52,7 +58,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/error-view
 			captureLinks : function() {
 				if (Backbone.history && Backbone.history._hasPushState) {
 					// Use delegation to avoid initial DOM selection and allow all matching elements to bubble
-					$(document).delegate("a", "click", function(evt) {
+					$(document).delegate("a:not(.internal)", "click", function(evt) {
 						var href = $(this).attr("href") || "";
 						var protocol = this.protocol + "//";
 

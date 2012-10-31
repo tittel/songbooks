@@ -5,10 +5,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'router' ], function($, _, Backbone
 		Router.initialize();
 		// init ajax loading spinner
 		$('#spinner').ajaxStart(function() {
-			console.log("ajax start");
 			$(this).fadeIn();
 		}).ajaxStop(function() {
-			console.log("ajax stop");
 			$(this).fadeOut();
 		});
 	};

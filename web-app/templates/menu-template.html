@@ -3,10 +3,10 @@
 </button>
 <ul class="dropdown-menu pull-right">
 	<li class="nav-header">Song</li>
-	<li id="menu-song-create"><a><i class="icon-asterisk"></i> New &hellip;</a></li>
-	<li id="menu-song-delete"><a><i class="icon-remove"></i> Delete</a></li>
-	<li class="divider"></li>
-	<li id="menu-song-add" class="disabled"><a><i class="icon-plus"></i> Add to songbook</a></li>
+	<li><a href="song/new"><i class="icon-asterisk"></i> New &hellip;</a></li>
+	<li data-views="song" data-display="display" data-display-on="list-item"><a href="#deleteDialog" class="internal" data-toggle="modal"><i class="icon-remove"></i> Delete</a></li>
+	<li class="divider" data-views="song" data-display="display" data-display-on="list-item"></li>
+	<li id="menu-song-add-remove" data-views="song" data-display="display" data-display-on="list-item"><a><i class="icon-plus"></i> Add to songbook</a></li>
 	<li class="divider"></li>
 	<li class="nav-header">Songbook</li>
 	<li id="menu-songbook-create"><a><i class="icon-asterisk"></i> New &hellip;</a></li>
@@ -20,3 +20,18 @@
 	<li id="menu-songbook-edit"><a><i class="icon-pencil"></i> Edit &hellip;</a></li>
 	<li id="menu-songbook-export"><a><i class="icon-download"></i> Export</a></li>
 </ul>
+
+<!-- modal delete confirmation dialog -->
+<div id="deleteDialog" class="modal hide fade" tabindex="-1" role="dialog">
+	<div class="modal-header">
+		 <button type="button" class="close" data-dismiss="modal">×</button>
+		 <h3 id="myModalLabel">Confirm</h3>
+	</div>
+	<div class="modal-body">
+		 <p>Really delete song?</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal">Close</button>
+		<button id="deleteButton" class="btn btn-primary" data-dismiss="modal">Delete</button>
+	</div>
+</div>

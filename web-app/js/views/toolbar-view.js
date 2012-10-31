@@ -32,11 +32,9 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			toggleEdit : function() {
 		    	var $icon = $("#button-edit *:first-child", this.$el);
 		    	if ($icon.hasClass("icon-pencil")) {
-			    	$icon.removeClass("icon-pencil").addClass("icon-ok");
 			    	state.channel.trigger("button:edit");
 		    	}
 		    	else {
-			    	$icon.removeClass("icon-ok").addClass("icon-pencil");
 			    	state.channel.trigger("button:save");
 		    	}
 			},
@@ -49,17 +47,32 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 				else {
 					this.$el.addClass("well well-large");
 				}
-	        	// unconditionally reset edit button from "save" to "edit" on any view change
-	        	$("#button-edit *:first-child", this.$el).removeClass("icon-ok").addClass("icon-pencil");
+				
+				// set edit song button state depending on view
+				if ("song-edit" == view) {
+					$("#button-edit *:first-child", this.$el).removeClass("icon-pencil").addClass("icon-ok");
+				}
+				else {
+					$("#button-edit *:first-child", this.$el).removeClass("icon-ok").addClass("icon-pencil");
+				}
+
 	        	// iterate over "data-view" attribute of toolbar children and show/hide them correspondingly
 	        	this.$el.find("*[data-views]").each(function() {
 	        		var $this = $(this);
 	        		var views = $this.data("views");
+	        		var cssProp = "visibility";
+	        		var cssValOn = "visible";
+	        		var cssValOff = "hidden";
+	        		if ("display" == $this.data("display")) {
+		        		cssProp = "display";
+		        		cssValOn = $this.data("display-on") || "inline-block";
+		        		cssValOff = "none";
+	        		}
 	        		if ($.isArray(views)) {
-	        			($.inArray(view, views) > -1) ? $this.css("visibility", "visible") : $this.css("visibility", "hidden");
+	        			$this.css(cssProp, ($.inArray(view, views) > -1) ? cssValOn : cssValOff);
 	        		}
 	        		else {
-	        			(views == view) ? $this.css("visibility", "visible") : $this.css("visibility", "hidden");
+	        			$this.css(cssProp, (views == view) ? cssValOn : cssValOff);
 	        		}
 	        	});
 			}
