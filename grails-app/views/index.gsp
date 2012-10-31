@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div id="page">
-			<div id="toolbar" class="well well-large"></div>
+			<div id="toolbar" class="well well-large home"></div>
 			<div id="content"></div>
 		</div>
 	</body>
