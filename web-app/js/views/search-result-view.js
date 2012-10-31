@@ -1,9 +1,9 @@
 // Filename: views/projects/list
-define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/search-collection', 'text!templates/search-result-template.html', 'views/error-view'],
-	function($, _, Backbone, state, searchCollection, searchListTemplate, ErrorMessage) {
+define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/search-result-model', 'text!templates/search-result-template.html', 'views/error-view'],
+	function($, _, Backbone, state, SearchResultModel, searchListTemplate, ErrorMessage) {
 		var SearchResultView = Backbone.View.extend({
 			el : "#content",
-			collection : searchCollection,
+			model : new SearchResultModel,
 			initialize : function() {
 				_.bindAll(this, "render", "queryChanged", "songbookChanged"); // remember: every function that uses 'this' as the current object should be in here
 		        state.bind("change:query", this.queryChanged);
@@ -13,17 +13,17 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 				state.set("viewState", "search");
 
 				var that = this;
-				this.collection.fetch({
-					success: function(songs) {
-
+				this.model.fetch({
+					success: function(searchResult) {
 						// if exactly one song in results, directly display it
-						if (songs.models.length == 1) {
-							Backbone.history.navigate("song/" + songs.models[0].id, true);
+						if (searchResult.get("results").length == 1) {
+							Backbone.history.navigate("song/" + searchResult.get("results")[0].id, true);
 						}
 						else {
-							var compiledTemplate = _.template(searchListTemplate, { songs : songs.models, _ : _ });
+							var compiledTemplate = _.template(searchListTemplate, { total:searchResult.get("total"), size:searchResult.get("size"), results:searchResult.get("results"), _ : _ });
 							$(that.el).html(compiledTemplate);
 						}
+						
 						$(".query").focus();
 					},
 					error: function(model, response) {
@@ -33,13 +33,11 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/sea
 				});
 			},
 			queryChanged : function() {
-				console.log("query changed");
 				if (state.get("query").length > 0) {
-					Backbone.history.navigate(this.collection.url().replace(".json", "").replace("api/", ""), {trigger:true});
+					Backbone.history.navigate(this.model.url().replace(".json", "").replace("api/", ""), {trigger:true});
 				}
 			},
 			songbookChanged : function() {
-				console.log("songbook changed");
 				if (state.get("viewState") == "search") {
 					this.queryChanged();
 				}

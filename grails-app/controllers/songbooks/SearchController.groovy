@@ -20,19 +20,9 @@ class SearchController {
 			        text: textHighlight ? textHighlight + "&hellip;" : ""
 			    ]
 			})
-			result.total = highlights.size()
+			result.total = highlights.size
 			result.results = highlights
-/*			
-			try {
-				def hits = Song.search(params.q, params)
-				println hits
-				result.total = hits.total
-				result.results = hits.results
-			}
-			catch (e) {
-				log.warn e
-			}
-*/		
+			result.size = Song.list().size
 		}
 		render result as JSON
 	}

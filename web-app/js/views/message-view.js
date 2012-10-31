@@ -13,7 +13,6 @@ define(['jQuery', 'Underscore', 'Backbone' ], function ($, _, Backbone){
 		},
 
 		render: function() {
-			console.log("rendering message: " + this.message);
 			var _self = this;
 			var msg = $('<div>')
 				.addClass(this.messageClass + " alert message")

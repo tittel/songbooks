@@ -13,7 +13,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			$(".query").focus();
 		},
 		textEntered : function(e) {
-			console.log("event -> " + e);
 			if (e.which == 13) {
 				e.preventDefault();
 				// really trigger event by unsetting query first

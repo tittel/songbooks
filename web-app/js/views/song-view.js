@@ -37,7 +37,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			},
 			save : function() {
 				if ("song" == state.get("viewState")) {
-					console.log("saving song ...");
 					var $textarea = this.$el.find("textarea");
 					if ($textarea.length > 0) {
 			        	this.model.set("text", this.$el.find("textarea").val());
@@ -46,7 +45,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			        			new Message({message:"Song saved."});
 			        		},
 							error: function(model, response) {
-								console.log(response);
 								new ErrorMessage({ message : "<strong>Error saving song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
 							}
 			        	});

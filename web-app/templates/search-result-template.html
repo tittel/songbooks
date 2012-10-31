@@ -1,15 +1,15 @@
 <div id="searchresult">
-	<% if (songs.length == 0) { %>
+	<% if (total == 0) { %>
 	No songs found.
 	<% } else { %>
 	<div class="stats">
-		Hits: <%= songs.length %>
+		<%= total %> of <%= size %> songs match. 
 	</div>
-	<% _.each(songs, function(song) { %>
+	<% _.each(results, function(song) { %>
 	<div class="hit">
-		<a href="song/<%= song.get('id') %>"><%= song.get("name") || "NO NAME" %></a>
-		<div class="author"><%= song.get("author") || "NO AUTHOR" %></div>
-		<div class="fragment"><%= song.get("text") %></div>
+		<a href="song/<%= song.id %>"><%= song.name || "NO NAME" %></a>
+		<div class="author"><%= song.author || "NO AUTHOR" %></div>
+		<div class="fragment"><%= song.text %></div>
 	</div>
 	<% }); } %>
 </div>
