@@ -30,8 +30,8 @@ html, body { font-family:sans-serif; font-size:16px }
 .songview { word-wrap:break-word; line-height:1.2em;
 	-moz-column-rule:0.2em solid #F5F5F5; -webkit-column-rule:0.2em solid #F5F5F5; column-rule:0.2em solid #F5F5F5;
 }
-.songview h1 { color:#04C; line-height:1em; font-size:1.5em }
-.songview h2 { color:#333; line-height:1em; font-size:1.2em }
+.songview h1 { color:#04C; line-height:1em; font-size:1.5em; margin-top:0 }
+.songview h2 { color:#333; line-height:1em; font-size:1.1em }
 .songview .verse { margin-bottom:1em }
 .songview .chorus { border-radius:0.5em; border:0.15em solid #888; padding:0.5em 0.5em 1em 0.5em; margin-bottom:2em }
 .songview .chorus, .songview .chorus .lyrics span.fragment { background-color:#F5F5F5 }
