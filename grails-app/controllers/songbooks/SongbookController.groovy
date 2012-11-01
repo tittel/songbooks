@@ -4,7 +4,6 @@ import grails.converters.JSON
 
 class SongbookController {
 	def list() {
-		Songbook.get(1).songs.add(Song.get(1))
 		render Songbook.list() as JSON
 	}
 	
@@ -80,7 +79,7 @@ class SongbookController {
 		if (songbook) {
 			def song = params.songId ? Song.get(params.songId) : null
 			if (song) {
-				songbook.songs.add(song)
+				songbook.addToSongs(song)
 				songbook.save(flush:true)
 				render(status: 200, text: 'song added to songbook')
 			}

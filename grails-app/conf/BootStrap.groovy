@@ -5,21 +5,29 @@ import songbooks.Songbook
 class BootStrap {
 	def init = { servletContext ->
 		JSON.registerObjectMarshaller(Song) {
-			def returnArray = [:]
-			returnArray['id'] = it.id
-			returnArray['name'] = it.name
-			returnArray['author'] = it.author
-			returnArray['text'] = it.text
-			return returnArray
+			def result = [:]
+			result['id'] = it.id
+			result['name'] = it.name
+			result['author'] = it.author
+			result['text'] = it.text
+			return result
 		}
+		
 		JSON.registerObjectMarshaller(Songbook) {
-			def returnArray = [:]
-			returnArray['id'] = it.id
-			returnArray['name'] = it.name
-			returnArray['author'] = it.author
-			returnArray['props'] = it.props
-			returnArray['songs'] = it.songs
-			return returnArray
+			def result = [:]
+			result['id'] = it.id
+			result['name'] = it.name
+			result['author'] = it.author
+			result['props'] = it.props
+			result['songs'] = it.songs.collect{it.id}
+			return result
+		}
+		
+		if (Song.list().size == 0) {
+			new Song(text:"{t:test}{st:test}lalalala").save(flush:true)
+		}
+		if (Songbook.list().size == 0) {
+			new Songbook(name:"sb name", author:"sb author", props:"").addToSongs(Song.get(1)).save(flush:true)
 		}
 	}
 	def destroy = {
