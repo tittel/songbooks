@@ -1,7 +1,7 @@
 package songbooks
 
 class Songbook {
-	static hasMany = [songs: Song]
+	static searchable = true
 	static constraints = {
 		name blank:false
 		author blank:false

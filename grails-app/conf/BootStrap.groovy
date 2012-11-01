@@ -10,6 +10,7 @@ class BootStrap {
 			result['name'] = it.name
 			result['author'] = it.author
 			result['text'] = it.text
+			result['containedInSongbook'] = it.containedInSongbook
 			return result
 		}
 		
@@ -19,15 +20,15 @@ class BootStrap {
 			result['name'] = it.name
 			result['author'] = it.author
 			result['props'] = it.props
-			result['songs'] = it.songs.collect{it.id}
+			//result['songs'] = it.songs.collect{it.id}
 			return result
 		}
 		
-		if (Song.list().size == 0) {
-			new Song(text:"{t:test}{st:test}lalalala").save(flush:true)
-		}
 		if (Songbook.list().size == 0) {
-			new Songbook(name:"sb name", author:"sb author", props:"").addToSongs(Song.get(1)).save(flush:true)
+			new Songbook(name:"sb name", author:"sb author", props:"").save(flush:true)
+		}
+		if (Song.list().size == 0) {
+			new Song(text:"{t:test}{st:test}lalalala").addToSongbooks(Songbook.get(1)).save(flush:true)
 		}
 	}
 	def destroy = {
