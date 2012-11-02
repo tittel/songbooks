@@ -9,37 +9,33 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 		render : function() {
 			this.$el.html(_.template(menuTemplate));
 			var that = this;
-			$("li[id]", this.$el).each(function() {
-				$(this).click(function (evt) {
-					evt.preventDefault();
-					var id = $(this).attr("id");
-					if (id && !$(this).hasClass("disabled")) {
-						// close menu
-						that.$el.removeClass("open");
-						if ("menu-songbook-edit" == id) {
-							Backbone.history.navigate("songbook/" + state.get("songbookId"), true);
-						}
-						else if ("menu-song-add-remove" == id) {
-							var isInSongbook = $.inArray(songView.model.get("id"), songbookView.model.get("songs")) > -1;
-							if (isInSongbook) {
-								songbookView.model.get("songs").remove(songView.model.get("id"));
-							}
-							else {
-								songbookView.model.get("songs").push(songView.model.get("id"));
-							}
-							songbookView.model.save({
-				        		success: function() {
-				        			new Message({message:"Songbook updated."});
-				        		},
-								error: function(model, response) {
-									new ErrorMessage({ message : "<strong>Error updating songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
-								}
-				        	});
-						}
-						console.log("click ->" + $(this).attr("id"));
+			$("li a:not([href])", this.$el).click(function (evt) {
+				console.log("click -> " + this);
+				evt.preventDefault();
+				var id = $(this).attr("id");
+				if (id && !$(this).parent().hasClass("disabled")) {
+					// close menu
+					that.$el.removeClass("open");
+					if ("menu-songbook-edit" == id) {
+						Backbone.history.navigate("songbook/" + state.get("songbookId"), true);
 					}
-					return false;
-				});
+					else if ("menu-songbook-export" == id) {
+						Backbone.history.navigate("songbook/" + state.get("songbookId") + "/export", true);
+					}
+					else if ("menu-song-add-remove" == id) {
+						var model = songView.model;
+						model.set("containedInSongbook", !model.get("containedInSongbook"));
+						model.save({
+			        		success: function() {
+			        			new Message({message:"Songbook updated."});
+			        		},
+							error: function(model, response) {
+								new ErrorMessage({ message : "<strong>Error updating songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+							}
+			        	});
+					}
+				}
+				return false;
 			});
 			// register delete button click
 			$("#deleteButton", this.$el).click(function (evt) {
@@ -61,11 +57,12 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 
 			// update state of menu items related to songs
 			if ("song" == view) {
-				var isInSongbook = $.inArray(songView.model.get("id"), songbookView.model.get("songs")) > -1;
-				console.log("isInSongbook -> " + isInSongbook);
+				var containedInSongbook = songView.model.get("containedInSongbook");
+				console.log("containedInSongbook -> " + containedInSongbook);
 				$("#menu-song-add-remove a", this.$el)
-				.html(isInSongbook ? "<i class='icon-minus'></i> Remove from songbook" : "<i class='icon-plus'></i> Add to songbook")
+				.html(containedInSongbook ? "<i class='icon-minus'></i> Remove from songbook" : "<i class='icon-plus'></i> Add to songbook")
 				.css("display", songbookId ? "list-item" : "none");
+				$("#menu-song-add-remove + li.divider", this.$el).css("display", songbookId ? "list-item" : "none");
 			}
 		},
 		songbookChanged : function() {

@@ -105,6 +105,11 @@ class SongbookController {
 			}
 		}
 	}
+	
+	def export(Long id) {
+		println ("EXPORTING")
+		
+	}
 
 	def retrieveSongbook(Long id) {
 		def songbook = Songbook.get(id)

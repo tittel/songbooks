@@ -50,6 +50,7 @@ class SongController {
 	}
 
 	def update(Long id, Long version) {
+		println("--- UPDATE -> " + request.JSON)
 		def song = retrieveSong(id)
 		if (song) {
 			if (version != null && song.version > version) {
@@ -62,6 +63,26 @@ class SongController {
 			else {
 				try {
 					song.text = request.JSON.text
+
+					def songbookId = params.songbookId?.trim()
+					if (songbookId && songbookId.isLong() && !request.JSON.isNull("containedInSongbook")) {
+						def songbook = retrieveSongbook(songbookId.toLong())
+						if (!songbook) {
+							return;
+						}
+						if (request.JSON.containedInSongbook) {
+							println("--- ADDING SONG")
+							songbook.addToSongs(song)
+						}
+						else {
+							println("--- REMOVING SONG")
+							songbook.removeFromSongs(song)
+						}
+						if (!songbook.save(flush:true)) {
+							render(status:500, text:"Could not update Songbook due to errors:\n ${songbook.errors}")
+							return
+						}
+					}
 					
 					if (song.save(flush:true)) {
 						render(status:204)

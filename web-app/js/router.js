@@ -8,6 +8,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mode
 				'search*params' : 'searchAction',
 				'song/:songId' : 'songAction',
 				'songbook/:songbookId' : 'songbookAction',
+				'songbook/:songbookId/export' : 'songbookExportAction',
 				'' : 'homeAction',
 				'*actions' : 'defaultAction'
 			},
@@ -52,6 +53,9 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mode
 						}
 					});
 				}
+			},
+			songbookExportAction : function() {
+				window.location.href = contextPath + Backbone.history.fragment;
 			},
 			homeAction : function() {
 				homeView.render();

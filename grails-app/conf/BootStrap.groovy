@@ -26,8 +26,9 @@ class BootStrap {
 			println "--- SONGS CREATED."
 		}
 		if (Songbook.list().size == 0) {
-			new Songbook(name:"sob name", author:"sob author", props:"").addToSongs(Song.get(1)).save(flush:true)
-			new Songbook(name:"sob2 name", author:"sob2 author", props:"").save(flush:true)
+			new Songbook(name:"sob1 name", author:"sob1 author", props:"").addToSongs(Song.get(1)).save(flush:true)
+			new Songbook(name:"sob2 name", author:"sob2 author", props:"").addToSongs(Song.get(1)).save(flush:true)
+			new Songbook(name:"sob3 name", author:"sob3 author", props:"").save(flush:true)
 			println "--- SONGBOOKS CREATED"
 		}
 	}
