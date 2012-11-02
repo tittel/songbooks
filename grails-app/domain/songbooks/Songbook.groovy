@@ -1,7 +1,9 @@
 package songbooks
 
 class Songbook {
-	static searchable = true
+	static searchable = {
+		only:["id"]
+	}
 	static constraints = {
 		name blank:false
 		author blank:false

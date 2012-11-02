@@ -7,8 +7,8 @@ class BootStrap {
 		JSON.registerObjectMarshaller(Song) {
 			def result = [:]
 			result['id'] = it.id
-			result['name'] = it.name
-			result['author'] = it.author
+//			result['name'] = it.name
+//			result['author'] = it.author
 			result['text'] = it.text
 			result['containedInSongbook'] = it.containedInSongbook
 			return result
@@ -25,10 +25,11 @@ class BootStrap {
 		}
 		
 		if (Songbook.list().size == 0) {
-			new Songbook(name:"sb name", author:"sb author", props:"").save(flush:true)
+			new Songbook(name:"sob name", author:"sob author", props:"").save(flush:true)
+			new Songbook(name:"sob2 name", author:"sob2 author", props:"").save(flush:true)
 		}
 		if (Song.list().size == 0) {
-			new Song(text:"{t:test}{st:test}lalalala").addToSongbooks(Songbook.get(1)).save(flush:true)
+			new Song(text:"{t:rest}{st:rest}lalalala").addToSongbooks(Songbook.get(1)).addToSongbooks(Songbook.get(2)).save(flush:true)
 		}
 	}
 	def destroy = {

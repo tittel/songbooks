@@ -5,9 +5,10 @@ class Song {
 	static searchable = {
 		name boost:2.0
 		author boost:2.0
+		only:["name", "author", "text"]
 		//text analyzer:"songTextAnalyzer"
-		containedInSongbook index:"no"
-		songbooks component:true
+		//containedInSongbook index:"no"
+		//songbooks component:true
 	}
 	static constraints = {
 		name blank:false
@@ -17,7 +18,7 @@ class Song {
 	static mapping = {
 		text type:"text"
 	}
-	static transients = ["containedInSongbook"]
+	static transients = ["containedInSongbook", "name", "author"]
 
 	String name
 	String author
