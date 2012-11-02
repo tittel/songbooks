@@ -20,7 +20,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 						Backbone.history.navigate("songbook/" + state.get("songbookId"), true);
 					}
 					else if ("menu-songbook-export" == id) {
-						Backbone.history.navigate("songbook/" + state.get("songbookId") + "/export", true);
+						// don't use backbone router, let the browser request the PDF
+						window.location.href = contextPath + "songbook/" + state.get("songbookId") + "/export";
 					}
 					else if ("menu-song-add-remove" == id) {
 						var model = songView.model;

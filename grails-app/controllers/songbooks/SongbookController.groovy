@@ -108,7 +108,7 @@ class SongbookController {
 	
 	def export(Long id) {
 		println ("EXPORTING")
-		
+		renderPdf(filename:"songbook.pdf", template:"pdf")
 	}
 
 	def retrieveSongbook(Long id) {
