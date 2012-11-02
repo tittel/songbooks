@@ -1,4 +1,16 @@
 <div id="searchresult">
+<!--  
+	<s:if test="%{songbookId.length() > 0}">
+		<p class="searchhint">
+			<s:if test="%{r}">
+				Your search is currently restricted to the songbook. <a href="#" onclick="$('#restrict').val('false'); $('#form').submit(); return false;">Search complete database instead.</a>
+			</s:if>
+			<s:else>
+				You're currently searching the complete datbase. <a href="#" onclick="$('#restrict').val('true'); $('#form').submit(); return false;">Restrict search on songbook instead.</a>
+			</s:else>
+		</p>
+	</s:if>
+-->
 	<% if (total == 0) { %>
 	No songs found.
 	<% } else { %>

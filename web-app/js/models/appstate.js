@@ -3,7 +3,7 @@ define([ 'Underscore', 'Backbone' ], function(_, Backbone) {
 		defaults : {
 			"songbookId" : localStorage["songbookId"] || "",
 			"query" : "",
-			"r" : true,
+			"r" : localStorage["r"] ? Boolean(localStorage["r"]) : true,
 			"viewState" : null,
 			"columns" : localStorage["columns"] ? parseInt(localStorage["columns"]) : 1,
 			"zoom" : localStorage["zoom"] ? parseFloat(localStorage["zoom"]) : 1

@@ -30,7 +30,18 @@ class SongController {
 	def show(Long id) {
 		def song = retrieveSong(id)
 		if (song) {
-			render song as JSON
+			def result = song
+			def songbookId = params.songbookId
+			if (songbookId && songbookId.isLong()) {
+				def songbook = retrieveSongbook(songbookId.toLong())
+				if (!songbook) {
+					return
+				}
+				def contained = songbook.songs.contains(song) 
+				result = JSON.parse((song as JSON).toString())
+				result.put("containedInSongbook", contained)
+			}
+			render result as JSON
 		}
 	}
 
@@ -86,5 +97,14 @@ class SongController {
 			render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'song.label', default: 'Song'), id]))
 		}
 		return song
+	}
+	
+	def retrieveSongbook(Long id) {
+		def songbook = Songbook.get(id)
+		if (!songbook) {
+			log.warn "songbook $id not found."
+			render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
+		}
+		return songbook;
 	}
 }

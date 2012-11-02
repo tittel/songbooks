@@ -1,14 +1,11 @@
 package songbooks
 
 class Song {
-	static hasMany = [songbooks: Songbook]
+	static hasMany = [songbooks:Songbook]
+	static belongsTo = Songbook
 	static searchable = {
 		name boost:2.0
 		author boost:2.0
-		only:["name", "author", "text"]
-		//text analyzer:"songTextAnalyzer"
-		//containedInSongbook index:"no"
-		//songbooks component:true
 	}
 	static constraints = {
 		name blank:false
@@ -18,12 +15,11 @@ class Song {
 	static mapping = {
 		text type:"text"
 	}
-	static transients = ["containedInSongbook", "name", "author"]
-
+	static transients = ["name", "author"]
+	
+	String text
 	String name
 	String author
-	String text
-	boolean containedInSongbook
 	Date dateCreated
 	Date lastUpdated
 	
