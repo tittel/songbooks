@@ -1,4 +1,5 @@
 import grails.converters.JSON
+import grails.util.Environment;
 import songbooks.Song
 import songbooks.Songbook
 
@@ -20,16 +21,21 @@ class BootStrap {
 			return result
 		}
 		
-		if (Song.list().size == 0) {
-			new Song(text:"{t:rest}{st:rest}lalalala").save(flush:true)
-			new Song(text:"{t:rest}{st:rest2}nananananana").save(flush:true)
-			println "--- SONGS CREATED."
-		}
-		if (Songbook.list().size == 0) {
-			new Songbook(name:"sob1 name", author:"sob1 author", props:"").addToSongs(Song.get(1)).save(flush:true)
-			new Songbook(name:"sob2 name", author:"sob2 author", props:"").addToSongs(Song.get(1)).save(flush:true)
-			new Songbook(name:"sob3 name", author:"sob3 author", props:"").save(flush:true)
-			println "--- SONGBOOKS CREATED"
+		if (Environment.developmentMode) {
+			if (Song.list().size == 0) {
+				new File("/home/tittel/temp/chopro").eachFileMatch(~/.*\.chopro/) { file ->
+					new Song(text:file.text).save(flush:true)
+				}
+				println "--- SONGS CREATED."
+			}
+			if (Songbook.list().size == 0) {
+				def songbook = new Songbook(name:"Songbook", author:"Stephan", props:"")
+				Song.list().each { song ->
+					songbook.addToSongs(song)
+				}
+				songbook.save(flush:true)
+				println "--- SONGBOOKS CREATED"
+			}
 		}
 	}
 	def destroy = {

@@ -1,0 +1,22 @@
+.songview { word-wrap:break-word; line-height:1.2em;
+	-moz-column-rule:0.2em solid #F5F5F5; -webkit-column-rule:0.2em solid #F5F5F5; column-rule:0.2em solid #F5F5F5;
+}
+.songview h1 { color:#04C; line-height:1em; font-size:1.5em; margin-top:0 }
+.songview h2 { color:#333; line-height:1em; font-size:1.1em }
+.songview .verse { margin-bottom:1em }
+.songview .chorus { border-radius:0.5em; border:0.15em solid #888; padding:0.5em 0.5em 1em 0.5em; margin-bottom:2em }
+.songview .chorus, .songview .chorus .lyrics span.fragment { background-color:#F5F5F5 }
+.songview .chorus, .songview .line { column-break-inside:avoid; -webkit-column-break-inside:avoid; -moz-column-break-inside:avoid; -o-column-break-inside:avoid; -ms-column-break-inside:avoid }
+.songview .comment { font-style:italic; border-radius:0.5em; background-color:#FFA; padding:0.5em; margin:0 1em 1em 0; display:inline-block }
+.songview .tabs { font-size:0.8em; margin-bottom:2em; white-space:pre-wrap; border:none; background:inherit }
+.songview .chord-definition { display:inline-block; width:4em; height:6em; margin:0 1em 1em 0; opacity:0.8 }
+
+.songview .line { display:table }
+.songview .chords { line-height:0.8em }
+.songview .lyrics, .songview .chords { display:table-row }
+.songview .lyrics > span, .songview .chords > span { display:table-cell; white-space:pre }
+.songview .chords > span { padding-right:0.5em; font-size:0.8em; color:#444 }
+.songview .lyrics > span { position:relative }
+.songview .lyrics span.sep { display:block; width:100%; position:absolute; margin-top:0.9em; z-index:-1; height:2px }
+.songview .lyrics > span:not(:last-child) span.sep { border-top:0.08em solid #333 }
+.songview .lyrics span.fragment { background-color:#FFF }

@@ -68,6 +68,7 @@ function choproToHtml($, source) {
     return $source;
 }
 
+/*
 function htmlToChopro($, rootNode) {
     var template = '<?xml version="1.0" encoding="UTF-8"?><xsl:stylesheet><xsl:template match="/"><xsl:apply-templates /></xsl:template><xsl:template match="h1">{t:<xsl:value-of select="text()" />}\n</xsl:template><xsl:template match="h2">{st:<xsl:value-of select="text()" />}\n</xsl:template><xsl:template match="*[@class=\'comment\']">\n{c:<xsl:value-of select="text()" />}\n</xsl:template><xsl:template match="*[@class=\'tabs\']">\n{sot}\n<xsl:apply-templates />{eot}\n</xsl:template><xsl:template match="*[@class=\'chorus\']">\n{soc}<xsl:apply-templates />{eoc}\n</xsl:template><xsl:template match="*[@class=\'verse\']"><xsl:apply-templates />\n</xsl:template><xsl:template match="*[@class=\'chord\']">[<xsl:value-of select="text()" />]</xsl:template><xsl:template match="text()"><xsl:value-of select="." /></xsl:template><xsl:template match="*[@class=\'textline\']"><xsl:apply-templates />\n</xsl:template></xsl:stylesheet>';
     $target = $("<div/>");
@@ -75,6 +76,7 @@ function htmlToChopro($, rootNode) {
     var chopro = $.trim($target.text());
     return chopro;
 }
+*/
 
 function createCells($, line) {
 	var cells;

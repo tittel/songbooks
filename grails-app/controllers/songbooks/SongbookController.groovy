@@ -107,10 +107,13 @@ class SongbookController {
 	}
 	
 	def export(Long id) {
-		println ("EXPORTING")
-		renderPdf(filename:"songbook.pdf", template:"pdf")
+		def songbook = retrieveSongbook(id)
+		if (songbook) {
+			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated)
+			renderPdf(filename:filename, template:"pdf", model:[songbook:songbook])
+		}
 	}
-
+	
 	def retrieveSongbook(Long id) {
 		def songbook = Songbook.get(id)
 		if (!songbook) {
