@@ -17,7 +17,7 @@ a { color:#04C }
 #toolbar .slider .ui-slider { background-color:#FFF; cursor:pointer }
 #toolbar .query { width:10em }
 #toolbar #select-songbook-container { text-align:center }
-#toolbar #select-songbook-container label { font-size:0.8em; color:#555 }
+#toolbar #select-songbook-container select { margin:0 0 0 1em; width:200px }
 #toolbar #menu-container { position:absolute; top:0.5em; right:0.5em }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
 #toolbar #menu-container .dropdown-menu a { cursor:pointer }

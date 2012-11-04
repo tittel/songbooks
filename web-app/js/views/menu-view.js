@@ -23,6 +23,12 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 						// don't use backbone router, let the browser request the PDF
 						window.location.href = contextPath + "songbook/" + state.get("songbookId") + "/export";
 					}
+					else if ("menu-songbook-print" == id) {
+						// first remove possible previous print frame
+						$("iframe#print", that.$el).remove();
+						// don't use backbone router, let the browser request the print page
+						that.$el.append("<iframe id='print' style='display:none' src='"+contextPath + "songbook/" + state.get("songbookId") + "/print"+"'>");
+					}
 					else if ("menu-song-add-remove" == id) {
 						var model = songView.model;
 						model.set("containedInSongbook", !model.get("containedInSongbook"));

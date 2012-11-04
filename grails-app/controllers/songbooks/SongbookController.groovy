@@ -114,6 +114,13 @@ class SongbookController {
 		}
 	}
 	
+	def print(Long id) {
+		def songbook = retrieveSongbook(id)
+		if (songbook) {
+			render(template:"pdf", model:[songbook:songbook, print:true])
+		}
+	}
+	
 	def retrieveSongbook(Long id) {
 		def songbook = Songbook.get(id)
 		if (!songbook) {

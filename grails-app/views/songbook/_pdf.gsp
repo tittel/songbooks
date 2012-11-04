@@ -3,8 +3,13 @@
 	<head>
 		<style>
 			@page { size:297mm 210mm; margin:15mm 20mm }
-			@page {
-				@bottom-center {
+			@page:left {
+				@bottom-left {
+					content:counter(page);
+				}
+			}
+			@page:right {
+				@bottom-right {
 					content:counter(page);
 				}
 			}
@@ -64,5 +69,10 @@
 				<a href="#${song.id}">${song.name}</a><br></br>
 			</g:each>
 		</div>
+		<g:if test="${print}">
+			<script type="text/javascript">
+				window.print();
+			</script>
+		</g:if>
 	</body>
 </html>

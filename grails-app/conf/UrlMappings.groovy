@@ -20,13 +20,18 @@ class UrlMappings {
 			controller = "songbook"
 			action = [GET:"export"]
 		}
-		"/import" {
-			controller = "import"
-			action = [GET: "index", POST: "result"]
+		"/songbook/$id/print" {
+			controller = "songbook"
+			action = [GET:"print"]
+			view = [GET:"_pdf"]
 		}
-		"/export" {
-			controller = "export"
-			action = [GET: "index"]
+		"/backup/import" {
+			controller = "backup"
+			action = [GET: "index", POST: "importBackup"]
+		}
+		"/backup/export" {
+			controller = "backup"
+			action = [GET: "exportBackup"]
 		}
 /*		
 		"/$controller/$action?/$id?"{
