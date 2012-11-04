@@ -25,7 +25,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 		},
 		delayedSearch : _.debounce(function() {
 			state.set("query", $(".query", this.$el).val());
-		}, 600),
+		}, 800),
 		queryChanged : function() {
 			$(".query", this.$el).val(state.get("query"));
 		}

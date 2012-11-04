@@ -2,18 +2,20 @@
 <html>
 	<head>
 		<style>
-			@page { size:297mm 210mm; margin:15mm 20mm }
-			@page:left {
-				@bottom-left {
-					content:counter(page);
-				}
-			}
-			@page:right {
+			@page { size:297mm 210mm }
+			@page:left { margin:10mm 10mm 10mm 20mm }
+			@page:right { margin:10mm 20mm 10mm 10mm }
+			@page content:left {
 				@bottom-right {
 					content:counter(page);
 				}
 			}
-			html, body { font-family:sans-serif; font-size:14px }
+			@page content:right {
+				@bottom-left {
+					content:counter(page);
+				}
+			}
+			html, body { font-family:sans-serif; font-size:14px; margin:0; padding:0 }
 			a { text-decoration:none; color:inherit }
 			ul { list-style-type:none; margin:0; padding:0 }
 			
@@ -28,6 +30,9 @@
 			.index h2 { font-size:1.2em; margin-bottom:0 }
 			.index a { padding-left:1em }
 			.toc a:after, .index a:after { content:leader('.') target-counter(attr(href), page) }
+			.toc, .index, .content { -moz-column-count:2; -webkit-column-count:2; column-count:2 }
+			
+			.content { page:content }
 		</style>
 	</head>
 	<body>

@@ -76,6 +76,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 			var songbookId = state.get("songbookId");
 			// update state of menu items related to songbooks
 			$("#menu-songbook-edit", this.$el).css("display", songbookId ? "list-item" : "none");
+			$("#menu-songbook-print", this.$el).css("display", songbookId ? "list-item" : "none");
 			$("#menu-songbook-export", this.$el).css("display", songbookId ? "list-item" : "none");
 			// call viewStateChanged because some items depend on the selected songbook
 			this.viewStateChanged();
