@@ -71,7 +71,6 @@
 		</div>
 		<g:if test="${print}">
 			<script type="text/javascript">
-			// jaja
 				window.print();
 			</script>
 		</g:if>
