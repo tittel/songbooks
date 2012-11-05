@@ -66,7 +66,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-	grails.serverURL = "https://songbooks.tittel.name"
+	grails.serverURL = "http://songbooks.tittel.name"
     }
 }
 
