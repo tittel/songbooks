@@ -9,7 +9,8 @@ class SearchController {
 		if (params.q?.trim()) {
 			def query = params.q.trim()
 			def songbookId = params.songbookId?.trim()
-			if (songbookId && songbookId.isLong()) {
+			def restricted = songbookId && songbookId.isLong()
+			if (restricted) {
 				query = query + " +\$/Song/songbooks/id:" + songbookId;
 			}
 			
@@ -30,7 +31,7 @@ class SearchController {
 			})
 			result.total = highlights.size
 			result.results = highlights
-			result.size = Song.list().size
+			result.size = restricted ? Songbook.get(songbookId).songs.size() : Song.list().size
 		}
 		render result as JSON
 	}

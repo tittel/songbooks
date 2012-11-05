@@ -35,7 +35,9 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
-	runtime 'postgresql:postgresql:8.4-702.jdbc3'
+		runtime 'postgresql:postgresql:8.4-702.jdbc3'
+		// rendering plugin needs MockHttpServlet at runtime
+		runtime('org.springframework:org.springframework.test:3.1.2.RELEASE')
     }
 
     plugins {
