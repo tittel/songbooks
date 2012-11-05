@@ -10,12 +10,12 @@ class SongTagLib {
 	    // cleanup: replace html tags (against injection etc.) 
 	    source = source.replaceAll("<", "\u2264").replaceAll(">", "\u2265")
 	    // cleanup: remove leading whitespace in every line
-	    source = source.replace("^[ \t]+", "")
+	    source = source.replaceAll("^[\\\\s]+", "")
 	    // cleanup: replace whitespace between adjacent chopro tags by single newline
-	    source = source.replace("({.*?})\\s*({.*?})", "${1}\n${2}")
+	    source = source.replaceAll("(\\{.*?\\})\\\\s*(\\{.*?\\})", "${1}\n${2}")
 	    // cleanup: remove line comments
-	    source = source.replace("^#.*", "")
-		println source
+	    source = source.replaceAll("^#.*", "")
+//		println source
 	
 	    // replace title
 	    source = source.replace("\\{(t|title):(.*?)\\}", "\n\n<h1>${2}</h1>\n\n")

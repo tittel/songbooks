@@ -1,10 +1,13 @@
 import grails.converters.JSON
-import grails.util.Environment;
+import grails.util.Environment
+import songbooks.RenderEnvironmentFix
 import songbooks.Song
 import songbooks.Songbook
 
 class BootStrap {
 	def init = { servletContext ->
+		RenderEnvironmentFix.doFixWithMetaclass()
+
 		JSON.registerObjectMarshaller(Song) {
 			def result = [:]
 			result['id'] = it.id

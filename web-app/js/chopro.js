@@ -29,7 +29,7 @@ function choproToHtml($, source) {
     
     var $source = $("<div class='songview'>" + source + "</div>");
     
-    // create verse blocks
+    // create verse blocks (which is every text node on root level right now)
     $source.contents().each(function() {
     	if (this.nodeType === 3) {
     		var $this = $(this);
@@ -44,7 +44,7 @@ function choproToHtml($, source) {
     	}
     });
     
-    // create lines, lyric lines and chord lines
+    // create lines, lyric lines and chord lines in chorus and verse blocks
     $(".chorus,.verse", $source).each(function() {
     	$(this).contents().each(function() {
         	if (this.nodeType === 3) {
@@ -61,7 +61,7 @@ function choproToHtml($, source) {
     	});
     });
     
-    // create chord definitions
+    // create chord images
     $(".chord-definition", $source).each(function() {
     	$(this).html(createChordImage($, $(this).text().trim()));
     });
