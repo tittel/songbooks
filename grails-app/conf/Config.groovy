@@ -62,11 +62,11 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
-		grails.serverURL = "http://localhost:8080/songbooks"
+	grails.serverURL = "http://localhost:8080/songbooks"
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
+	grails.serverURL = "https://songbooks.tittel.name"
     }
 }
 
