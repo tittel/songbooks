@@ -9,7 +9,9 @@
 	<body>
 		<div id="page">
 			<div id="toolbar"></div>
-			<div id="content"></div>
+			<div id="content">
+				<div class="spinner"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
+			</div>
 		</div>
 	</body>
 </html>

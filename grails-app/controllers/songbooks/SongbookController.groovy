@@ -1,8 +1,11 @@
 package songbooks
 
 import grails.converters.JSON
+import com.itextpdf.text.pdf.PdfReader
 
 class SongbookController {
+	def pdfRenderingService
+	
 	def list() {
 		render Songbook.list() as JSON
 	}
@@ -109,6 +112,11 @@ class SongbookController {
 	def export(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
+			def destination = new ByteArrayOutputStream()
+			pdfRenderingService.render([controller:this, template:"pdf", model:[songbook:songbook]], destination)
+			println destination
+			def pdfReader = new PdfReader(destination.toByteArray())
+			
 			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated)
 			renderPdf(filename:filename, template:"pdf", model:[songbook:songbook])
 		}

@@ -24,8 +24,8 @@ class Song {
 	Date lastUpdated
 	
 	public void setText(String text) {
-		name = (text =~ "\\{(t|title):(.*?)\\}")[0][2]
-		author = (text =~ "\\{(st|subtitle):(.*?)\\}")[0][2]
+		name = (text =~ "\\{(t|title):\\s*(.*?)\\s*\\}")[0][2]
+		author = (text =~ "\\{(st|subtitle):\\s*(.*?)\\s*\\}")[0][2]
 		this.text = text
 	}
 }

@@ -69,7 +69,7 @@
 		<div class="index">
 			<h1>Index</h1>
 			<g:set var="currentAuthor" value="" />
-			<g:each in="${songbook.songs.sort{a,b -> a.author < b.author ? -1 : 1}}" var="song">
+			<g:each in="${songbook.songs.sort{a,b -> (a.author == b.author) ? (a.name < b.name ? -1 : 1) : (a.author < b.author ? -1 : 1) }}" var="song">
 				<g:if test="${currentAuthor != song.author}">
 					<g:set var="currentAuthor" value="${song.author}" />
 					<h2>${song.author}</h2>
