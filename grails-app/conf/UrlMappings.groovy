@@ -16,6 +16,10 @@ class UrlMappings {
 			controller = "songbook"
 			action = [DELETE:"deleteSong"]
 		}
+		"/song/$id/export" {
+			controller = "song"
+			action = [GET:"export"]
+		}
 		"/songbook/$id/export" {
 			controller = "songbook"
 			action = [GET:"export"]

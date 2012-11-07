@@ -41,6 +41,10 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 							}
 			        	});
 					}
+					else if ("menu-song-export" == id) {
+						// don't use backbone router, let the browser request the PDF
+						window.location.href = contextPath + "song/" + songView.model.get("id") + "/export";
+					}
 				}
 				return false;
 			});

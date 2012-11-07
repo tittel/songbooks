@@ -1,6 +1,6 @@
 <select id="select-songbook">
 	<option value="">None</option>
 	<% _.each(songbooks, function(songbook) { %>
-	<option value="<%= songbook.get('id') %>"><%= songbook.get("name") || "NO NAME" %></option>
+	<option value="<%= songbook.get('id') %>"><%= (songbook.get("name") || "NO NAME") + " - " + (songbook.get("author") || "NO AUTHOR") %></option>
 	<% }); %>
 </select>

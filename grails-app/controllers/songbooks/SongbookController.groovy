@@ -4,7 +4,8 @@ import grails.converters.JSON
 import com.itextpdf.text.pdf.PdfReader
 
 class SongbookController {
-	def pdfRenderingService
+	def pdfExportService
+//	def pdfRenderingService
 	
 	def list() {
 		render Songbook.list() as JSON
@@ -112,20 +113,29 @@ class SongbookController {
 	def export(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
+/*
 			def destination = new ByteArrayOutputStream()
 			pdfRenderingService.render([controller:this, template:"pdf", model:[songbook:songbook]], destination)
 			println destination
 			def pdfReader = new PdfReader(destination.toByteArray())
-			
-			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated)
+			println "info: " + pdfReader.info
+*/			
+			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
 			renderPdf(filename:filename, template:"pdf", model:[songbook:songbook])
+/*			
+			response.contentType = "application/octet-stream"
+			response.setHeader("Content-disposition", "attachment; filename=\"$filename\"")
+			pdfExportService.exportSongbook(songbook, response.outputStream)
+			response.outputStream.flush()
+*/			
 		}
 	}
-	
+
 	def print(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
-			render(template:"pdf", model:[songbook:songbook, print:true])
+//			render(template:"pdf", model:[songbook:songbook, print:true])
+			render(template:"pdf", model:[songbook:songbook])
 		}
 	}
 	

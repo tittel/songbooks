@@ -1,26 +1,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
-		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" />
-		<style>
-			@page { size:297mm 210mm }
+		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" media="all" />
+		<style media="all">
+			/*@page { size:297mm 210mm }*/
+			@page { size:148mm 210mm }
 			@page:left { margin:10mm 10mm 10mm 20mm }
 			@page:right { margin:10mm 20mm 10mm 10mm }
-			@page content:left {
+			@page songs:left {
 				@bottom-right {
 					content:counter(page);
 				}
 			}
-			@page content:right {
+			@page songs:right {
 				@bottom-left {
 					content:counter(page);
 				}
 			}
 			html, body { font-family:sans-serif; font-size:14px; margin:0; padding:0 }
+			h1 { margin-top:1em; padding-bottom:0.2em; border-bottom:1px solid #000 }
 			a { text-decoration:none; color:inherit }
 			ul { list-style-type:none; margin:0; padding:0 }
 			
-			.front-page { font-size:28px; display:table; width:100%; height:180mm }
+			.front-page { font-size:24px; display:table; width:100%; height:180mm }
 			.front-page > div { display:table-cell; vertical-align:middle}
 			.front-page .name { font-size:3em; font-variant:small-caps; border-bottom:1px solid black }
 			.front-page .author { text-align:right }
@@ -31,10 +33,10 @@
 			.index h2 { font-size:1.2em; margin-bottom:0 }
 			.index a { padding-left:1em }
 			.toc a:after, .index a:after { content:leader('.') target-counter(attr(href), page) }
-			.toc, .index, .content { -moz-column-count:2; -webkit-column-count:2; column-count:2 }
+			.toc, .index, .songs { -moz-column-count:2; -webkit-column-count:2; column-count:2 }
 			
-			.content { page:content }
-			.content h1 { margin-top:1em }
+			.songs { page:songs; page-break-before :right }
+			.songs h1 { border-color:#04C }
 		</style>
 	</head>
 	<body>
@@ -58,10 +60,9 @@
 			</ul>
 		</div>
 		<%-- create content with songs --%>
-		<div class="content songview">
+		<div class="songs songview">
 			<g:each in="${songsByName}" var="song">
 				<a name="${song.id}"></a>
-				<h1>${song.name}</h1>
 				<song:render text="${song.text}" />
 			</g:each>
 		</div>
