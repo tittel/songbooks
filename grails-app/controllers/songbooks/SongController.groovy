@@ -116,11 +116,16 @@ class SongController {
 	def export(Long id) {
 		def song = retrieveSong(id)
 		if (song) {
+/*
 			def filename = song.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:song.lastUpdated) + ".pdf"
 			response.contentType = 'application/octet-stream'
 			response.setHeader 'Content-disposition', "attachment; filename=\"$filename\""
 			pdfExportService.exportSong(song, response.outputStream)
 			response.outputStream.flush()
+*/
+
+			def filename = song.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:song.lastUpdated) + ".pdf"
+			renderPdf(filename:filename, template:"/pdf/song", model:[song:song])
 		}
 	}
 	

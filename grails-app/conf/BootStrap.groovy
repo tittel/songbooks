@@ -20,7 +20,7 @@ class BootStrap {
 			result['id'] = it.id
 			result['name'] = it.name
 			result['author'] = it.author
-			result['props'] = it.props
+			result['format'] = it.format
 			return result
 		}
 		
@@ -32,7 +32,7 @@ class BootStrap {
 				println "--- SONGS CREATED."
 			}
 			if (Songbook.list().size == 0) {
-				def songbook = new Songbook(name:"Songbook", author:"Stephan", props:"")
+				def songbook = new Songbook(name:"Songbook", author:"Stephan")
 				Song.list().each { song ->
 					songbook.addToSongs(song)
 				}

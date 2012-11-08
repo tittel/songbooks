@@ -1,3 +1,11 @@
 <p><label for="name">Name:</label><input type="text" id="name" value="<%= songbook.get("name") %>" placeholder="Some descriptive name..."></p>
 <p><label for="author">Author:</label><input type="text" id="author" value="<%= songbook.get("author") %>" placeholder="Your name..."></p>
-<p><label for="props">Properties:</label><textarea id="props"><%= JSON.stringify(songbook.get("props")) %></textarea></p>
+<p>
+	<label for="format">Format:</label>
+	<select id="format">
+		<option value="A4"<%= songbook.get("format") == "A4" ? " selected='selected'" : "" %>>A4 (portrait)</option>
+		<option value="A4L"<%= songbook.get("format") == "A4L" ? " selected='selected'" : "" %>>A4 (landscape)</option>
+		<option value="A5"<%= songbook.get("format") == "A5" ? " selected='selected'" : "" %>>A5 (portrait)</option>
+		<option value="A5L"<%= songbook.get("format") == "A5L" ? " selected='selected'" : "" %>>A5 (landscape)</option>
+	</select>
+</p>

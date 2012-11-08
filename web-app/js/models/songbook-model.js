@@ -3,7 +3,7 @@ define([ 'Underscore', 'Backbone' ], function(_, Backbone) {
 		defaults : {
 			"name" : "",
 			"author" : "",
-			"props": "",
+			"format": "",
 			"songs" : []
 		},
 		initialize : function() {

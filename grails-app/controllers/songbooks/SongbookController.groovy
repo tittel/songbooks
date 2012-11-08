@@ -45,8 +45,16 @@ class SongbookController {
 				render(status:409, text:"Could not update Songbook due to errors:\n ${songbook.errors}")
 			}
 			else {
-				songbook.properties = params
-		
+				if (request.JSON.name) {
+					songbook.name = request.JSON.name
+				}
+				if (request.JSON.author) {
+					songbook.author = request.JSON.author
+				}
+				if (request.JSON.format) {
+					songbook.format = request.JSON.format
+				}
+
 				if (songbook.save(flush:true)) {
 					render(status:204)
 				}
@@ -121,7 +129,7 @@ class SongbookController {
 			println "info: " + pdfReader.info
 */			
 			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
-			renderPdf(filename:filename, template:"pdf", model:[songbook:songbook])
+			renderPdf(filename:filename, template:"/pdf/songbook", model:[songbook:songbook])
 /*			
 			response.contentType = "application/octet-stream"
 			response.setHeader("Content-disposition", "attachment; filename=\"$filename\"")
@@ -134,8 +142,8 @@ class SongbookController {
 	def print(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
-//			render(template:"pdf", model:[songbook:songbook, print:true])
-			render(template:"pdf", model:[songbook:songbook])
+//			render(template:"/pdf/songbook", model:[songbook:songbook, print:true])
+			render(template:"/pdf/songbook", model:[songbook:songbook])
 		}
 	}
 	

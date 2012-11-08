@@ -4,7 +4,7 @@
 		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" media="all" />
 		<style media="all">
 			/*@page { size:297mm 210mm }*/
-			@page { size:148mm 210mm }
+			@page { <song:renderPageSize>${songbook.format}</song:renderPageSize> }
 			@page:left { margin:10mm 10mm 10mm 20mm }
 			@page:right { margin:10mm 20mm 10mm 10mm }
 			@page songs:left {
@@ -43,6 +43,7 @@
 		</style>
 	</head>
 	<body>
+	<h1><song:renderPageSize>${songbook.format}</song:renderPageSize> </h1>
 		<%-- create front page --%>
 		<div class="front-page">
 			<div>

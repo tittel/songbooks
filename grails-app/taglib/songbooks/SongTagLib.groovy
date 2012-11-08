@@ -3,6 +3,12 @@ package songbooks
 
 class SongTagLib {
 	static namespace = "song"
+	static PAGE_SIZES = [
+		"A4" : "210mm 297mm",
+		"A4L" : "297mm 210mm",
+		"A5" : "148mm 210mm",
+		"A5L" : "210mm 148mm"
+	]
 	
 	def render = { attrs, body ->
 		def source = body()
@@ -65,6 +71,14 @@ class SongTagLib {
 		source = "<div class='songview'>\n" + sw.toString() + "</div>"
 
 		out << source
+	}
+	
+	def renderPageSize = { attrs, body ->
+		def size = PAGE_SIZES.get(body())
+		if (!size) {
+			size = "148mm 210mm"
+		}
+		out << "size:" + size
 	}
 	
 	def chord = { attrs, body ->

@@ -24,7 +24,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 		        	var isNew = model.isNew();
 		        	model.set("name", $("#name", this.$el).val());
 		        	model.set("author", $("#author", this.$el).val());
-		        	model.set("props", JSON.parse($("#props", this.$el).val()));
+		        	model.set("format", $("#format", this.$el).val());
 		        	model.save(null, {
 		        		success: function() {
 		        			new Message({message:"Songbook " + (isNew ? "created" : "saved") + "."});

@@ -8,11 +8,12 @@ class Songbook {
 	static constraints = {
 		name blank:false
 		author blank:false
+		format blank:false
 	}
 
 	String name
 	String author
-	String props
+	String format = "A5"
 	Date dateCreated
 	Date lastUpdated
 }
