@@ -1,7 +1,6 @@
 package songbooks
 
 import grails.converters.JSON
-import com.itextpdf.text.pdf.PdfReader
 
 class SongbookController {
 	def pdfExportService

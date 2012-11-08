@@ -39,6 +39,7 @@ grails.project.dependency.resolution = {
 		runtime 'postgresql:postgresql:8.4-702.jdbc3'
 		// rendering plugin needs MockHttpServlet at runtime
 		runtime('org.springframework:spring-test:3.1.2.RELEASE')
+		runtime('batik:batik-rasterizer:1.6-1')
     }
 
     plugins {
