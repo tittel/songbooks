@@ -52,7 +52,7 @@ class SongController {
 	}
 
 	def update(Long id, Long version) {
-		println("--- UPDATE -> " + request.JSON)
+//		println("--- UPDATE -> " + request.JSON)
 		def song = retrieveSong(id)
 		if (song) {
 			if (version != null && song.version > version) {
