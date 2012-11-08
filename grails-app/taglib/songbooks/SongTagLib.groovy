@@ -1,8 +1,6 @@
 package songbooks
 
-import org.apache.batik.transcoder.TranscoderInput
-import org.apache.batik.transcoder.TranscoderOutput
-import org.apache.batik.transcoder.image.PNGTranscoder
+
 
 
 class SongTagLib {
@@ -41,7 +39,8 @@ class SongTagLib {
 		// replace comments
 		source = source.replaceAll(/\{(c|comment|ci):\s*(.*?)\s*\}/, "\n\n<div class='comment'>\$2</div>\n\n")
 		// replace chord definitions
-		source = source.replaceAll(/\{define[:]?(.*?)\s*\}/, "\n\n<div class='chord-definition'>\$1</div>\n\n")
+		source = source.replaceAll(/\{define[:]?\s*(.*?)\s*\}/, "\n\n<div class='chord-definition'>\$1</div>\n\n")
+		println source
 
 		def parser = new XmlParser()
 		def sw = new StringWriter()
@@ -67,6 +66,11 @@ class SongTagLib {
 				}
 				sw.append("</div>\n")
 			}
+			else if (it.@class == "chord-definition") {
+//				sw.append("<img src='data:image/png;base64,")
+				sw.append(createChordSVG(it.text()))
+//				sw.append("' class='chord-definition' />")
+			}
 			else {
 				printer.print(it)
 			}
@@ -85,22 +89,22 @@ class SongTagLib {
 		out << "size:" + size
 	}
 
-	def chord = { attrs, body ->
-		println "CREATING CHORD FROM -> attrs=" + attrs + ", body=" + body()
-		byte[] streamBytes
-		PNGTranscoder t = new PNGTranscoder();
-		TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(streamBytes));
-		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-		TranscoderOutput output = new TranscoderOutput(ostream);
+	def createChordPNG(define) {
+		println "CREATING CHORD FROM -> "+ define
+/*		
+		byte[] streamBytes = createChordSVG(define).bytes
+		PNGTranscoder t = new PNGTranscoder()
+		TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(streamBytes))
+		ByteArrayOutputStream ostream = new ByteArrayOutputStream()
+		TranscoderOutput output = new TranscoderOutput(ostream)
 
-		t.transcode(input, output);
+		t.transcode(input, output)
 
-		ostream.flush();
-		// ostream.close();
-//		return ostream;
-
-
-		out << ("huh".bytes as byte[])
+		ostream.flush()
+		ostream.close()
+		return ostream.toByteArray()
+*/
+		return define
 	}
 
 	def createLines(text, sw) {
@@ -165,6 +169,7 @@ class SongTagLib {
 	}
 	
 	def createChordSVG(define) {
+		println "CREATING CHORD FROM -> '"+ define + "'"
 		def svg = ""
 		// collapse white space
 		define = define.replaceAll(/\s+/, " ")
@@ -173,14 +178,14 @@ class SongTagLib {
 		if (split.length == 10 && "base-fret" == split[1] && "frets" == split[3]) {
 			name = split[0]
 			offset = Integer.parseInt(split[2])
-			frets = split.slice(4);
+			frets = split[4..9]
 		}
 		else if (split.length == 8) {
 			name = split[0];
 			offset = Integer.parseInt(split[1]);
-			frets = split.slice(2).reverse();
+//			frets = split.[2..7].reverse();
 		}
-		if (name && name.length > 0 && offset && frets && frets.length === 6) {
+		if (name && name.length() > 0 && offset && frets && frets.size() == 6) {
 			def clampAtFret = 26
 			def maxFret = 0
 			frets.eachWithIndex { value, index ->
@@ -228,7 +233,7 @@ class SongTagLib {
 				if (isNaN(fret) || fret < 0) {
 					svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>"
 				}
-				else if (0 === fret) {
+				else if (0 == fret) {
 					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />"
 				}
 				else {
