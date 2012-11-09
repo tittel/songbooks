@@ -127,7 +127,7 @@ class SongbookController {
 			def pdfReader = new PdfReader(destination.toByteArray())
 			println "info: " + pdfReader.info
 */			
-			def filename = songbook.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
+			def filename = songbook.name.replaceAll(" ", "_") + "-${songbook.format}-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
 			renderPdf(filename:filename, template:"/pdf/songbook", model:[songbook:songbook])
 /*			
 			response.contentType = "application/octet-stream"

@@ -104,6 +104,7 @@ class SongTagLib {
 		println "CREATING PNG FROM -> "+ define
 		IMOperation op = new IMOperation()
 		op.addImage("svg:-")                 // input: stdin
+		op.antialias()
 		op.addImage("png:-")                 // output: stdout
 		
 		// set up command
@@ -125,6 +126,7 @@ class SongTagLib {
 */
 
 		BufferedImage img = consumer.getImage()
+		println "--- img size=" + img.width + "x" + img.height
 		ByteArrayOutputStream out = new ByteArrayOutputStream()
 		ImageIO.write(img, "png", out)
 		png += out.toByteArray().encodeBase64()
