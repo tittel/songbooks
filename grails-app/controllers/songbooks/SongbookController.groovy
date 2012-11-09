@@ -3,9 +3,6 @@ package songbooks
 import grails.converters.JSON
 
 class SongbookController {
-	def pdfExportService
-//	def pdfRenderingService
-	
 	def list() {
 		render Songbook.list() as JSON
 	}
@@ -120,21 +117,8 @@ class SongbookController {
 	def export(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
-/*
-			def destination = new ByteArrayOutputStream()
-			pdfRenderingService.render([controller:this, template:"pdf", model:[songbook:songbook]], destination)
-			println destination
-			def pdfReader = new PdfReader(destination.toByteArray())
-			println "info: " + pdfReader.info
-*/			
 			def filename = songbook.name.replaceAll(" ", "_") + "-${songbook.format}-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
 			renderPdf(filename:filename, template:"/pdf/songbook", model:[songbook:songbook])
-/*			
-			response.contentType = "application/octet-stream"
-			response.setHeader("Content-disposition", "attachment; filename=\"$filename\"")
-			pdfExportService.exportSongbook(songbook, response.outputStream)
-			response.outputStream.flush()
-*/			
 		}
 	}
 

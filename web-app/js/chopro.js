@@ -175,10 +175,14 @@ function createChordImage($, def) {
 			var fret = parseInt(value);
 			var x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)));
 			if (isNaN(fret) || fret < 0) {
-				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>";
+//				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>";
+				var d = topFretFontsize * 0.4;
+				var y = padding.top - 0.75 * topFretFontsize;
+				svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>";
+				svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>";
 			}
 			else if (0 === fret) {
-				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />";
+				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='" + strokeWidth + "' fill='none' />";
 			}
 			else {
 				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.35 * fretDiff + fret * fretDiff) + "' r='" + radius + "' fill='black' />";

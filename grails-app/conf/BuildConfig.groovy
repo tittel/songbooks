@@ -35,7 +35,7 @@ grails.project.dependency.resolution = {
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-		compile 'com.itextpdf:itextpdf:5.3.2'
+//		compile 'com.itextpdf:itextpdf:5.3.2'
 //		compile('batik:batik-rasterizer:1.6-1') {
 //			excludes 'slf4j-log4j12', 'xml-apis', 'xml-apis-ext', 'log4j', 'xerces', 'xercesImpl', 'xalan', 'serializer'
 //			excludes 'batik-ext', 'xml-apis', 'xmlParserAPIs','xml-apis-ext', 'log4j', 'xerces', 'xercesImpl', 'xalan', 'serializer'

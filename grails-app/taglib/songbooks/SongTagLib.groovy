@@ -74,11 +74,9 @@ class SongTagLib {
 				sw.append("</div>\n")
 			}
 			else if (it.@class == "chord-definition") {
-				sw.append("<img src='data:image/png;base64,")
-//				sw.append("<div class='chord-definition'>")
+				sw.append("<img class='chord-definition' src='data:image/png;base64,")
 				sw.append(createChordPNG(it.text()))
-//				sw.append("</div>")
-				sw.append("' class='chord-definition' />")
+				sw.append("' />")
 			}
 			else {
 				printer.print(it)
@@ -100,13 +98,13 @@ class SongTagLib {
 
 	def createChordPNG(define) {
 		def svg = createChordSVG(define)
-		
+
 		println "CREATING PNG FROM -> "+ define
 		IMOperation op = new IMOperation()
 		op.addImage("svg:-")                 // input: stdin
 		op.antialias()
 		op.addImage("png:-")                 // output: stdout
-		
+
 		// set up command
 		ConvertCmd convert = new ConvertCmd()
 		convert.setInputProvider(new Pipe(new ByteArrayInputStream(svg.bytes), null))
@@ -114,36 +112,35 @@ class SongTagLib {
 		Stream2BufferedImage consumer = new Stream2BufferedImage()
 //		ArrayListOutputConsumer consumer = new ArrayListOutputConsumer()
 		convert.setOutputConsumer(consumer)
-		
+
 		// run command and extract BufferedImage from OutputConsumer
 		convert.run(op)
-		
+
 		def png = ""
+
 /*
-		consumer.output.each {
-			png += it.bytes.encodeBase64()
-		}
+		FileOutputStream fos = new FileOutputStream(new File("/home/tittel/chord-piped.png"))
+		def join = consumer.output.join("\n")
+		println join.trim()
+		fos.write join.trim().bytes
+		png += join.trim().bytes.encodeBase64()
+		fos.close()
 */
+				
+//		consumer.output.each {
+//			fos.write it.bytes
+//			png += it.bytes.encodeBase64()
+//		}
 
-		BufferedImage img = consumer.getImage()
-		println "--- img size=" + img.width + "x" + img.height
-		ByteArrayOutputStream out = new ByteArrayOutputStream()
-		ImageIO.write(img, "png", out)
-		png += out.toByteArray().encodeBase64()
-	
-/*		
-		byte[] streamBytes = createChordSVG(define).bytes
-		PNGTranscoder t = new PNGTranscoder()
-		TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(streamBytes))
-		ByteArrayOutputStream ostream = new ByteArrayOutputStream()
-		TranscoderOutput output = new TranscoderOutput(ostream)
-
-		t.transcode(input, output)
-
-		ostream.flush()
-		ostream.close()
-		return ostream.toByteArray()
-*/
+		
+		
+		 BufferedImage img = consumer.getImage()
+//		 println "--- img size=" + img.width + "x" + img.height
+		 ByteArrayOutputStream out = new ByteArrayOutputStream()
+		 ImageIO.write(img, "png", out)
+		 //		ImageIO.write(img, "png", new File("/home/tittel/chord-buffered.png"))
+		 png += out.toByteArray().encodeBase64()
+		 		
 		return png
 	}
 
@@ -207,7 +204,7 @@ class SongTagLib {
 			sw.append("<div class='chords'>\n" + chords + "</div>\n" + (lyrics.length() > 0 ? "<div class='lyrics'>\n" + lyrics + "</div>\n" : ""))
 		}
 	}
-	
+
 	def createChordSVG(define) {
 		println "CREATING SVG FROM -> '"+ define + "'"
 		def svg = ""
@@ -242,42 +239,42 @@ class SongTagLib {
 				}
 			}
 			maxFret++
-	
+
 			def numVerticalLines = 6
 			def numHorizontalLines = Math.max(maxFret, 4) + 1
-			
+
 			def w = 80
 			def h = 1.6 * w
 			def strokeWidth = 2
-			def nameFontsize = 0.2 * w
+			def nameFontsize = 0.15 * w
 			def offsetFontsize = 0.14 * w
 			def topFretFontsize = 0.13 * w
 			def padding = [ top:1.4 * nameFontsize + topFretFontsize, right:0.5 * topFretFontsize, bottom:strokeWidth/2, left:offsetFontsize * 1.5 ]
 			def fretDiff = (h - padding.top - padding.bottom) / (numHorizontalLines - 1)
 			def radius = 0.5 * topFretFontsize
-	
+
 			svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>"
 			// draw chord name
-			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>"
+			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-family:sans-serif; font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>"
 
 			// chord offset
 			if (offset > 0) {
-				svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='text-anchor:end; font-size:" + offsetFontsize + "px; font-weight:bold'>" + offset + "</text>"
+				svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='font-family:sans-serif; text-anchor:end; font-size:" + offsetFontsize + "px; font-weight:bold'>" + offset + "</text>"
 			}
-			
+
 			// draw chord positions (circles and top fret notations)
 			frets.eachWithIndex { it, index ->
 				def fret = it.isInteger() ? Integer.parseInt(it) : -1
 				def x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)))
 				if (fret < 0) {
 					// draw "x" with lines
-					def d = topFretFontsize * 0.4
+					def d = topFretFontsize * 0.3
 					def y = padding.top- 0.75 * topFretFontsize
-					svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='stroke:black;stroke-width:2'/>"
-					svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='stroke:black;stroke-width:2'/>"
+					svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>"
+					svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>"
 				}
 				else if (0 == fret) {
-					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />"
+					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='" + strokeWidth + "' fill='none' />"
 				}
 				else {
 					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.35 * fretDiff + fret * fretDiff) + "' r='" + radius + "' fill='black' />"
@@ -297,5 +294,5 @@ class SongTagLib {
 		}
 		return svg
 	}
-	
+
 }
