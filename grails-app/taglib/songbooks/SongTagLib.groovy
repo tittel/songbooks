@@ -47,13 +47,13 @@ class SongTagLib {
 		source = source.replaceAll(/\{(c|comment|ci):\s*(.*?)\s*\}/, "\n\n<div class='comment'>\$2</div>\n\n")
 		// replace chord definitions
 		source = source.replaceAll(/\{define[:]?\s*(.*?)\s*\}/, "\n\n<div class='chord-definition'>\$1</div>\n\n")
-		println source
-
-		def parser = new XmlParser()
+		
 		def sw = new StringWriter()
 		def printer = new XmlNodePrinter(new PrintWriter(sw))
+		printer.preserveWhitespace = true
+		
 		// convert text nodes to verse blocks and make lyric and chord lines for verses and chorus
-		parser.parseText("<root>" + source + "</root>").children().each {
+		new XmlParser().parseText("<root>" + source + "</root>").children().each {
 			if (it instanceof String) {
 				it.split("\n\n").each {
 					sw.append("<div class='verse'>\n")
@@ -62,7 +62,7 @@ class SongTagLib {
 				}
 			}
 			else if (it.@class == "chorus") {
-				sw.append("<div class='chorus'>\n")
+				sw.append("<div class='chorus sticky'>\n")
 				it.children().each {
 					if (it instanceof String) {
 						createLines(it, sw)
@@ -83,7 +83,10 @@ class SongTagLib {
 			}
 		}
 
-		source = "<div class='songview'>\n" + sw.toString() + "</div>"
+		source = "<div class='songview'>\n" + sw.toString() + "\n</div>"
+
+		// make first 3 elements of song stick together, so that there will be no page/column break between them
+		source = source.replaceAll(/(<h1>.*?<\/h1>\s*<h2>.*?<\/h2>\s*<.*?>.*?<\/.*?>)/, "<div class='sticky'>\$1</div>")
 
 		out << source
 	}
@@ -96,59 +99,11 @@ class SongTagLib {
 		out << "size:" + size
 	}
 
-	def createChordPNG(define) {
-		def svg = createChordSVG(define)
-
-		println "CREATING PNG FROM -> "+ define
-		IMOperation op = new IMOperation()
-		op.addImage("svg:-")                 // input: stdin
-		op.antialias()
-		op.addImage("png:-")                 // output: stdout
-
-		// set up command
-		ConvertCmd convert = new ConvertCmd()
-		convert.setInputProvider(new Pipe(new ByteArrayInputStream(svg.bytes), null))
-
-		Stream2BufferedImage consumer = new Stream2BufferedImage()
-//		ArrayListOutputConsumer consumer = new ArrayListOutputConsumer()
-		convert.setOutputConsumer(consumer)
-
-		// run command and extract BufferedImage from OutputConsumer
-		convert.run(op)
-
-		def png = ""
-
-/*
-		FileOutputStream fos = new FileOutputStream(new File("/home/tittel/chord-piped.png"))
-		def join = consumer.output.join("\n")
-		println join.trim()
-		fos.write join.trim().bytes
-		png += join.trim().bytes.encodeBase64()
-		fos.close()
-*/
-				
-//		consumer.output.each {
-//			fos.write it.bytes
-//			png += it.bytes.encodeBase64()
-//		}
-
-		
-		
-		 BufferedImage img = consumer.getImage()
-//		 println "--- img size=" + img.width + "x" + img.height
-		 ByteArrayOutputStream out = new ByteArrayOutputStream()
-		 ImageIO.write(img, "png", out)
-		 //		ImageIO.write(img, "png", new File("/home/tittel/chord-buffered.png"))
-		 png += out.toByteArray().encodeBase64()
-		 		
-		return png
-	}
-
 	def createLines(text, sw) {
 		text.split("\n").each {
 			def line = it.trim()
 			if (line.length() > 0) {
-				sw.append("<div class='line'>\n")
+				sw.append("<div class='line sticky'>\n")
 				createCells(line, sw)
 				sw.append("</div>\n")
 			}
@@ -205,8 +160,54 @@ class SongTagLib {
 		}
 	}
 
+	def createChordPNG(define) {
+		def svg = createChordSVG(define)
+
+		IMOperation op = new IMOperation()
+		op.addImage("svg:-")                 // input: stdin
+//		op.antialias()
+		op.addImage("png:-")                 // output: stdout
+
+		// set up command
+		ConvertCmd convert = new ConvertCmd()
+		convert.setInputProvider(new Pipe(new ByteArrayInputStream(svg.bytes), null))
+
+		Stream2BufferedImage consumer = new Stream2BufferedImage()
+//		ArrayListOutputConsumer consumer = new ArrayListOutputConsumer()
+		convert.setOutputConsumer(consumer)
+
+		// run command and extract BufferedImage from OutputConsumer
+		convert.run(op)
+
+		def png = ""
+
+/*
+		FileOutputStream fos = new FileOutputStream(new File("/home/tittel/chord-piped.png"))
+		def join = consumer.output.join("\n")
+		println join.trim()
+		fos.write join.trim().bytes
+		png += join.trim().bytes.encodeBase64()
+		fos.close()
+*/
+				
+//		consumer.output.each {
+//			fos.write it.bytes
+//			png += it.bytes.encodeBase64()
+//		}
+
+		
+		
+		 BufferedImage img = consumer.getImage()
+//		 println "--- img size=" + img.width + "x" + img.height
+		 ByteArrayOutputStream out = new ByteArrayOutputStream()
+		 ImageIO.write(img, "png", out)
+		 //		ImageIO.write(img, "png", new File("/home/tittel/chord-buffered.png"))
+		 png += out.toByteArray().encodeBase64()
+		 		
+		return png
+	}
+
 	def createChordSVG(define) {
-		println "CREATING SVG FROM -> '"+ define + "'"
 		def svg = ""
 		// collapse white space
 		define = define.replaceAll(/\s+/, " ")
@@ -243,23 +244,23 @@ class SongTagLib {
 			def numVerticalLines = 6
 			def numHorizontalLines = Math.max(maxFret, 4) + 1
 
-			def w = 80
+			def w = 60
 			def h = 1.6 * w
-			def strokeWidth = 2
-			def nameFontsize = 0.15 * w
+			def strokeWidth = Math.max(1, Math.round(0.025 * w))
+			def nameFontsize = 0.18 * w
 			def offsetFontsize = 0.14 * w
 			def topFretFontsize = 0.13 * w
 			def padding = [ top:1.4 * nameFontsize + topFretFontsize, right:0.5 * topFretFontsize, bottom:strokeWidth/2, left:offsetFontsize * 1.5 ]
 			def fretDiff = (h - padding.top - padding.bottom) / (numHorizontalLines - 1)
 			def radius = 0.5 * topFretFontsize
 
-			svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>"
+			svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='" + w + "px' height='" + h + "px' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>"
 			// draw chord name
-			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-family:sans-serif; font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>"
+			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='shape-rendering:crispEdges; font-weight:bold; font-family:sans-serif; font-size:" + nameFontsize + "px'>" + name +  "</text>"
 
 			// chord offset
 			if (offset > 0) {
-				svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='font-family:sans-serif; text-anchor:end; font-size:" + offsetFontsize + "px; font-weight:bold'>" + offset + "</text>"
+				svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='shape-rendering:crispEdges; font-family:sans-serif; text-anchor:end; font-size:" + offsetFontsize + "px'>" + offset + "</text>"
 			}
 
 			// draw chord positions (circles and top fret notations)
@@ -270,8 +271,8 @@ class SongTagLib {
 					// draw "x" with lines
 					def d = topFretFontsize * 0.3
 					def y = padding.top- 0.75 * topFretFontsize
-					svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>"
-					svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='stroke:black;stroke-width:" + strokeWidth + "'/>"
+					svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>"
+					svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>"
 				}
 				else if (0 == fret) {
 					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='" + strokeWidth + "' fill='none' />"
@@ -283,11 +284,11 @@ class SongTagLib {
 			// draw grid
 			for (i in 0..numHorizontalLines-1) {
 				def y = padding.top + i * fretDiff
-				svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>"
+				svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>"
 			}
 			for (i in 0..numVerticalLines-1) {
 				def x = padding.left + i * ((w - padding.left - padding.right) / (numVerticalLines - 1))
-				svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>"
+				svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>"
 			}
 
 			svg += "</svg>"

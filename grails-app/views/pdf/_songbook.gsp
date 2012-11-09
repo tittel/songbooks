@@ -39,6 +39,7 @@
 			.songs { page:songs; page-break-before:left }
 			.songs h1 { border-color:#04C }
 			.songview { margin-bottom:1em }
+			.songview .chord-definition { width:auto; height:auto; opacity:inherit }
 		</style>
 	</head>
 	<body>
