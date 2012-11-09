@@ -11,6 +11,8 @@ grails.project.dependency.resolution = {
 	inherits("global") {
 		// specify dependency exclusions here; for example, uncomment this to disable ehcache:
 		// excludes 'ehcache'
+		//excludes 'xml-apis', 'xml-apis-ext', 'xerces', 'xercesImpl', 'xalan', 'serializer'
+		//excludes 'xmlParserAPIs'
 	}
 	log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	checksums true // Whether to verify checksums on resolve
@@ -35,8 +37,10 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 		compile 'com.itextpdf:itextpdf:5.3.2'
 //		compile('batik:batik-rasterizer:1.6-1') {
-//			excludes  'slf4j-log4j12', 'xml-apis', 'xml-apis-ext', 'log4j', 'xerces', 'xercesImpl', 'xalan', 'serializer'
+//			excludes 'slf4j-log4j12', 'xml-apis', 'xml-apis-ext', 'log4j', 'xerces', 'xercesImpl', 'xalan', 'serializer'
+//			excludes 'batik-ext', 'xml-apis', 'xmlParserAPIs','xml-apis-ext', 'log4j', 'xerces', 'xercesImpl', 'xalan', 'serializer'
 //		}
+		compile('org.im4java:im4java:1.2.0')
 
 		// runtime 'mysql:mysql-connector-java:5.1.20'
 		runtime 'postgresql:postgresql:8.4-702.jdbc3'

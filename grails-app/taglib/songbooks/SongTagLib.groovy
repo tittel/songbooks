@@ -1,6 +1,13 @@
 package songbooks
 
+import java.awt.image.BufferedImage
 
+import javax.imageio.ImageIO
+
+import org.im4java.core.ConvertCmd
+import org.im4java.core.IMOperation
+import org.im4java.core.Stream2BufferedImage
+import org.im4java.process.Pipe
 
 
 class SongTagLib {
@@ -67,9 +74,11 @@ class SongTagLib {
 				sw.append("</div>\n")
 			}
 			else if (it.@class == "chord-definition") {
-//				sw.append("<img src='data:image/png;base64,")
-				sw.append(createChordSVG(it.text()))
-//				sw.append("' class='chord-definition' />")
+				sw.append("<img src='data:image/png;base64,")
+//				sw.append("<div class='chord-definition'>")
+				sw.append(createChordPNG(it.text()))
+//				sw.append("</div>")
+				sw.append("' class='chord-definition' />")
 			}
 			else {
 				printer.print(it)
@@ -90,7 +99,36 @@ class SongTagLib {
 	}
 
 	def createChordPNG(define) {
-		println "CREATING CHORD FROM -> "+ define
+		def svg = createChordSVG(define)
+		
+		println "CREATING PNG FROM -> "+ define
+		IMOperation op = new IMOperation()
+		op.addImage("svg:-")                 // input: stdin
+		op.addImage("png:-")                 // output: stdout
+		
+		// set up command
+		ConvertCmd convert = new ConvertCmd()
+		convert.setInputProvider(new Pipe(new ByteArrayInputStream(svg.bytes), null))
+
+		Stream2BufferedImage consumer = new Stream2BufferedImage()
+//		ArrayListOutputConsumer consumer = new ArrayListOutputConsumer()
+		convert.setOutputConsumer(consumer)
+		
+		// run command and extract BufferedImage from OutputConsumer
+		convert.run(op)
+		
+		def png = ""
+/*
+		consumer.output.each {
+			png += it.bytes.encodeBase64()
+		}
+*/
+
+		BufferedImage img = consumer.getImage()
+		ByteArrayOutputStream out = new ByteArrayOutputStream()
+		ImageIO.write(img, "png", out)
+		png += out.toByteArray().encodeBase64()
+	
 /*		
 		byte[] streamBytes = createChordSVG(define).bytes
 		PNGTranscoder t = new PNGTranscoder()
@@ -104,12 +142,12 @@ class SongTagLib {
 		ostream.close()
 		return ostream.toByteArray()
 */
-		return define
+		return png
 	}
 
 	def createLines(text, sw) {
 		text.split("\n").each {
-			def line = it.trim();
+			def line = it.trim()
 			if (line.length() > 0) {
 				sw.append("<div class='line'>\n")
 				createCells(line, sw)
@@ -140,28 +178,28 @@ class SongTagLib {
 			sw.append(line)
 		}
 		else {
-			def chords = "";
-			def lyrics = "";
+			def chords = ""
+			def lyrics = ""
 			def lastAddedWasChord = split[0].length() > 0 && '[' == split[0].charAt(0)
 
 			split.each {
 				if (it.length() > 1 && '[' == it.charAt(0) && ']' == it.charAt(it.length() - 1)) {
-					chords += "<span>" + it.replaceAll(/\[|\]/, "") + "</span>";
+					chords += "<span>" + it.replaceAll(/\[|\]/, "") + "</span>"
 					if (lastAddedWasChord) {
-						lyrics += "<span></span>";
+						lyrics += "<span></span>"
 					}
-					lastAddedWasChord = true;
+					lastAddedWasChord = true
 				}
 				else if (it.trim().length() > 0) {
-					lyrics += "<span><span class='sep'></span><span class='fragment'>" + it + "</span></span>";
+					lyrics += "<span><span class='sep'></span><span class='fragment'>" + it + "</span></span>"
 					if (!lastAddedWasChord) {
-						chords += "<span></span>";
+						chords += "<span></span>"
 					}
-					lastAddedWasChord = false;
+					lastAddedWasChord = false
 				}
 			}
 			if (lastAddedWasChord && lyrics.length() > 0) {
-				lyrics += "<span></span>";
+				lyrics += "<span></span>"
 			}
 
 			sw.append("<div class='chords'>\n" + chords + "</div>\n" + (lyrics.length() > 0 ? "<div class='lyrics'>\n" + lyrics + "</div>\n" : ""))
@@ -169,7 +207,7 @@ class SongTagLib {
 	}
 	
 	def createChordSVG(define) {
-		println "CREATING CHORD FROM -> '"+ define + "'"
+		println "CREATING SVG FROM -> '"+ define + "'"
 		def svg = ""
 		// collapse white space
 		define = define.replaceAll(/\s+/, " ")
@@ -177,20 +215,20 @@ class SongTagLib {
 		def name = null, offset = null, frets = null
 		if (split.length == 10 && "base-fret" == split[1] && "frets" == split[3]) {
 			name = split[0]
-			offset = Integer.parseInt(split[2])
+			offset = split[2].isInteger() ? Integer.parseInt(split[2]) : 0
 			frets = split[4..9]
 		}
 		else if (split.length == 8) {
-			name = split[0];
-			offset = Integer.parseInt(split[1]);
-//			frets = split.[2..7].reverse();
+			name = split[0]
+			offset = split[1].isInteger() ? Integer.parseInt(split[1]) : 0
+			frets = split[2..7].reverse()
 		}
 		if (name && name.length() > 0 && offset && frets && frets.size() == 6) {
 			def clampAtFret = 26
 			def maxFret = 0
 			frets.eachWithIndex { value, index ->
-				def pos = Integer.parseInt(value)
-				if (pos) {
+				if (value.isInteger()) {
+					def pos = Integer.parseInt(value)
 					// robustness: clamp fret value to some maximum (else we could be drawing endlessly)
 					if (pos > clampAtFret) {
 						pos = clampAtFret
@@ -220,18 +258,21 @@ class SongTagLib {
 			// draw chord name
 			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>"
 
-/*			
 			// chord offset
-			if (!isNaN(offset) && offset > 0) {
+			if (offset > 0) {
 				svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='text-anchor:end; font-size:" + offsetFontsize + "px; font-weight:bold'>" + offset + "</text>"
 			}
 			
 			// draw chord positions (circles and top fret notations)
-			frets.each {
-				def fret = Integer.parseInt(it)
+			frets.eachWithIndex { it, index ->
+				def fret = it.isInteger() ? Integer.parseInt(it) : -1
 				def x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)))
-				if (isNaN(fret) || fret < 0) {
-					svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>"
+				if (fret < 0) {
+					// draw "x" with lines
+					def d = topFretFontsize * 0.4
+					def y = padding.top- 0.75 * topFretFontsize
+					svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='stroke:black;stroke-width:2'/>"
+					svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='stroke:black;stroke-width:2'/>"
 				}
 				else if (0 == fret) {
 					svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='2' fill='none' />"
@@ -241,15 +282,14 @@ class SongTagLib {
 				}
 			}
 			// draw grid
-			for (var i = 0; i < numHorizontalLines; i++) {
+			for (i in 0..numHorizontalLines-1) {
 				def y = padding.top + i * fretDiff
 				svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>"
 			}
-			for (var i = 0; i < numVerticalLines; i++) {
+			for (i in 0..numVerticalLines-1) {
 				def x = padding.left + i * ((w - padding.left - padding.right) / (numVerticalLines - 1))
 				svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>"
 			}
-			*/
 
 			svg += "</svg>"
 		}
