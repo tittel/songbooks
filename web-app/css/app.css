@@ -6,7 +6,7 @@ a { color:#04C }
 #page { min-width:1000px; padding:0.4em }
 #message { position:fixed; right:0.4em; bottom:0.4em; width:12em }
 .message { margin-bottom:0; margin-top:1em }
-.spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:32px; width:32px; padding:2px; position:fixed; right:0.4em; bottom:0.4em; text-indent:-9999px; z-index:1 }
+.spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:90px; width:90px; padding:2px; position:fixed; right:0.4em; bottom:0.4em; text-indent:-9999px; z-index:1 }
 
 #toolbar { padding:0.5em; position:relative; height:45px }
 #toolbar:not(.well) { border:1px solid transparent }
