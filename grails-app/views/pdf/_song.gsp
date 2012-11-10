@@ -5,7 +5,7 @@
 		<style media="all">
 			@page { size:210mm 297mm; margin:10mm }
 			html, body { font-family:sans-serif; font-size:14px; margin:0; padding:0 }
-			h1 { padding-bottom:0.2em; border-bottom:1px solid #000 }
+			h1 { padding-bottom:0.2em; border-bottom:1px solid #04C }
 		</style>
 	</head>
 	<body>

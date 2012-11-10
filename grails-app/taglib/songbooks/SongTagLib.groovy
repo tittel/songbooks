@@ -31,6 +31,8 @@ class SongTagLib {
 		source = source.replaceAll(/(\{.*?\})\s*(\{.*?\})/, "\$1\n\$2")
 		// cleanup: remove line comments
 		source = source.replaceAll(/(?m)^#.*/, "")
+		// cleanup: replace possible entities ("&" sign)
+		source = source.replaceAll(/&/, "@blubb@")
 		// replace title
 		source = source.replaceAll(/\{(t|title):\s*(.*?)\s*\}/, "\n\n<h1>\$2</h1>\n\n")
 		// replace subtitle
@@ -43,7 +45,7 @@ class SongTagLib {
 		source = source.replaceAll(/\{(sot|start_of_tabs)\s*\}/, "\n\n<pre class='tabs'>\n")
 		// replace eot
 		source = source.replaceAll(/\{(eot|end_of_tabs)\s*\}/, "\n</pre>\n\n")
-		// replace comments
+		// replace comment tags
 		source = source.replaceAll(/\{(c|comment|ci):\s*(.*?)\s*\}/, "\n\n<div class='comment'>\$2</div>\n\n")
 		// replace chord definitions
 		source = source.replaceAll(/\{define[:]?\s*(.*?)\s*\}/, "\n\n<div class='chord-definition'>\$1</div>\n\n")
@@ -74,17 +76,26 @@ class SongTagLib {
 				sw.append("</div>\n")
 			}
 			else if (it.@class == "chord-definition") {
-				sw.append("<img class='chord-definition' src='data:image/png;base64,")
-				sw.append(createChordPNG(it.text()))
-				sw.append("' />")
+				def png = createChordPNG(it.text())
+				if (png) {
+					sw.append("<img class='chord-definition' src='data:image/png;base64,")
+					sw.append(createChordPNG(it.text()))
+					sw.append("' />")
+				}
+				else {
+					log.warn("couldn't convert chord definition '" + it.text() + "'")
+				}
 			}
 			else {
 				printer.print(it)
 			}
 		}
+		println source
 
 		source = "<div class='songview'>\n" + sw.toString() + "\n</div>"
 
+		// cleanup: ampersands have been reintroduced by now, so re-replace them (otherwise we get an error from the rendering plugin)
+		source = source.replaceAll(/@blubb@/, "&amp;")
 		// make first 3 elements of song stick together, so that there will be no page/column break between them
 		source = source.replaceAll(/(<h1>.*?<\/h1>\s*<h2>.*?<\/h2>\s*<.*?>.*?<\/.*?>)/, "<div class='sticky'>\$1</div>")
 
@@ -161,58 +172,38 @@ class SongTagLib {
 	}
 
 	def createChordPNG(define) {
-		def svg = createChordSVG(define)
-
+		def png = null
+		
 		IMOperation op = new IMOperation()
-		op.addImage("svg:-")                 // input: stdin
+		op.addImage("svg:-") // input: stdin
 //		op.antialias()
-		op.addImage("png:-")                 // output: stdout
+		op.addImage("png:-") // output: stdout
 
-		// set up command
-		ConvertCmd convert = new ConvertCmd()
-		convert.setInputProvider(new Pipe(new ByteArrayInputStream(svg.bytes), null))
-
-		Stream2BufferedImage consumer = new Stream2BufferedImage()
-//		ArrayListOutputConsumer consumer = new ArrayListOutputConsumer()
-		convert.setOutputConsumer(consumer)
-
-		// run command and extract BufferedImage from OutputConsumer
-		convert.run(op)
-
-		def png = ""
-
-/*
-		FileOutputStream fos = new FileOutputStream(new File("/home/tittel/chord-piped.png"))
-		def join = consumer.output.join("\n")
-		println join.trim()
-		fos.write join.trim().bytes
-		png += join.trim().bytes.encodeBase64()
-		fos.close()
-*/
-				
-//		consumer.output.each {
-//			fos.write it.bytes
-//			png += it.bytes.encodeBase64()
-//		}
-
-		
-		
-		 BufferedImage img = consumer.getImage()
-//		 println "--- img size=" + img.width + "x" + img.height
-		 ByteArrayOutputStream out = new ByteArrayOutputStream()
-		 ImageIO.write(img, "png", out)
-		 //		ImageIO.write(img, "png", new File("/home/tittel/chord-buffered.png"))
-		 png += out.toByteArray().encodeBase64()
-		 		
+		def svg = createChordSVG(define)
+		if (svg) {
+			def inputStream = new ByteArrayInputStream(svg.bytes)
+			def outputStream = new ByteArrayOutputStream()
+			def pipe = new Pipe(inputStream, outputStream)
+	
+			ConvertCmd convert = new ConvertCmd()
+			convert.setInputProvider(pipe)
+			convert.setOutputConsumer(pipe)
+			convert.run(op)
+	
+			inputStream.close()
+			outputStream.flush()
+			png = outputStream.toByteArray().encodeBase64() as String
+			outputStream.close()
+		}
 		return png
 	}
 
 	def createChordSVG(define) {
-		def svg = ""
+		def svg = null
 		// collapse white space
 		define = define.replaceAll(/\s+/, " ")
 		def split = define.split(" ")
-		def name = null, offset = null, frets = null
+		def name = null, offset = -1, frets = null
 		if (split.length == 10 && "base-fret" == split[1] && "frets" == split[3]) {
 			name = split[0]
 			offset = split[2].isInteger() ? Integer.parseInt(split[2]) : 0
@@ -223,7 +214,7 @@ class SongTagLib {
 			offset = split[1].isInteger() ? Integer.parseInt(split[1]) : 0
 			frets = split[2..7].reverse()
 		}
-		if (name && name.length() > 0 && offset && frets && frets.size() == 6) {
+		if (name && name.length() > 0 && offset > -1 && frets && frets.size() == 6) {
 			def clampAtFret = 26
 			def maxFret = 0
 			frets.eachWithIndex { value, index ->
@@ -254,7 +245,7 @@ class SongTagLib {
 			def fretDiff = (h - padding.top - padding.bottom) / (numHorizontalLines - 1)
 			def radius = 0.5 * topFretFontsize
 
-			svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='" + w + "px' height='" + h + "px' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>"
+			svg = "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='" + w + "px' height='" + h + "px' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>"
 			// draw chord name
 			svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='shape-rendering:crispEdges; font-weight:bold; font-family:sans-serif; font-size:" + nameFontsize + "px'>" + name +  "</text>"
 

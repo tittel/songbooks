@@ -8,7 +8,7 @@
 .songview .chorus { border-radius:0.5em; border:0.15em solid #888; padding:0.5em 0.5em 1em 0.5em; margin-bottom:2em }
 .songview .chorus, .songview .chorus .lyrics span.fragment { background-color:#F5F5F5 }
 .songview .comment { font-style:italic; border-radius:0.5em; background-color:#FFA; padding:0.5em; margin:0 1em 1em 0; display:inline-block }
-.songview .tabs { font-size:0.8em; margin-bottom:2em; white-space:pre-wrap; border:none; background:inherit }
+.songview .tabs { font-size:0.7em; margin-bottom:2em; white-space:pre-wrap; border:none; background:inherit }
 .songview .chord-definition { display:inline-block; width:4em; height:6em; margin:0 1em 1em 0; opacity:0.8 }
 
 .songview .line { display:table }

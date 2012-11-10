@@ -70,15 +70,17 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 			if ("song" == view) {
 				var containedInSongbook = songView.model.get("containedInSongbook");
 				console.log("containedInSongbook -> " + containedInSongbook);
-				$("#menu-song-add-remove a", this.$el)
+				$("#menu-song-add-remove", this.$el)
 				.html(containedInSongbook ? "<i class='icon-minus'></i> Remove from songbook" : "<i class='icon-plus'></i> Add to songbook")
-				.css("display", songbookId ? "list-item" : "none");
-				$("#menu-song-add-remove + li.divider", this.$el).css("display", songbookId ? "list-item" : "none");
+				.parent().css("display", songbookId ? "list-item" : "none");
+				$("#menu-song-add-remove-container + li.divider", this.$el).css("display", songbookId ? "list-item" : "none");
 			}
 		},
 		songbookChanged : function() {
 			var songbookId = state.get("songbookId");
+			console.log("current songbook=" + songbookId);
 			// update state of menu items related to songbooks
+			$("li>a#menu-song-add-remove", this.$el).css("display", songbookId ? "list-item" : "none");
 			$("#menu-songbook-edit", this.$el).css("display", songbookId ? "list-item" : "none");
 			$("#menu-songbook-print", this.$el).css("display", songbookId ? "list-item" : "none");
 			$("#menu-songbook-export", this.$el).css("display", songbookId ? "list-item" : "none");

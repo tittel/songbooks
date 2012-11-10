@@ -16,12 +16,12 @@
 					content:counter(page);
 				}
 			}
-			html, body { font-family:sans-serif; font-size:14px; margin:0; padding:0 }
+			html, body { font-family:sans-serif; font-size:13px; margin:0; padding:0 }
 			h1 { padding-bottom:0.2em; border-bottom:1px solid #000 }
 			a { text-decoration:none; color:inherit }
 			ul { list-style-type:none; margin:0; padding:0 }
 			
-			.front-page { font-size:24px; display:table; width:100%; height:180mm; page-break-after:always }
+			.front-page { color:#04C; font-size:24px; display:table; width:100%; height:180mm; page-break-after:always }
 			.front-page > div { display:table-cell; vertical-align:middle}
 			.front-page .name { font-size:3em; font-variant:small-caps; border-bottom:1px solid black }
 			.front-page .author { text-align:right }
@@ -29,8 +29,8 @@
 			
 			.blank { page-break-after:always; page-break-before:always }
 			
-			.toc { font-size:0.7em; page-break-before:right }
-			.index { font-size:0.7em; page-break-before:left }
+			.toc { font-size:0.8em; page-break-before:right }
+			.index { font-size:0.8em; page-break-before:left }
 			.index h2 { font-size:1.2em; margin-bottom:0 }
 			.index a { padding-left:1em }
 			.toc a:after, .index a:after { content:leader('.') target-counter(attr(href), page) }
