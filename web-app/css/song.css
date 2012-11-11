@@ -1,7 +1,8 @@
+.sticky { page-break-inside:avoid; -webkit-page-break-inside:avoid; -moz-page-break-inside:avoid; column-break-inside:avoid; -webkit-column-break-inside:avoid; -moz-column-break-inside:avoid; -o-column-break-inside:avoid; -ms-column-break-inside:avoid }
+
 .songview { word-wrap:break-word; line-height:1.1em;
 	-moz-column-rule:0.2em solid #F5F5F5; -webkit-column-rule:0.2em solid #F5F5F5; column-rule:0.2em solid #F5F5F5;
 }
-.songview .sticky { page-break-inside:avoid; -webkit-page-break-inside:avoid; -moz-page-break-inside:avoid; column-break-inside:avoid; -webkit-column-break-inside:avoid; -moz-column-break-inside:avoid; -o-column-break-inside:avoid; -ms-column-break-inside:avoid }
 .songview h1 { color:#04C; line-height:1em; font-size:1.5em; margin:0 0 0.2em 0 }
 .songview h2 { color:#333; line-height:1em; font-size:1.1em; margin:0 0 1em 0 }
 .songview .verse { margin-bottom:1em }

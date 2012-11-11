@@ -1,7 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
+	<%--
 		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" media="all" />
+		 --%>
 		<style media="all">
 			@page { <song:renderPageSize>${songbook.format}</song:renderPageSize> }
 			@page:left { margin:10mm 10mm 10mm 20mm }
@@ -73,13 +75,16 @@
 		<%-- create index by author --%>
 		<div class="index">
 			<h1>Index</h1>
-			<g:set var="currentAuthor" value="" />
-			<g:each in="${songbook.songs.sort{a,b -> (a.author == b.author) ? (a.name < b.name ? -1 : 1) : (a.author < b.author ? -1 : 1) }}" var="song">
-				<g:if test="${currentAuthor != song.author}">
-					<g:set var="currentAuthor" value="${song.author}" />
-					<h2>${song.author}</h2>
-				</g:if>
-				<a href="#${song.id}">${song.name}</a><br></br>
+			<g:set var="songsByAuthorMap" value="${songbook.songs.groupBy { it.author }}" /> 
+			<g:each in="${songsByAuthorMap.keySet().sort()}" var="author">
+				<div class="sticky">
+					<h2>${author}</h2>
+					<ul>
+						<g:each in="${songsByAuthorMap[author].sort{a,b -> a.name < b.name ? -1 : 1}}" var="song">
+							<li><a href="#${song.id}">${song.name}</a></li>
+						</g:each>
+					</ul>
+				</div>
 			</g:each>
 		</div>
 		<g:if test="${print}">

@@ -16,7 +16,7 @@ class RenderEnvironmentFix {
 		grails.plugin.rendering.document.RenderEnvironment.metaClass.init {
 			originalRequestAttributes = RequestContextHolder.getRequestAttributes()
 			def renderRequest = new MockHttpServletRequest(applicationContext.getServletContext())
-			renderRequest.contextPath = originalRequestAttributes.contextPath
+			renderRequest.contextPath = originalRequestAttributes?.contextPath
 			renderRequestAttributes = GrailsWebUtil.bindMockWebRequest(
 					applicationContext,
 					renderRequest,

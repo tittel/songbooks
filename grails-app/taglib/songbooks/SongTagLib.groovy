@@ -31,7 +31,7 @@ class SongTagLib {
 		source = source.replaceAll(/(\{.*?\})\s*(\{.*?\})/, "\$1\n\$2")
 		// cleanup: remove line comments
 		source = source.replaceAll(/(?m)^#.*/, "")
-		// cleanup: replace possible entities ("&" sign)
+		// cleanup: replace ampersands by placeholder to not break XML parsing
 		source = source.replaceAll(/&/, "@blubb@")
 		// replace title
 		source = source.replaceAll(/\{(t|title):\s*(.*?)\s*\}/, "\n\n<h1>\$2</h1>\n\n")
@@ -90,14 +90,12 @@ class SongTagLib {
 				printer.print(it)
 			}
 		}
-		println source
-
 		source = "<div class='songview'>\n" + sw.toString() + "\n</div>"
 
-		// cleanup: ampersands have been reintroduced by now, so re-replace them (otherwise we get an error from the rendering plugin)
+		// cleanup: replace ampersand placeholder 
 		source = source.replaceAll(/@blubb@/, "&amp;")
-		// make first 3 elements of song stick together, so that there will be no page/column break between them
-		source = source.replaceAll(/(<h1>.*?<\/h1>\s*<h2>.*?<\/h2>\s*<.*?>.*?<\/.*?>)/, "<div class='sticky'>\$1</div>")
+		// make song header stick together, so that there will be no page/column break inside
+		source = source.replaceAll(/(<h1>.*?<\/h1>\s*<h2>.*?<\/h2>)/, "<div class='sticky'>\$1</div>")
 
 		out << source
 	}
