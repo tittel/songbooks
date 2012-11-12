@@ -123,7 +123,7 @@ function createChordImage($, def) {
 	var name = null, offset = null, frets = null;
 	if (split.length === 10 && "base-fret" === split[1] && "frets" === split[3]) {
 		name = split[0];
-		offset = parseInt(split[2]);
+		offset = parseInt(split[2]) - 1;
 		frets = split.slice(4);
 	}
 	else if (split.length === 8) {

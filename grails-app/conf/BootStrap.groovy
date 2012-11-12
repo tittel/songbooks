@@ -5,6 +5,8 @@ import songbooks.Song
 import songbooks.Songbook
 
 class BootStrap {
+	def messageSource
+	
 	def init = { servletContext ->
 		RenderEnvironmentFix.doFixWithMetaclass()
 
@@ -24,9 +26,13 @@ class BootStrap {
 			result['exportState'] = it.exportState
 			return result
 		}
-		
+
+		// create readme documentation song		
+		if (Song.list().size == 0) {
+			new Song(text:messageSource.getMessage('song.readme', null, null)).save(flush:true)
+		}
 		if (Environment.developmentMode) {
-			if (Song.list().size == 0) {
+			if (Song.list().size <= 1) {
 				new File("/home/tittel/temp/chopro").eachFileMatch(~/.*\.chopro/) { file ->
 					new Song(text:file.text).save(flush:true)
 				}

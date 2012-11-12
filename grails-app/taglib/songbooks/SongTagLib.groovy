@@ -205,7 +205,7 @@ class SongTagLib {
 		def name = null, offset = -1, frets = null
 		if (split.length == 10 && "base-fret" == split[1] && "frets" == split[3]) {
 			name = split[0]
-			offset = split[2].isInteger() ? Integer.parseInt(split[2]) : 0
+			offset = (split[2].isInteger() ? Integer.parseInt(split[2]) : 1) - 1
 			frets = split[4..9]
 		}
 		else if (split.length == 8) {
