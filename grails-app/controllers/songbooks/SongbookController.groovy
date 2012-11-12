@@ -117,35 +117,24 @@ class SongbookController {
 	}
 	
 	def export(Long id) {
-		println  "export() called"
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
-			println  "songbook found"
 			// check if export is already in progress
-	
 			if (songbook.exportState == 1) {
-				println "export is already in progress"
-				render(status:404, text:"export is already in progress")
+				render(status:404, text:"pdf generation in progress...")
 			}
 			else {
-/*				
-				def filename = songbook.name.replaceAll(" ", "_") + "-${songbook.format}-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
-				renderPdf(filename:filename, template:"/pdf/songbook", model:[songbook:songbook])
-*/
-				
 				runAsync {
 					def sb = retrieveSongbook(id)
 					try {
-						println "in async"
 						sb.exportState = 1
 						sb.save(flush:true)
-						println "starting export..."
-						def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:songbook])
-						println "export finished "
+						// TODO: this is a hack. lazy loading in the template does not work (no hibernate session found). so eager load songs now...
+						def songs = sb.songs.collect { it }
+						def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:songbook, songs:songs])
 						sb.exportData = outputStream.toByteArray()
 						sb.exportState = 2
 						sb.save(flush:true)
-						println "done."
 					}
 					catch (e) {
 						log.error e
@@ -154,9 +143,8 @@ class SongbookController {
 					}
 				}
 				
-				render(status:204, text:"export started")
+				render(status:204, text:"pdf generation started")
 			}
-			
 		}
 	}
 
@@ -165,14 +153,14 @@ class SongbookController {
 		if (songbook) {
 			// check if export exists
 			if (songbook.exportState != 2) {
-				render(status:404, text:"export not existing")
+				render(status:404, text:"pdf export not existing")
 			}
 			else {
 				def filename = songbook.name.replaceAll(" ", "_") + "-${songbook.format}-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
 			    OutputStream out = response.getOutputStream()
 			    response.setContentLength(songbook.exportData.length)
 			    response.addHeader("Content-disposition", "attachment; filename=${filename}")
-			    response.addHeader("Content-type", songbook.exportMimeType)
+			    response.addHeader("Content-type", "application/pdf")
 			    out.write(songbook.exportData)
 			    out.close()
 			}

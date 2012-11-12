@@ -20,6 +20,7 @@ class SongTagLib {
 	]
 
 	def render = { attrs, body ->
+		def songId = attrs.songId
 		def source = body()
 		// cleanup: trim source
 		source = source.trim()
@@ -34,7 +35,7 @@ class SongTagLib {
 		// cleanup: replace ampersands by placeholder to not break XML parsing
 		source = source.replaceAll(/&/, "@blubb@")
 		// replace title
-		source = source.replaceAll(/\{(t|title):\s*(.*?)\s*\}/, "\n\n<h1>\$2</h1>\n\n")
+		source = source.replaceAll(/\{(t|title):\s*(.*?)\s*\}/, "\n\n<h1>" + (songId ? "<a name='${songId}'></a>" : "") + "\$2</h1>\n\n")
 		// replace subtitle
 		source = source.replaceAll(/\{(st|subtitle):\s*(.*?)\s*\}/, "\n\n<h2>\$2</h2>\n\n")
 		// replace soc

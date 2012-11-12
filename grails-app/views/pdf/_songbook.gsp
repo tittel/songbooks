@@ -1,9 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
-	<%--
 		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" media="all" />
-		 --%>
 		<style media="all">
 			@page { <song:renderPageSize>${songbook.format}</song:renderPageSize> }
 			@page:left { margin:10mm 10mm 10mm 20mm }
@@ -55,7 +53,7 @@
 		</div>
 		<%-- create blank page --%>
 		<%-- sort songs by name --%>
-		<g:set var="songsByName" value="${songbook.songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
+		<g:set var="songsByName" value="${songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
 		<%-- create index by song name --%>
 		<div class="toc">
 			<h1>Contents</h1>
@@ -68,14 +66,13 @@
 		<%-- create content with songs --%>
 		<div class="songs">
 			<g:each in="${songsByName}" var="song">
-				<a name="${song.id}"></a>
-				<song:render>${song.text}</song:render>
+				<song:render songId="${song.id}">${song.text}</song:render>
 			</g:each>
 		</div>
 		<%-- create index by author --%>
 		<div class="index">
 			<h1>Index</h1>
-			<g:set var="songsByAuthorMap" value="${songbook.songs.groupBy { it.author }}" /> 
+			<g:set var="songsByAuthorMap" value="${songs.groupBy { it.author }}" /> 
 			<g:each in="${songsByAuthorMap.keySet().sort()}" var="author">
 				<div class="sticky">
 					<h2>${author}</h2>
