@@ -21,7 +21,7 @@ a { color:#04C }
 #toolbar #menu-container { position:absolute; top:0.5em; right:0.5em }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
 #toolbar #menu-container .dropdown-menu a { cursor:pointer }
-.query { font-size:1.1em !important }
+.query { font-size:1.1em !important; margin:0 !important }
 
 #content { font-size:1.2em }
 #content #home { text-align:center }

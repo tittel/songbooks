@@ -23,6 +23,10 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 						// don't use backbone router, let the browser request the PDF
 						window.location.href = contextPath + "songbook/" + state.get("songbookId") + "/export";
 					}
+					else if ("menu-songbook-download" == id) {
+						// don't use backbone router, let the browser request the PDF
+						window.location.href = contextPath + "songbook/" + state.get("songbookId") + "/download";
+					}
 					else if ("menu-songbook-print" == id) {
 						// first remove possible previous print frame
 						$("iframe#print", that.$el).remove();
