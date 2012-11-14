@@ -30,7 +30,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mode
 							songView.render();
 						},
 						error : function(model, response) {
-							new ErrorMessage({ message : "<strong>Error loading song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+							new ErrorMessage({ message : "<strong>Error loading song</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 							Backbone.history.navigate("", true);
 						}
 					});
@@ -47,7 +47,7 @@ define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mode
 							songbookView.render();
 						},
 						error : function(model, response) {
-							new ErrorMessage({ message : "<strong>Error loading songbook</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+							new ErrorMessage({ message : "<strong>Error loading songbook</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 							Backbone.history.navigate("", true);
 						}
 					});

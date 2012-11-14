@@ -36,7 +36,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 		        				songView.render();
 			        		},
 							error: function(model, response) {
-								new ErrorMessage({ message : "<strong>Error saving song</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+								new ErrorMessage({ message : "<strong>Error saving song</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 							}
 			        	});
 					}

@@ -28,7 +28,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/search-r
 						$(".query").focus();
 					},
 					error: function(model, response) {
-						new ErrorMessage({ message : "<strong>Error searching songs</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+						new ErrorMessage({ message : "<strong>Error searching songs</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 						Backbone.history.navigate("", true);
 					}
 				});

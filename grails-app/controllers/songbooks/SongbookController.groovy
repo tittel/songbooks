@@ -121,17 +121,16 @@ class SongbookController {
 		if (songbook) {
 			// check if export is already in progress
 			if (songbook.exportState == 1) {
-				render(status:404, text:"pdf generation in progress...")
+				render(status:400, text:"pdf generation already in progress...")
 			}
 			else {
 				runAsync {
+					println "statring export..."
 					def sb = retrieveSongbook(id)
 					try {
 						sb.exportState = 1
 						sb.save(flush:true)
-						// TODO: this is a hack. lazy loading in the template does not work (no hibernate session found). so eager load songs now...
-						def songs = sb.songs.collect { it }
-						def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:songbook, songs:songs])
+						def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:sb])
 						sb.exportData = outputStream.toByteArray()
 						sb.exportState = 2
 						sb.save(flush:true)
@@ -141,6 +140,7 @@ class SongbookController {
 						sb.exportState = 0
 						sb.save(flush:true)
 					}
+					println "done..."
 				}
 				
 				render(status:204, text:"pdf generation started")
@@ -167,14 +167,6 @@ class SongbookController {
 		}
 	}
 
-	def print(Long id) {
-		def songbook = retrieveSongbook(id)
-		if (songbook) {
-//			render(template:"/pdf/songbook", model:[songbook:songbook, print:true])
-			render(template:"/pdf/songbook", model:[songbook:songbook])
-		}
-	}
-	
 	def retrieveSongbook(Long id) {
 		def songbook = Songbook.get(id)
 		if (!songbook) {

@@ -111,7 +111,7 @@ class SongController {
 		}
 	}
 	
-	def export(Long id) {
+	def download(Long id) {
 		def song = retrieveSong(id)
 		if (song) {
 			def filename = song.name.replaceAll(" ", "_") + "-" + formatDate(format:'yyMMdd', date:song.lastUpdated) + ".pdf"

@@ -12,7 +12,6 @@ define([ 'Underscore', 'Backbone', 'models/appstate' ], function(_, Backbone, st
 			if (state.get("songbookId")) {
 				url += "?songbookId=" + state.get("songbookId");
 			}
-			console.log("--- URL="+url);
 			return url;
 		}
 	});

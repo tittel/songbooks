@@ -29,12 +29,11 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 					 	}
 					},
 					error: function(model, response) {
-						new ErrorMessage({ message : "<strong>Error loading songbooks</strong>\n<i>" + response.status + " (" + response.statusText + ")</i>\n" + response.responseText });
+						new ErrorMessage({ message : "<strong>Error loading songbooks</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 					}
 				});
 			},
 			selectSongbook : function() {
-				console.log("select songbook event -> " + $("#select-songbook").val());
 				localStorage["songbookId"] = $("#select-songbook").val();
 				state.set("songbookId", $("#select-songbook").val());
 			}

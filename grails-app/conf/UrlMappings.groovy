@@ -16,9 +16,9 @@ class UrlMappings {
 			controller = "songbook"
 			action = [DELETE:"deleteSong"]
 		}
-		"/song/$id/export" {
+		"/song/$id/download" {
 			controller = "song"
-			action = [GET:"export"]
+			action = [GET:"download"]
 		}
 		"/songbook/$id/export" {
 			controller = "songbook"
@@ -27,11 +27,6 @@ class UrlMappings {
 		"/songbook/$id/download" {
 			controller = "songbook"
 			action = [GET:"download"]
-		}
-		"/songbook/$id/print" {
-			controller = "songbook"
-			action = [GET:"print"]
-			view = [GET:"_pdf"]
 		}
 		"/backup/import" {
 			controller = "backup"

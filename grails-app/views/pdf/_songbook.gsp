@@ -53,7 +53,7 @@
 		</div>
 		<%-- create blank page --%>
 		<%-- sort songs by name --%>
-		<g:set var="songsByName" value="${songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
+		<g:set var="songsByName" value="${songbook.songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
 		<%-- create index by song name --%>
 		<div class="toc">
 			<h1>Contents</h1>
@@ -72,7 +72,7 @@
 		<%-- create index by author --%>
 		<div class="index">
 			<h1>Index</h1>
-			<g:set var="songsByAuthorMap" value="${songs.groupBy { it.author }}" /> 
+			<g:set var="songsByAuthorMap" value="${songbook.songs.groupBy { it.author }}" /> 
 			<g:each in="${songsByAuthorMap.keySet().sort()}" var="author">
 				<div class="sticky">
 					<h2>${author}</h2>
