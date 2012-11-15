@@ -4,6 +4,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 		var SongbookView = Backbone.View.extend({
 			el : "#content",
 			model : new SongbookModel,
+			probing : {},
 			initialize : function() {
 				_.bindAll(this, "render", "save", "songbookChanged", "updateControlsFromExportState", "exportSongbook", "downloadSongbook");
 				state.channel.on("button:save", this.save);
@@ -21,7 +22,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 
 				var compiledTemplate = _.template(songbookTemplate, { songbook : this.model, _ : _});
 				this.$el.html(compiledTemplate);
-				this.updateControlsFromExportState(this.model.get("exportState"));
+				this.updateControlsFromExportState(this.model.get("id"), this.model.get("name"), this.model.get("exportState"));
 			},
 			save : function() {
 				if ("songbook" == state.get("viewState")) {
@@ -54,47 +55,59 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 					this.model = new SongbookModel();
 				}
 			},
-			updateControlsFromExportState : function(previousState) {
-				var that = this;
-				this.model.fetch({
-					success: function(model) {
-						var exportState = model.get("exportState");
-						var downloadable = exportState == 2;
-						if (downloadable) {
-							if (previousState == 1) {
-								new Message({message:"<strong>Export finished</strong><br>You can download it now ..."});
+			updateControlsFromExportState : function(id, name, previousState, looping) {
+				console.log(this.probing)
+				if (id) {
+					var that = this;
+					$.ajax({
+						url : contextPath + "api/songbook/" + id,
+						success : function(data) {
+							if (id == that.model.get("id")) {
+								var exportState = data.exportState;
+								console.log("STATE=" + exportState);
+								var downloadable = exportState == 2;
+								if (downloadable) {
+									if (previousState == 1) {
+										new Message({message:"<strong>\"" + name + "\" exported</strong><br>You can <a class='internal' href='" + (contextPath + "songbook/" + id + "/download") + "'>download</a> it now ..."});
+									}
+									$("#button-download", that.$el).removeClass("disabled");
+								}
+								else {
+									$("#button-download", that.$el).addClass("disabled");
+								}
+								var exportable = exportState != 1;
+								if (exportable) {
+									$("#button-export", that.$el).removeClass("disabled loading");
+									that.probing[id] = false;
+								}
+								else {
+									$("#button-export", that.$el).addClass("disabled loading");
+									if (looping || !that.probing[id]) {
+										that.probing[id] = true;
+										// reload state every second
+										_.debounce(function() { that.updateControlsFromExportState(id, name, exportState, true); }, 1000)();
+									}
+								}
 							}
-							$("#button-download", that.$el).removeClass("disabled");
-						}
-						else {
-							$("#button-download", that.$el).addClass("disabled");
-						}
-						var exportable = exportState != 1;
-						if (exportable) {
-							$("#button-export", that.$el).removeClass("disabled loading");
-						}
-						else {
-							// reload state every second
-							_.debounce(function() { that.updateControlsFromExportState(exportState); }, 1000)();
-							$("#button-export", that.$el).addClass("disabled loading");
-						}
-					},
-					error: function(model, response) {
-						new ErrorMessage({ message : "<strong>Error loading songbook</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
-					},
-					global : false // prevents ajaxStart event (spinner)
-				});
+						},
+						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error probing songbook</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },
+						global : false // prevents ajaxStart event (spinner)
+					});
+				}
 			},
 			exportSongbook : function() {
 				var that = this;
 				if (!$("#button-export", this.$el).hasClass("disabled")) {
+					var id = this.model.get("id");
+					var name = this.model.get("name");
+					var exportState = this.model.get("exportState");
 					$.ajax({
-						url : contextPath + "songbook/" + this.model.get("id") + "/export",
+						url : contextPath + "songbook/" + id + "/export",
 						success : function() {
 							new Message({message:"<strong>Export started</strong><br>Please wait ..."});
-							that.updateControlsFromExportState(that.model.get("exportState"));
+							that.updateControlsFromExportState(id, name, exportState);
 						},
-						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error exporting songbook</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },
+						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error exporting \"" + name + "\"</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },
 						global : false // prevents ajaxStart event (spinner)
 					});
 				}
