@@ -23,6 +23,20 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				var compiledTemplate = _.template(songbookTemplate, { songbook : this.model, _ : _});
 				this.$el.html(compiledTemplate);
 				this.updateControlsFromExportState(this.model.get("id"), this.model.get("name"), this.model.get("exportState"));
+				// register delete button click
+				var that = this;
+				$("#songbookDeleteButton", this.$el).click(function (evt) {
+					that.model.destroy({
+		        		success: function() {
+		        			new Message({message:"Songbook deleted."});
+		        			window.history.back();
+		        			state.set("songbookId", null);
+		        		},
+						error: function(model, response) {
+							new ErrorMessage({ message : "<strong>Error deleting songbook</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
+						}
+		        	});
+				});
 			},
 			save : function() {
 				if ("songbook" == state.get("viewState")) {
@@ -45,7 +59,13 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			songbookChanged : function() {
 				var songbookId = state.get("songbookId");
 				if (songbookId) {
+					var that = this;
 					this.model.set("id", songbookId).fetch({
+						success : function() {
+							if (state.get("viewState") == "songbook") {
+								that.render();
+							}
+						},
 						error : function(model, response) {
 							new ErrorMessage({ message : "<strong>Error loading songbook</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
 						}
@@ -53,41 +73,40 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				}
 				else {
 					this.model = new SongbookModel();
+					if (state.get("viewState") == "songbook") {
+						this.render();
+					}
 				}
 			},
 			updateControlsFromExportState : function(id, name, previousState, looping) {
-				console.log(this.probing)
 				if (id) {
 					var that = this;
 					$.ajax({
 						url : contextPath + "api/songbook/" + id,
 						success : function(data) {
+							var exportState = data.exportState;
+							var downloadable = exportState == 2;
+							var exportable = exportState != 1;
+							// only update button state if we're probing the same model
 							if (id == that.model.get("id")) {
-								var exportState = data.exportState;
-								console.log("STATE=" + exportState);
-								var downloadable = exportState == 2;
-								if (downloadable) {
-									if (previousState == 1) {
-										new Message({message:"<strong>\"" + name + "\" exported</strong><br>You can <a class='internal' href='" + (contextPath + "songbook/" + id + "/download") + "'>download</a> it now ..."});
-									}
-									$("#button-download", that.$el).removeClass("disabled").addClass("btn-success");
-								}
-								else {
-									$("#button-download", that.$el).addClass("disabled").removeClass("btn-success");
-								}
-								var exportable = exportState != 1;
+								$("#button-download", that.$el).removeClass(downloadable ? "disabled" : "btn-success").addClass(downloadable ? "btn-success" : "disabled");
 								if (exportable) {
 									$("#button-export", that.$el).removeClass("disabled loading");
-									that.probing[id] = false;
 								}
 								else {
 									$("#button-export", that.$el).addClass("disabled loading");
-									if (looping || !that.probing[id]) {
-										that.probing[id] = true;
-										// reload state every second
-										_.debounce(function() { that.updateControlsFromExportState(id, name, exportState, true); }, 1000)();
-									}
 								}
+							}
+							if (downloadable && previousState == 1) {
+								new Message({message:"<strong>\"" + name + "\" exported</strong><br>You can <a class='internal' href='" + (contextPath + "songbook/" + id + "/download") + "'>download</a> it now ..."});
+							}
+							if (exportable) {
+								that.probing[id] = false;
+							}
+							else if (looping || !that.probing[id]) {
+								that.probing[id] = true;
+								// reload state every second
+								_.debounce(function() { that.updateControlsFromExportState(id, name, exportState, true); }, 1000)();
 							}
 						},
 						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error probing songbook</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },

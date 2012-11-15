@@ -9,8 +9,11 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 		render : function() {
 			this.$el.html(_.template(menuTemplate));
 			var that = this;
+			
+			// TODO: this is a temporary fix for the twitter dropdown menu not working on iPad. remove after fix (version > 2.1.1)
+			$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+			
 			$("li a:not([href])", this.$el).click(function (evt) {
-				console.log("click -> " + this);
 				evt.preventDefault();
 				var id = $(this).attr("id");
 				if (id && !$(this).parent().hasClass("disabled")) {
@@ -39,7 +42,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 				return false;
 			});
 			// register delete button click
-			$("#deleteButton", this.$el).click(function (evt) {
+			$("#songDeleteButton", this.$el).click(function (evt) {
 				songView.model.destroy({
 	        		success: function() {
 	        			new Message({message:"Song deleted."});
@@ -59,7 +62,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 			// update state of menu items related to songs
 			if ("song" == view) {
 				var containedInSongbook = songView.model.get("containedInSongbook");
-				console.log("containedInSongbook -> " + containedInSongbook);
 				$("#menu-song-add-remove", this.$el)
 				.html(containedInSongbook ? "<i class='icon-minus'></i> Remove from songbook" : "<i class='icon-plus'></i> Add to songbook")
 				.parent().css("display", songbookId ? "list-item" : "none");
@@ -68,7 +70,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 		},
 		songbookChanged : function() {
 			var songbookId = state.get("songbookId");
-			console.log("current songbook=" + songbookId);
 			// update state of menu items related to songbooks
 			$("li>a#menu-song-add-remove", this.$el).css("display", songbookId ? "list-item" : "none");
 			$("#menu-songbook-manage", this.$el).css("display", songbookId ? "list-item" : "none");

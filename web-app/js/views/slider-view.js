@@ -23,14 +23,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate' ], function($, _,
 				e.preventDefault();
 				var $slider = $(this).parent();
 				var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-				/*
-				var elm = $slider.offset();
-				var x = touch.pageX - elm.left;
-				var y = touch.pageY - elm.top;
-				if(x < $slider.width() && x > 0 && y < $slider.height() && y > 0){
-					console.log(touch.pageY+' '+touch.pageX);
-				}
-				*/
 
 			    var left = $slider.offset().left;
 			    var right = left + $slider.width();

@@ -4,7 +4,7 @@
 <ul class="dropdown-menu pull-right">
 	<li class="nav-header">Song</li>
 	<li><a href="song/new"><i class="icon-asterisk"></i> New &hellip;</a></li>
-	<li data-views="song" data-display="display" data-display-on="list-item"><a href="#deleteDialog" class="internal" data-toggle="modal"><i class="icon-remove"></i> Delete</a></li>
+	<li data-views="song" data-display="display" data-display-on="list-item"><a href="#songDeleteDialog" class="internal" data-toggle="modal"><i class="icon-remove"></i> Delete</a></li>
 	<li data-views="song" data-display="display" data-display-on="list-item"><a id="menu-song-export"><i class="icon-download"></i> Export</a></li>
 	<li class="divider" data-views="song" data-display="display" data-display-on="list-item"></li>
 	<li id="menu-song-add-remove-container" data-views="song" data-display="display" data-display-on="list-item"><a id="menu-song-add-remove"><i class="icon-plus"></i> Add to songbook</a></li>
@@ -24,7 +24,7 @@
 </ul>
 
 <!-- modal delete confirmation dialog -->
-<div id="deleteDialog" class="modal hide fade" tabindex="-1" role="dialog">
+<div id="songDeleteDialog" class="modal hide fade" tabindex="-1" role="dialog">
 	<div class="modal-header">
 		 <button type="button" class="close" data-dismiss="modal">×</button>
 		 <h3>Please confirm</h3>
@@ -35,6 +35,6 @@
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal">Close</button>
-		<button id="deleteButton" class="btn btn-primary" data-dismiss="modal">Yes, delete it!</button>
+		<button id="songDeleteButton" class="btn btn-primary" data-dismiss="modal">Yes, delete it!</button>
 	</div>
 </div>
