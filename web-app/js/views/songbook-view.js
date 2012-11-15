@@ -70,10 +70,10 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 									if (previousState == 1) {
 										new Message({message:"<strong>\"" + name + "\" exported</strong><br>You can <a class='internal' href='" + (contextPath + "songbook/" + id + "/download") + "'>download</a> it now ..."});
 									}
-									$("#button-download", that.$el).removeClass("disabled");
+									$("#button-download", that.$el).removeClass("disabled").addClass("btn-success");
 								}
 								else {
-									$("#button-download", that.$el).addClass("disabled");
+									$("#button-download", that.$el).addClass("disabled").removeClass("btn-success");
 								}
 								var exportable = exportState != 1;
 								if (exportable) {

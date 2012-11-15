@@ -125,7 +125,6 @@ class SongbookController {
 			}
 			else {
 				runAsync {
-					println "statring export..."
 					def sb = retrieveSongbook(id)
 					try {
 						sb.exportState = 1
@@ -140,7 +139,6 @@ class SongbookController {
 						sb.exportState = 0
 						sb.save(flush:true)
 					}
-					println "done..."
 				}
 				
 				render(status:204, text:"pdf generation started")

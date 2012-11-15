@@ -7,6 +7,7 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #page { min-width:1000px; padding:0.4em }
 #message { position:fixed; right:0.4em; bottom:0.4em; width:12em }
 .message { margin-bottom:0; margin-top:1em }
+.message a { color:inherit; text-decoration:underline }
 .spinner { background:url(../images/spinner.gif) 50% 50% no-repeat transparent; height:90px; width:90px; padding:2px; position:fixed; right:0.4em; bottom:0.4em; text-indent:-9999px; z-index:1 }
 .small { font-size:0.8em }
 
@@ -43,3 +44,4 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #songbook > div > div { display:table-cell; border:1px solid #E5E5E5; border-radius:6px; padding:0.5em }
 #songbook > div > div:not(:first-child) { width:10em; background-color:#F5F5F5 }
 #songbook .songbook-export-controls button { display:block; margin:0.8em auto; width:8em }
+#songbook .songbook-export-controls button.loading .icon-white { background:url(../images/spinner-small.gif) }
