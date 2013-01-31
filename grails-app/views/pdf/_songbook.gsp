@@ -4,37 +4,28 @@
 		<link rel="stylesheet" href="${resource(dir:'css', file:'song.css')}" type="text/css" media="all" />
 		<style media="all">
 			@page { <song:renderPageSize>${songbook.format}</song:renderPageSize> }
-			@page:left { margin:10mm 10mm 10mm 20mm }
-			@page:right { margin:10mm 20mm 10mm 10mm }
-			@page songs:left {
-				@bottom-right {
-					content:counter(page);
-				}
-			}
-			@page songs:right {
-				@bottom-left {
-					content:counter(page);
-				}
-			}
+			@page:left { <song:renderPageLeftMargin /> }
+			@page:right { <song:renderPageRightMargin /> }
+			@page songs:left { @bottom-right { content:counter(page) } }
+			@page songs:right { @bottom-left { content:counter(page) } }
 			html, body { font-family:sans-serif; font-size:13px; margin:0; padding:0 }
-			h1 { padding-bottom:0.2em; border-bottom:1px solid #000 }
+			h1 { padding-bottom:0.2em; border-bottom:1px solid #888 }
 			a { text-decoration:none; color:inherit }
 			ul { list-style-type:none; margin:0; padding:0 }
 			
-			.front-page { color:#04C; font-size:24px; display:table; width:100%; height:180mm; page-break-after:always }
-			.front-page > div { display:table-cell; vertical-align:middle}
-			.front-page .name { font-size:3em; font-variant:small-caps; border-bottom:1px solid black }
+			.front-page { page-break-after:always; display:table; <song:renderFullWidthHeight>${songbook.format}</song:renderFullWidthHeight>; table-layout:fixed }
+			.front-page > div { color:#888; font-size:200%; display:table-cell; vertical-align:middle; overflow:hidden }
+			.front-page > div > div { word-wrap:break-word; word-break:break-all; white-space:pre-wrap }
+			.front-page .name { color:#04C; font-variant:small-caps; font-size:2em; border-bottom:3px solid #888 }
 			.front-page .author { text-align:right }
 			.front-page .date { text-align:right }
-			
-			.blank { page-break-after:always; page-break-before:always }
 			
 			.toc { font-size:0.8em; page-break-before:right }
 			.index { font-size:0.8em; page-break-before:left }
 			.index h2 { font-size:1.2em; margin-bottom:0 }
 			.index a { padding-left:1em }
 			.toc a:after, .index a:after { content:leader('.') target-counter(attr(href), page) }
-			.toc, .index, .songs { -moz-column-count:2; -webkit-column-count:2; column-count:2 }
+			/*.toc, .index, .songs { -moz-column-count:2; -webkit-column-count:2; column-count:2 }*/
 			
 			.songs { page:songs; page-break-before:left }
 			.songs h1 { border-color:#04C }
@@ -48,10 +39,9 @@
 			<div>
 				<div class="name">${songbook.name}</div>
 				<div class="author">${songbook.author}</div>
-				<div class="date"><g:formatDate format="dd. MMMM, yyyy" date="${songbook.lastUpdated}"/></div>
+				<div class="date"><g:formatDate format="dd. MMMM yyyy" date="${songbook.lastUpdated}"/></div>
 			</div>
 		</div>
-		<%-- create blank page --%>
 		<%-- sort songs by name --%>
 		<g:set var="songsByName" value="${songbook.songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
 		<%-- create index by song name --%>

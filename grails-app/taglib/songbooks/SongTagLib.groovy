@@ -13,11 +13,13 @@ import org.im4java.process.Pipe
 class SongTagLib {
 	static namespace = "song"
 	static PAGE_SIZES = [
-		"A4" : "210mm 297mm",
-		"A4L" : "297mm 210mm",
-		"A5" : "148mm 210mm",
-		"A5L" : "210mm 148mm"
+		"A4" : [210, 297],
+		"A4L" : [297, 210],
+		"A5" : [148, 210],
+		"A5L" : [210, 148]
 	]
+	static PAGE_MARGIN = 10
+	static PAGE_MARGIN_OFFSET = 10
 
 	def render = { attrs, body ->
 		def songId = attrs.songId
@@ -104,9 +106,25 @@ class SongTagLib {
 	def renderPageSize = { attrs, body ->
 		def size = PAGE_SIZES.get(body())
 		if (!size) {
-			size = "148mm 210mm"
+			size = PAGE_SIZES.get("A5")
 		}
-		out << "size:" + size
+		out << "size:" + size[0] + "mm " + size[1] + "mm"
+	}
+
+	def renderPageLeftMargin = { attrs, body ->
+		out << "margin:" + PAGE_MARGIN + "mm " + PAGE_MARGIN + "mm " + PAGE_MARGIN + "mm " + (PAGE_MARGIN + PAGE_MARGIN_OFFSET) + "mm"
+	}
+
+	def renderPageRightMargin = { attrs, body ->
+		out << "margin:" + PAGE_MARGIN + "mm " + (PAGE_MARGIN + PAGE_MARGIN_OFFSET) + "mm " + PAGE_MARGIN + "mm " + PAGE_MARGIN + "mm"
+	}
+
+	def renderFullWidthHeight = { attrs, body ->
+		def size = PAGE_SIZES.get(body())
+		if (!size) {
+			size = PAGE_SIZES.get("A5")
+		}
+		out << "width:" + (size[0] - 2 * PAGE_MARGIN - PAGE_MARGIN_OFFSET) + "mm; height:" + (size[1] - 2 * PAGE_MARGIN) + "mm"
 	}
 
 	def createLines(text, sw) {
