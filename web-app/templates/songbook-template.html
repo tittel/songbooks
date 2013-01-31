@@ -4,13 +4,6 @@
 			<fieldset>
 				<legend>
 					Metadata
-					<%
-					if (songbook.get("id")) {
-					%>
-					<a href="#songbookDeleteDialog" class="btn btn-large btn-danger internal" style="float:right" data-toggle="modal"><i class="icon-remove icon-white"></i> Delete</a>
-					<%
-					}
-					%>
 				</legend>
 				<p><label for="name">Name:</label><input type="text" id="name" value="<%= songbook.get("name") %>" placeholder="Some descriptive name..."></p>
 				<p><label for="author">Author:</label><input type="text" id="author" value="<%= songbook.get("author") %>" placeholder="Your name..."></p>
@@ -23,6 +16,13 @@
 						<option value="A5L"<%= songbook.get("format") == "A5L" ? " selected='selected'" : "" %>>A5 (landscape)</option>
 					</select>
 				</p>
+				<%
+				if (songbook.get("id")) {
+				%>
+				<a href="#songbookDeleteDialog" class="btn btn-mini btn-danger internal" style="float:right" data-toggle="modal"><i class="icon-remove icon-white"></i> Delete songbook</a>
+				<%
+				}
+				%>
 			</fieldset>
 		</div>
 		<%
@@ -54,6 +54,7 @@
 	</div>
 	<div class="modal-body">
 		 <p>Do you really want to delete this songbook?</p>
+		 <p>The songs contained will be kept in the database.</p>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal">Close</button>

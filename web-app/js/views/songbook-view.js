@@ -115,11 +115,11 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				}
 			},
 			exportSongbook : function() {
-				var that = this;
 				if (!$("#button-export", this.$el).hasClass("disabled")) {
 					var id = this.model.get("id");
 					var name = this.model.get("name");
 					var exportState = this.model.get("exportState");
+					var that = this;
 					$.ajax({
 						url : contextPath + "songbook/" + id + "/export",
 						success : function() {
