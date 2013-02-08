@@ -17,16 +17,18 @@
 					}
 				});
 				$wrapper.focusout(function(evt) {
-//					console.log(evt);
-//					methods["_close"].call(this, $wrapper, $content, $toggleButton);
+					setTimeout(function() {
+						if ($wrapper.has(":focus").length == 0) {
+							methods["_close"].call(this, $wrapper, $content, $toggleButton);
+					    }
+					}, 100);
 				});
 			})
 		},
 		_open : function($wrapper, $content, $toggleButton) {
 			$wrapper.addClass("open");
 			$("i", $toggleButton).removeClass("icon-arrow-right").addClass("icon-arrow-left");
-//			$content.focus();
-			//$(":enabled", $content).focus();
+			$content.focus();
 			$content.trigger("opened")
 		},
 		_close : function($wrapper, $content, $toggleButton) {
