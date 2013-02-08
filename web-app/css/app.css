@@ -19,8 +19,6 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #toolbar .slider .ui-slider-handle { width:2em; height:2em; top:-0.7em; margin-left:-1em; cursor:pointer }
 #toolbar .slider .ui-slider { background-color:#FFF; cursor:pointer }
 #toolbar .query { width:10em }
-#toolbar #select-songbook-container { text-align:center }
-#toolbar #select-songbook-container select { margin:0 0 0 1em; width:200px }
 #toolbar #menu-container { position:absolute; top:0.5em; right:0.5em }
 #toolbar #menu-container button { padding-left:11px; padding-right:11px }
 #toolbar #menu-container .dropdown-menu a { cursor:pointer }
@@ -31,9 +29,9 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #content #home #logo { margin:1em 0; font-size:6em; color:#555; font-variant:small-caps }
 #content #home .query { width:15em }
 
-#searchresult .stats { font-size:0.7em; color:#333; margin-bottom:1em }
-#searchresult .hit { padding-bottom:1em }
-#searchresult .hit .author { color:#093; font-size:0.7em }
+#searchresult .stats, #songbook-songs-container .stats { font-size:0.7em; color:#333; margin-bottom:1em }
+#searchresult .hit, #songbook-songs-container .song { padding-bottom:0.5em }
+#searchresult .hit .author, #songbook-songs-container .song .author { color:#093; font-size:0.7em }
 #searchresult .hit .fragment { color:#333; font-size:0.7em }
 .searchhint { font-size:0.8em; opacity:0.5 }
 
@@ -45,3 +43,5 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #songbook > div > div:not(:first-child) { width:10em; background-color:#F5F5F5 }
 #songbook .songbook-export-controls button { display:block; margin:0.8em auto; width:8.5em; white-space:nowrap }
 #songbook .songbook-export-controls button.loading .icon-white { background:url(../images/spinner-small.gif) }
+
+#select-songbook-container select { width:100% }

@@ -1,6 +1,6 @@
 // Filename: router.js
-define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-model', 'models/songbook-model', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/song-edit-view', 'views/songbook-view', 'views/toolbar-view' ],
-	function($, _, Backbone, state, SongModel, SongbookModel, ErrorMessage, homeView, searchResultView, songView, songEditView, songbookView, toolbarView) {
+define(['jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-model', 'models/songbook-model', 'views/error-view', 'views/home-view', 'views/search-result-view', 'views/song-view', 'views/song-edit-view', 'views/songbook-view', 'views/toolbar-view', 'views/panel-view' ],
+	function($, _, Backbone, state, SongModel, SongbookModel, ErrorMessage, homeView, searchResultView, songView, songEditView, songbookView, toolbarView, panelView) {
 		var AppRouter = Backbone.Router.extend({
 			initialize : function() {
 			},

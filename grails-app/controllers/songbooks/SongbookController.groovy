@@ -80,7 +80,16 @@ class SongbookController {
 	def listSong(Long id) {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
-			render songbook.songs as JSON
+			def result = []
+			songbook.songs.each { song ->
+				result.add([
+					id : song.id,
+					name : song.name,
+					author : song.author
+				])
+			}
+			
+			render result.sort{a,b -> a.name < b.name ? -1 : 1} as JSON
 		}
 	}
 

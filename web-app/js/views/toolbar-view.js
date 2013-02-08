@@ -1,6 +1,6 @@
 // Filename: views/projects/list
-define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/toolbar-template.html', 'views/search-view', 'views/slider-view', 'views/songbook-select-view', 'views/menu-view'],
-	function($, _, Backbone, state, toolbarTemplate, SearchView, SliderView, SongbookSelectView, MenuView) {
+define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/toolbar-template.html', 'views/search-view', 'views/slider-view', 'views/menu-view'],
+	function($, _, Backbone, state, toolbarTemplate, SearchView, SliderView, MenuView) {
 		var SongToolbarView = Backbone.View.extend({
 			el : "#toolbar",
 			initialize : function() {
@@ -23,9 +23,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 			    // render search view
 			    new SearchView({ el:$(".query-container", this.$el) });
 			    
-			    // render songbook selector
-			    new SongbookSelectView({ el:$("#select-songbook-container", this.$el) });
-
 			    // render menu button
 			    new MenuView({ el:$("#menu-container", this.$el) });
 			},

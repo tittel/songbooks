@@ -24,15 +24,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 					}
 					else if ("menu-song-add-remove" == id) {
 						var model = songView.model;
-						model.set("containedInSongbook", !model.get("containedInSongbook"));
-						model.save({
-			        		success: function() {
-			        			new Message({message:"Songbook updated."});
-			        		},
-							error: function(model, response) {
-								new ErrorMessage({ message : "<strong>Error updating songbook</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
-							}
-			        	});
+						// TODO: implement
 					}
 					else if ("menu-song-export" == id) {
 						// don't use backbone router, let the browser request the PDF
@@ -61,7 +53,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 
 			// update state of menu items related to songs
 			if ("song" == view) {
-				var containedInSongbook = songView.model.get("containedInSongbook");
+				// TODO: implement
+				var containedInSongbook = false;
 				$("#menu-song-add-remove", this.$el)
 				.html(containedInSongbook ? "<i class='icon-minus'></i> Remove from songbook" : "<i class='icon-plus'></i> Add to songbook")
 				.parent().css("display", songbookId ? "list-item" : "none");

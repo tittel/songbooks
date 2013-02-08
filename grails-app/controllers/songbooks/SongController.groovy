@@ -30,18 +30,7 @@ class SongController {
 	def show(Long id) {
 		def song = retrieveSong(id)
 		if (song) {
-			def result = song
-			def songbookId = params.songbookId
-			if (songbookId && songbookId.isLong()) {
-				def songbook = retrieveSongbook(songbookId.toLong())
-				if (!songbook) {
-					return
-				}
-				def contained = songbook.songs.contains(song) 
-				result = JSON.parse((song as JSON).toString())
-				result.put("containedInSongbook", contained)
-			}
-			render result as JSON
+			render song as JSON
 		}
 	}
 
@@ -64,26 +53,6 @@ class SongController {
 				try {
 					song.text = request.JSON.text
 
-					def songbookId = params.songbookId?.trim()
-					if (songbookId && songbookId.isLong() && !request.JSON.isNull("containedInSongbook")) {
-						def songbook = retrieveSongbook(songbookId.toLong())
-						if (!songbook) {
-							return;
-						}
-						if (request.JSON.containedInSongbook) {
-							println("--- ADDING SONG")
-							songbook.addToSongs(song)
-						}
-						else {
-							println("--- REMOVING SONG")
-							songbook.removeFromSongs(song)
-						}
-						if (!songbook.save(flush:true)) {
-							render(status:500, text:"Could not update Songbook due to errors:\n ${songbook.errors}")
-							return
-						}
-					}
-					
 					if (song.save(flush:true)) {
 						render(status:204)
 					}

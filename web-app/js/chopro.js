@@ -147,27 +147,26 @@ function createChordImage($, def) {
 				}
 			}
 		});
-		maxFret++;
 
 		var numVerticalLines = 6;
-		var numHorizontalLines = Math.max(maxFret, 4) + 1;
+		var numHorizontalLines = Math.max(maxFret, 3) + 2;
 		
 		var w = 80;
 		var h = 1.6 * w;
-		var strokeWidth = Math.max(1, Math.round(0.025 * w));
+		var strokeWidth = Math.round(Math.max(1, Math.round(0.025 * w)));
 		var nameFontsize = 0.18 * w;
 		var offsetFontsize = 0.14 * w;
-		var topFretFontsize = 0.13 * w;
-		var padding = { top:1.4 * nameFontsize + topFretFontsize, right:0.5 * topFretFontsize, bottom:strokeWidth/2, left:offsetFontsize * 1.5 };
+		var topFretFontsize = 0.2 * w;
+		var padding = { top:1.4 * nameFontsize + (0.7 * topFretFontsize), right:0.5 * topFretFontsize, bottom:0.5 * strokeWidth, left:1.5 * offsetFontsize };
 		var fretDiff = (h - padding.top - padding.bottom) / (numHorizontalLines - 1);
-		var radius = 0.5 * topFretFontsize;
+		var radius = 0.3 * topFretFontsize;
 
 		svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>";
 		// draw chord name
-		svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='shape-rendering:crispEdges; font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>";
+		svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>";
 		// chord offset
 		if (!isNaN(offset) && offset > 0) {
-			svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='shape-rendering:crispEdges; text-anchor:end; font-size:" + offsetFontsize + "px'>" + offset + "</text>";
+			svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='text-anchor:end; font-size:" + offsetFontsize + "px'>" + offset + "</text>";
 		}
 		
 		// draw chord positions (circles and top fret notations)
@@ -175,14 +174,16 @@ function createChordImage($, def) {
 			var fret = parseInt(value);
 			var x = (padding.left + index * ((w - padding.left - padding.right) / (numVerticalLines - 1)));
 			if (isNaN(fret) || fret < 0) {
-//				svg += "<text x='" + x + "' y='" + (padding.top - 0.4 * topFretFontsize) + "' style='text-anchor:middle; font-size:" + topFretFontsize + "px'>&#x274c;</text>";
+				svg += "<text x='" + x + "' y='" + (padding.top - 0.1 * topFretFontsize) + "' style='text-anchor:middle; font-weight:bold; font-size:" + topFretFontsize + "px'>&#x00d7;</text>";
+				/*
 				var d = topFretFontsize * 0.3;
 				var y = padding.top - 0.75 * topFretFontsize;
-				svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='shape-rendering:crispEdges; stroke:black;stroke-width:" + strokeWidth + "'/>";
-				svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='shape-rendering:crispEdges; stroke:black;stroke-width:" + strokeWidth + "'/>";
+				svg += "<line x1='"+(x-d)+"' y1='"+(y-d)+"' x2='"+(x+d)+"' y2='"+(y+d)+"' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>";
+				svg += "<line x1='"+(x-d)+"' y1='"+(y+d)+"' x2='"+(x+d)+"' y2='"+(y-d)+"' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>";
+				*/
 			}
 			else if (0 === fret) {
-				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.75 * topFretFontsize) + "' r='" + (radius * 0.7) + "' stroke='black' stroke-width='" + strokeWidth + "' fill='none' />";
+				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.5 * topFretFontsize) + "' r='" + (radius * 0.8) + "' stroke='black' stroke-width='" + strokeWidth + "' fill='none' />";
 			}
 			else {
 				svg += "<circle cx='" + x + "' cy='" + (padding.top - 0.35 * fretDiff + fret * fretDiff) + "' r='" + radius + "' fill='black' />";
@@ -191,11 +192,11 @@ function createChordImage($, def) {
 		// draw grid
 		for (var i = 0; i < numHorizontalLines; i++) {
 			var y = padding.top + i * fretDiff;
-			svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>";
+			svg += "<line x1='" + (padding.left - 0.5 * strokeWidth) + "' y1='" + y + "' x2='" + (w - padding.right + 0.5 * strokeWidth) + "' y2='" + y + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>";
 		}
 		for (var i = 0; i < numVerticalLines; i++) {
 			var x = padding.left + i * ((w - padding.left - padding.right) / (numVerticalLines - 1));
-			svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='shape-rendering:crispEdges; stroke:black; stroke-width:" + strokeWidth + "'/>";
+			svg += "<line x1='" + x + "' y1='" + padding.top + "' x2='" + x + "' y2='" + (h - padding.bottom) + "' style='stroke:black; stroke-width:" + strokeWidth + "'/>";
 		}
 		svg += "</svg>";
 	}
