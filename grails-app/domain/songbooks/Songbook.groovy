@@ -18,11 +18,5 @@ class Songbook {
 	Date dateCreated
 	Date lastUpdated
 	
-	/**
-	 * 0 = not existing
-	 * 1 = in progress
-	 * 2 = existing
-	 */
-	Integer exportState = 0
 	byte[] exportData = new byte[0]
 }

@@ -11,7 +11,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 			var that = this;
 			
 			// TODO: this is a temporary fix for the twitter dropdown menu not working on iPad. remove after fix (version > 2.1.1)
-			$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+			//$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
 			
 			$("li a:not([href])", this.$el).click(function (evt) {
 				evt.preventDefault();

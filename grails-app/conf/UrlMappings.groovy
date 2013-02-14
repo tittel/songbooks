@@ -24,7 +24,7 @@ class UrlMappings {
 			controller = "songbook"
 			action = [GET:"export"]
 		}
-		"/songbook/$id/download" {
+		name songbookDownload: "/songbook/$id/download" {
 			controller = "songbook"
 			action = [GET:"download"]
 		}

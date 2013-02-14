@@ -4,6 +4,7 @@ import grails.converters.JSON
 
 class SongbookController {
 	def pdfRenderingService
+	static exportStates = [:]
 	
 	def list() {
 		render Songbook.list() as JSON
@@ -13,7 +14,7 @@ class SongbookController {
 		def songbook = new Songbook(request.JSON)
 		if (songbook.save(flush:true)) {
 			response.status = 201
-			response.setHeader("Location", createLink(controller:"") + "/api/songbook/" + songbook.id);
+			response.setHeader("Location", createLink(controller:"") + "/api/songbook/" + songbook.id)
 			render songbook as JSON // Backbone needs the model to interpret the response as a success
 		}
 		else {
@@ -23,7 +24,7 @@ class SongbookController {
 	
 	def show(Long id) {
 		def songbook = retrieveSongbook(id)
-		if (songbook) {	
+		if (songbook) {
 			render songbook as JSON
 		}
 	}
@@ -129,28 +130,30 @@ class SongbookController {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
 			// check if export is already in progress
-			if (songbook.exportState == 1) {
-				render(status:400, text:"pdf generation already in progress...")
+			def exportState = exportStates.get(id) ? exportStates.get(id) : 0
+			if (exportState == 2) {
+				exportStates.put(id, null)
+				response.setHeader("Location",createLink(mapping:"songbookDownload", id:id))
+				render(status:201, text:"exported.")
 			}
 			else {
-				runAsync {
-					def sb = retrieveSongbook(id)
-					try {
-						sb.exportState = 1
-						sb.save(flush:true)
-						def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:sb])
-						sb.exportData = outputStream.toByteArray()
-						sb.exportState = 2
-						sb.save(flush:true)
-					}
-					catch (e) {
-						log.error e
-						sb.exportState = 0
-						sb.save(flush:true)
+				if (exportState != 1) {
+					runAsync {
+						try {
+							exportStates.put(id, 1);
+							def sb = retrieveSongbook(id)
+							def outputStream = pdfRenderingService.render(template:"/pdf/songbook", model:[songbook:sb])
+							sb.exportData = outputStream.toByteArray()
+							sb.save(flush:true)
+							exportStates.put(id, 2);
+						}
+						catch (e) {
+							log.error e
+							exportStates.put(id, null);
+						}
 					}
 				}
-				
-				render(status:204, text:"pdf generation started")
+				render(status:204, text:"exporting...")
 			}
 		}
 	}
@@ -159,10 +162,7 @@ class SongbookController {
 		def songbook = retrieveSongbook(id)
 		if (songbook) {
 			// check if export exists
-			if (songbook.exportState != 2) {
-				render(status:404, text:"pdf export not existing")
-			}
-			else {
+			if (songbook.exportData?.length > 0) {
 				def filename = songbook.name.replaceAll(" ", "_") + "-${songbook.format}-" + formatDate(format:'yyMMdd', date:songbook.lastUpdated) + ".pdf"
 			    OutputStream out = response.getOutputStream()
 			    response.setContentLength(songbook.exportData.length)
@@ -170,6 +170,9 @@ class SongbookController {
 			    response.addHeader("Content-type", "application/pdf")
 			    out.write(songbook.exportData)
 			    out.close()
+			}
+			else {
+				render(status:404, text:"pdf export not existing")
 			}
 		}
 	}

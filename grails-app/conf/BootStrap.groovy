@@ -23,7 +23,6 @@ class BootStrap {
 			result['name'] = it.name
 			result['author'] = it.author
 			result['format'] = it.format
-			result['exportState'] = it.exportState
 			return result
 		}
 

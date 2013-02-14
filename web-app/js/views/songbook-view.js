@@ -6,13 +6,12 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			model : new SongbookModel,
 			probing : {},
 			initialize : function() {
-				_.bindAll(this, "render", "save", "songbookChanged", "updateControlsFromExportState", "exportSongbook", "downloadSongbook");
+				_.bindAll(this, "render", "save", "songbookChanged", "updateControlsFromExportState", "exportSongbook");
 				state.channel.on("button:save", this.save);
 		        state.bind("change:songbookId", this.songbookChanged);
 		    },
 		    events : {
 		        "click #button-export": "exportSongbook",
-		        "click #button-download": "downloadSongbook"
 		    },
 			render : function() {
 				state.set("viewState", "songbook");
@@ -22,7 +21,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 
 				var compiledTemplate = _.template(songbookTemplate, { songbook : this.model, _ : _});
 				this.$el.html(compiledTemplate);
-				this.updateControlsFromExportState(this.model.get("id"), this.model.get("name"), this.model.get("exportState"));
 				// register delete button click
 				var that = this;
 				$("#songbookDeleteButton", this.$el).click(function (evt) {
@@ -78,63 +76,43 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 					}
 				}
 			},
-			updateControlsFromExportState : function(id, name, previousState, looping) {
+			updateControlsFromExportState : function(id, looping) {
 				if (id) {
 					var that = this;
 					$.ajax({
-						url : contextPath + "api/songbook/" + id,
-						success : function(data) {
-							var exportState = data.exportState;
-							var downloadable = exportState == 2;
-							var exportable = exportState != 1;
-							// only update button state if we're probing the same model
-							if (id == that.model.get("id")) {
-								$("#button-download", that.$el).removeClass(downloadable ? "disabled" : "btn-success").addClass(downloadable ? "btn-success" : "disabled");
-								if (exportable) {
+						url : contextPath + "songbook/" + id + "/export",
+						success : function(data, textStatus, jqXHR) {
+							if (201 == jqXHR.status) {
+								that.probing[id] = false;
+								// only update button state if we're probing the same model
+								if (id == that.model.get("id")) {
 									$("#button-export", that.$el).removeClass("disabled loading");
 								}
-								else {
-									$("#button-export", that.$el).addClass("disabled loading");
-								}
-							}
-							if (downloadable && previousState == 1) {
-								new Message({message:"<strong>\"" + name + "\" exported</strong><br>You can <a class='internal' href='" + (contextPath + "songbook/" + id + "/download") + "'>download</a> it now ..."});
-							}
-							if (exportable) {
-								that.probing[id] = false;
+								new Message({message:"<strong>Songbook exported</strong><br>Downloading it now ..."});
+								window.location.href = jqXHR.getResponseHeader('Location');
 							}
 							else if (looping || !that.probing[id]) {
 								that.probing[id] = true;
 								// reload state every second
-								_.debounce(function() { that.updateControlsFromExportState(id, name, exportState, true); }, 1000)();
+								_.debounce(function() { that.updateControlsFromExportState(id, true); }, 1000)();
 							}
 						},
-						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error probing songbook</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },
+						error : function(jqXHR, textStatus, errorThrown) {
+							// only update button state if we're probing the same model
+							if (id == that.model.get("id")) {
+								$("#button-export", that.$el).removeClass("disabled loading");
+							}
+							new ErrorMessage({ message : "<strong>Error probing songbook</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText });
+						},
 						global : false // prevents ajaxStart event (spinner)
 					});
 				}
 			},
 			exportSongbook : function() {
 				if (!$("#button-export", this.$el).hasClass("disabled")) {
-					var id = this.model.get("id");
-					var name = this.model.get("name");
-					var exportState = this.model.get("exportState");
-					var that = this;
-					$.ajax({
-						url : contextPath + "songbook/" + id + "/export",
-						success : function() {
-							new Message({message:"<strong>Export started</strong><br>Please wait ..."});
-							that.updateControlsFromExportState(id, name, exportState);
-						},
-						error : function(jqXHR, textStatus, errorThrown) { new ErrorMessage({ message : "<strong>Error exporting \"" + name + "\"</strong><br><i>" + jqXHR.status + " (" + jqXHR.statusText + ")</i><br>" + jqXHR.responseText }); },
-						global : false // prevents ajaxStart event (spinner)
-					});
-				}
-			},
-			downloadSongbook : function() {
-				if (!$("#button-download", this.$el).hasClass("disabled")) {
-					// don't use backbone router, let the browser request the PDF
-					window.location.href = contextPath + "songbook/" + this.model.get("id") + "/download";
+					$("#button-export", this.$el).addClass("disabled loading");
+					new Message({message:"<strong>Export started</strong><br>Please wait ..."});
+					this.updateControlsFromExportState(this.model.get("id"));
 				}
 			}
 		});
