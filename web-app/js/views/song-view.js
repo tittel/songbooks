@@ -9,6 +9,8 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'models/song-mod
 		        state.bind("change:zoom", this.setZoom);
 		    },
 			render : function() {
+				// really trigger event by unsetting viewState first
+				state.unset("viewState", {silent:true});
 				state.set("viewState", "song");
 
 				// scroll to top

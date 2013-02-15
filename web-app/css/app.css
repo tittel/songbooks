@@ -41,7 +41,7 @@ ul.dropdown-menu li { margin-bottom:0.5em }
 #songbook > div { display:table-row }
 #songbook > div > div { display:table-cell; border:1px solid #E5E5E5; border-radius:6px; padding:0.5em }
 #songbook > div > div:not(:first-child) { width:10em; background-color:#F5F5F5 }
-#songbook .songbook-export-controls button { display:block; margin:0.8em auto; width:8.5em; white-space:nowrap }
-#songbook .songbook-export-controls button.loading .icon-white { background:url(../images/spinner-small.gif) }
+#songbook .songbook-export-controls button { display:block; margin:0.8em auto; white-space:nowrap }
+#songbook .songbook-export-controls button.loading img { background-image:url(../images/spinner-small.gif); background-position:center; background-repeat:no-repeat; width:32px; display:inline-block; padding:32px 0 0 0; height:0 }
 
 #select-songbook-container select { width:100% }

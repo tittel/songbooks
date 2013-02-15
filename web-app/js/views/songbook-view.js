@@ -6,7 +6,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 			model : new SongbookModel,
 			probing : {},
 			initialize : function() {
-				_.bindAll(this, "render", "save", "songbookChanged", "updateControlsFromExportState", "exportSongbook");
+				_.bindAll(this, "render", "save", "songbookChanged", "pollForDownload", "exportSongbook");
 				state.channel.on("button:save", this.save);
 		        state.bind("change:songbookId", this.songbookChanged);
 		    },
@@ -76,7 +76,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 					}
 				}
 			},
-			updateControlsFromExportState : function(id, looping) {
+			pollForDownload : function(id, looping) {
 				if (id) {
 					var that = this;
 					$.ajax({
@@ -94,7 +94,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 							else if (looping || !that.probing[id]) {
 								that.probing[id] = true;
 								// reload state every second
-								_.debounce(function() { that.updateControlsFromExportState(id, true); }, 1000)();
+								_.debounce(function() { that.pollForDownload(id, true); }, 1000)();
 							}
 						},
 						error : function(jqXHR, textStatus, errorThrown) {
@@ -112,7 +112,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 				if (!$("#button-export", this.$el).hasClass("disabled")) {
 					$("#button-export", this.$el).addClass("disabled loading");
 					new Message({message:"<strong>Export started</strong><br>Please wait ..."});
-					this.updateControlsFromExportState(this.model.get("id"));
+					this.pollForDownload(this.model.get("id"));
 				}
 			}
 		});
