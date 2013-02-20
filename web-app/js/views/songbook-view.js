@@ -46,6 +46,9 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'views/message-v
 		        	model.save(null, {
 		        		success: function() {
 		        			new Message({message:"Songbook " + (isNew ? "created" : "saved") + "."});
+		        			if (isNew) {
+		        				state.set("songbookId", model.get("id").toString());
+		        			}
 		        			window.history.back();
 		        		},
 						error: function(model, response) {

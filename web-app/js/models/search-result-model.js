@@ -8,8 +8,9 @@ define([ 'Underscore', 'Backbone', 'models/appstate' ], function(_, Backbone, st
 		initialize : function() {
 		},
 		url: function() {
-			var songbookParam = (state.get("r") && state.get("songbookId")) ? "&songbookId=" + state.get("songbookId") : "";
-			return "api/search.json?q=" + state.get("query") + songbookParam;
+//			var songbookParam = (state.get("r") && state.get("songbookId")) ? "&songbookId=" + state.get("songbookId") : "";
+//			return "api/search.json?q=" + state.get("query") + songbookParam;
+			return "api/search.json?q=" + state.get("query");
 		}
 	});
 	return SearchResultModel;

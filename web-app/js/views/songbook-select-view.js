@@ -3,7 +3,9 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 		var SongbookSelectView = Backbone.View.extend({
 			collection : songbooksCollection,
 			initialize : function() {
-				_.bindAll(this, "render");
+				_.bindAll(this, "render", "songbookChanged");
+		        state.bind("change:songbookId", this.songbookChanged);
+		        $("<select id='select-songbook'/>").appendTo($(this.el));
 		        this.render();
 		    },
 		    events : {
@@ -13,20 +15,13 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 				var that = this;
 				this.collection.fetch({
 					success: function(songbooks) {
-						var compiledTemplate = _.template(songbookSelectTemplate, { songbooks : songbooks.models, _ : _ });
-						$(that.el).html(compiledTemplate);
+						var compiledTemplate = _.template(songbookSelectTemplate, { songbooks : songbooks.models, currentSongbookId : state.get("songbookId"), _ : _ });
+						$("#select-songbook", $(that.el)).html(compiledTemplate);
 	
-						// pre-select songbook from app state
-						var found = false;
-					 	$("#select-songbook option").each(function() {
-					 		if (state.get("songbookId") == $(this).val()) {
-					 			$(this).prop("selected", "selected");
-					 			found = true;
-					 		}
-					 	});
-					 	if (!found) {
-					 		that.selectSongbook();
-					 	}
+						// erase stale state from local storage
+						if ($("#select-songbook option:selected").length == 0) {
+							that.selectSongbook();
+						}
 					},
 					error: function(model, response) {
 						new ErrorMessage({ message : "<strong>Error loading songbooks</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });
@@ -34,8 +29,11 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 				});
 			},
 			selectSongbook : function() {
-				localStorage["songbookId"] = $("#select-songbook").val();
 				state.set("songbookId", $("#select-songbook").val());
+			},
+			songbookChanged : function() {
+				localStorage["songbookId"] = $("#select-songbook").val();
+				this.render();
 			}
 		});
 		return SongbookSelectView;

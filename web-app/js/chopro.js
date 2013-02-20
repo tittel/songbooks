@@ -2,7 +2,7 @@ function choproToHtml($, source) {
     // cleanup: trim source
     source = $.trim(source);
     // cleanup: replace html tags (against injection etc.) 
-    source = source.replace(/</g, "\u2264").replace(/>/g, "\u2265");
+    source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     // cleanup: remove leading whitespace in every line
     source = source.replace(/^[ \t]+/mg, "");
     // cleanup: replace whitespace between adjacent chopro tags by single newline
@@ -27,7 +27,7 @@ function choproToHtml($, source) {
     // replace chord definitions
     source = source.replace(/{define[:]?(.*?)}/g, "\n\n<div class='chord-definition'>$1</div>\n\n");
     
-    var $source = $("<div class='songview'>" + source + "</div>");
+    var $source = $("<div class='songview'>" + $("<div/>").text(source).html() + "</div>"); // escapes HTML
     
     // create verse blocks (which is every text node on root level right now)
     $source.contents().each(function() {
@@ -80,10 +80,10 @@ function htmlToChopro($, rootNode) {
 
 function createCells($, line) {
 	var cells;
-	var split = line.split(/(\[.*?\])/g);
+	var split = $("<div/>").text(line).html().split(/(\[.*?\])/g); // escapes HTML
 	if (split.length == 1) {
 		// line contains no chords, early out
-		cells = line;
+		cells = split;
 	}
 	else {
 		var chords = "";

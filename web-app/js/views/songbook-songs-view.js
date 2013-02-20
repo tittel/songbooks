@@ -18,6 +18,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'collections/son
 						success: function(collection) {
 							var compiledTemplate = _.template(template, { songs:collection.models, _ : _ });
 							$(that.el).html(compiledTemplate);
+					        state.channel.trigger("songbookSongsCollectionChanged");
 						},
 						error: function(model, response) {
 							new ErrorMessage({ message : "<strong>Error loading songs</strong><br><i>" + response.status + " (" + response.statusText + ")</i><br>" + response.responseText });

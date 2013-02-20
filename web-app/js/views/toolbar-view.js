@@ -52,7 +52,6 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 				else {
 					$("#button-edit *:first-child", this.$el).removeClass("icon-ok").addClass("icon-pencil");
 				}
-console.log("--- redenr")
 	        	// iterate over "data-view" attribute of toolbar children and show/hide them correspondingly
 	        	this.$el.find("*[data-views]").each(function() {
 	        		var $this = $(this);

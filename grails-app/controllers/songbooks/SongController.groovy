@@ -96,13 +96,4 @@ class SongController {
 		}
 		return song
 	}
-	
-	def retrieveSongbook(Long id) {
-		def songbook = Songbook.get(id)
-		if (!songbook) {
-			log.warn "songbook $id not found."
-			render(status:404, text:message(code: 'default.not.found.message', args: [message(code: 'songbook.label', default: 'Songbook'), id]))
-		}
-		return songbook;
-	}
 }
