@@ -2,7 +2,7 @@
 define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/panel-template.html', 'views/songbook-select-view', 'views/songbook-songs-view'],
 	function($, _, Backbone, state, panelTemplate, SongbookSelectView, SongbookSongsView) {
 		var PanelView = Backbone.View.extend({
-			el : "#left-panel",
+			el : "#songbook-panel",
 			initialize : function() {
 				_.bindAll(this, "render", "viewStateChanged"); // remember: every function that uses 'this' as the current object should be in here
 		        this.render();
@@ -14,7 +14,7 @@ define([ 'jQuery', 'Underscore', 'Backbone', 'models/appstate', 'text!templates/
 				this.$el.html(_.template(panelTemplate));
 			    
 				// create collapsible panels with nice scrolling effect
-				this.$el.collapsiblePanel().on("opened closed", function() {
+				this.$el.collapsiblePanel({position:"right"}).on("opened closed", function() {
 					$(this).getNiceScroll().resize();
 				}).niceScroll();
 

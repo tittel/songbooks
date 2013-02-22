@@ -12,7 +12,7 @@
 			<div id="content">
 				<div class="spinner"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 			</div>
-			<div id="left-panel" class="collapsible-panel-content"></div>
+			<div id="songbook-panel" class="collapsible-panel-content"></div>
 		</div>
 	</body>
 </html>

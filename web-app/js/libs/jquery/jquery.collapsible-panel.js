@@ -1,13 +1,20 @@
 (function($) {
 	var methods = {
 		init : function(options) { 
+			var settings = $.extend({
+				"position" : "left"
+		    }, options);
+			if (settings.position != "left") {
+				settings.position = "right";
+			}
+			
 			return this.each(function() {
 				var $content = $(this);
 				$content.addClass("collapsible-panel-content");
-				$content.wrap("<div class='collapsible-panel-wrapper'></div>");
+				$content.wrap("<div class='collapsible-panel-wrapper position-" + settings.position + "'></div>");
 				$wrapper = $content.parent();
 				var $controls = $("<div class='collapsible-panel-controls' />").insertAfter($content);
-				var $toggleButton = $("<div class='collapsible-panel-control-toggler collapsible-panel-control'><i class='icon-white icon-arrow-right' /></div>").appendTo($controls);
+				var $toggleButton = $("<div class='collapsible-panel-control-toggler collapsible-panel-control'></div>").appendTo($controls);
 				$toggleButton.click(function() {
 					if ($wrapper.hasClass("open")) {
 						methods["_close"].call(this, $wrapper, $content, $toggleButton);

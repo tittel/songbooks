@@ -2,7 +2,7 @@ function choproToHtml($, source) {
     // cleanup: trim source
     source = $.trim(source);
     // cleanup: replace html tags (against injection etc.) 
-    source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    source = escape(source, $);
     // cleanup: remove leading whitespace in every line
     source = source.replace(/^[ \t]+/mg, "");
     // cleanup: replace whitespace between adjacent chopro tags by single newline
@@ -27,7 +27,7 @@ function choproToHtml($, source) {
     // replace chord definitions
     source = source.replace(/{define[:]?(.*?)}/g, "\n\n<div class='chord-definition'>$1</div>\n\n");
     
-    var $source = $("<div class='songview'>" + $("<div/>").text(source).html() + "</div>"); // escapes HTML
+    var $source = $("<div class='songview'>" + source + "</div>");
     
     // create verse blocks (which is every text node on root level right now)
     $source.contents().each(function() {
@@ -37,13 +37,15 @@ function choproToHtml($, source) {
     		$.each($this.text().split("\n\n"), function(index, value) {
         		var trim = $.trim(value);
         		if (trim.length > 0) {
-	    			verses += "<div class='verse'>" + trim + "</div>";
+	    			verses += "<div class='verse'>" + escape(trim, $) + "</div>";
 	    		}
     		});
     		$this.replaceWith(verses);
     	}
     });
     
+    console.log("1 -> " + $source.html());
+
     // create lines, lyric lines and chord lines in chorus and verse blocks
     $(".chorus,.verse", $source).each(function() {
     	$(this).contents().each(function() {
@@ -61,10 +63,13 @@ function choproToHtml($, source) {
     	});
     });
     
+    console.log("2 -> " + $source.html());
+
     // create chord images
     $(".chord-definition", $source).each(function() {
     	$(this).html(createChordImage($, $(this).text().trim()));
     });
+    console.log("3 -> " + $source.html());
     return $source;
 }
 
@@ -80,7 +85,7 @@ function htmlToChopro($, rootNode) {
 
 function createCells($, line) {
 	var cells;
-	var split = $("<div/>").text(line).html().split(/(\[.*?\])/g); // escapes HTML
+	var split = escape(line, $).split(/(\[.*?\])/g); // escapes HTML
 	if (split.length == 1) {
 		// line contains no chords, early out
 		cells = split;
@@ -163,7 +168,7 @@ function createChordImage($, def) {
 
 		svg += "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 " + w + " " + h + "' preserveAspectRatio='xMinYMin meet'>";
 		// draw chord name
-		svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + name +  "</text>";
+		svg += "<text x='" + (padding.left - strokeWidth) + "' y='" + nameFontsize + "px' style='font-weight:bold; font-size:" + nameFontsize + "px'>" + escape(name, $) +  "</text>";
 		// chord offset
 		if (!isNaN(offset) && offset > 0) {
 			svg += "<text x='" + (padding.left - 4) + "' y='" + (padding.top + 0.5 * offsetFontsize) + "' style='text-anchor:end; font-size:" + offsetFontsize + "px'>" + offset + "</text>";
@@ -201,4 +206,8 @@ function createChordImage($, def) {
 		svg += "</svg>";
 	}
 	return svg;
+}
+
+function escape(text, $) {
+	return $("<div/>").text(text).html();
 }
