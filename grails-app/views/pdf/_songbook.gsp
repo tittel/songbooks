@@ -43,7 +43,7 @@
 			</div>
 		</div>
 		<%-- sort songs by name --%>
-		<g:set var="songsByName" value="${songbook.songs.sort{a,b -> a.name < b.name ? -1 : 1}}" />
+		<g:set var="songsByName" value="${songbook.songs.sort{a,b -> a.name.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') < b.name.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') ? -1 : 1}}" />
 		<%-- create index by song name --%>
 		<div class="toc">
 			<h1>Contents</h1>
@@ -63,11 +63,11 @@
 		<div class="index">
 			<h1>Index</h1>
 			<g:set var="songsByAuthorMap" value="${songbook.songs.groupBy { it.author }}" /> 
-			<g:each in="${songsByAuthorMap.keySet().sort()}" var="author">
+			<g:each in="${songsByAuthorMap.keySet().sort{a,b -> a.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') < b.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') ? -1 : 1}}" var="author">
 				<div class="sticky">
 					<h2>${author}</h2>
 					<ul>
-						<g:each in="${songsByAuthorMap[author].sort{a,b -> a.name < b.name ? -1 : 1}}" var="song">
+						<g:each in="${songsByAuthorMap[author].sort{a,b -> a.name.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') < b.name.toLowerCase().replace('ä', 'a').replace('ü', 'u').replace('ö', 'o') ? -1 : 1}}" var="song">
 							<li><a href="#${song.id}">${song.name}</a></li>
 						</g:each>
 					</ul>
