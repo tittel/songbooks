@@ -44,8 +44,6 @@ function choproToHtml($, source) {
     	}
     });
     
-    console.log("1 -> " + $source.html());
-
     // create lines, lyric lines and chord lines in chorus and verse blocks
     $(".chorus,.verse", $source).each(function() {
     	$(this).contents().each(function() {
@@ -63,13 +61,10 @@ function choproToHtml($, source) {
     	});
     });
     
-    console.log("2 -> " + $source.html());
-
     // create chord images
     $(".chord-definition", $source).each(function() {
     	$(this).html(createChordImage($, $(this).text().trim()));
     });
-    console.log("3 -> " + $source.html());
     return $source;
 }
 
