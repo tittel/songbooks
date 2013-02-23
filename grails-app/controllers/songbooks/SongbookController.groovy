@@ -185,4 +185,15 @@ class SongbookController {
 		}
 		return songbook;
 	}
+	
+	def addAllSongs(Long id) {
+		def songbook = retrieveSongbook(id)
+		if (songbook) {
+			Song.list().each {
+				songbook.addToSongs(it)
+			}
+			songbook.save(flush:true)
+			print "added all songs to songbook"
+		}
+	}
 }

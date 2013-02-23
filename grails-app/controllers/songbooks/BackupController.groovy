@@ -65,9 +65,7 @@ class BackupController {
 		}
 		else {
 			try {
-				print "--- 1"
 				importedSongs << importSong(uploadedFile.inputStream.text, null, null)
-				print "--- 2"
 			}
 			catch(e) {
 				log.warn e
@@ -92,12 +90,9 @@ class BackupController {
 	}
 	
 	def importSong(text, filename, songIdMapping) {
-		print "--- 3"
 		Song song = new Song()
 		song.text = text
-		print "--- 4"
 		song.save(flush:true)
-		print "--- 5"
 		if (filename && songIdMapping != null) {
 			def matcher = (filename =~ /.*\/sbid_([0-9]+)\.chopro/)
 			if (matcher.matches()) {
@@ -105,7 +100,6 @@ class BackupController {
 				songIdMapping[oldId] = song.id
 			}
 		}
-		print "--- 6"
 		return song
 	}
 	
