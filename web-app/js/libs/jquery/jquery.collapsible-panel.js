@@ -9,39 +9,38 @@
 			}
 			
 			return this.each(function() {
-				var $content = $(this);
-				$content.addClass("collapsible-panel-content");
-				$content.wrap("<div class='collapsible-panel-wrapper position-" + settings.position + "'></div>");
-				$wrapper = $content.parent();
-				var $controls = $("<div class='collapsible-panel-controls' />").insertAfter($content);
+				var $panel = $(this);
+				$panel.addClass("collapsible-panel position-" + settings.position);
+				var $controls = $("<div class='collapsible-panel-controls' />").insertAfter($panel);
 				var $toggleButton = $("<div class='collapsible-panel-control-toggler collapsible-panel-control'></div>").appendTo($controls);
 				$toggleButton.click(function() {
-					if ($wrapper.hasClass("open")) {
-						methods["_close"].call(this, $wrapper, $content, $toggleButton);
+					if ($panel.hasClass("open")) {
+						methods["_close"].call(this, $panel, $toggleButton);
 					}
 					else {
-						methods["_open"].call(this, $wrapper, $content, $toggleButton);
+						methods["_open"].call(this, $panel, $toggleButton);
 					}
 				});
-				$wrapper.focusout(function(evt) {
+				$panel.focusout(function(evt) {
 					setTimeout(function() {
-						if ($wrapper.has(":focus").length == 0) {
-							methods["_close"].call(this, $wrapper, $content, $toggleButton);
+						if ($panel.has(":focus").length == 0 && !$panel.is(":focus")) {
+							methods["_close"].call(this, $panel, $toggleButton);
 					    }
 					}, 100);
 				});
 			})
 		},
-		_open : function($wrapper, $content, $toggleButton) {
-			$wrapper.addClass("open");
+		_open : function($panel, $toggleButton) {
+			$panel.addClass("open");
 			$("i", $toggleButton).removeClass("icon-arrow-right").addClass("icon-arrow-left");
-			$content.focus();
-			$content.trigger("opened")
+			// focus first focusable element on panel
+			$('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]', $panel).filter(":visible").first().focus();
+			$panel.trigger("opened")
 		},
-		_close : function($wrapper, $content, $toggleButton) {
-			$wrapper.removeClass("open");
+		_close : function($panel, $toggleButton) {
+			$panel.removeClass("open");
 			$("i", $toggleButton).removeClass("icon-arrow-left").addClass("icon-arrow-right");
-			$content.trigger("closed");
+			$panel.trigger("closed");
 		}
 	};
 
