@@ -24,6 +24,7 @@ environments {
         }
     }
     production {
+/*		
         dataSource {
             dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
@@ -32,6 +33,18 @@ environments {
             uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
 
             url = "jdbc:postgresql://"+uri.host+uri.path
+            username = uri.userInfo.split(":")[0]
+            password = uri.userInfo.split(":")[1]
+        }
+*/		
+        dataSource {
+            dbCreate = "update"
+			driverClassName = "com.mysql.jdbc.Driver"
+            dialect = org.hibernate.dialect.MySQLDialect
+
+            uri = new URI(System.env.DATABASE_URL?:"mysql://sb:sb@localhost/songbooks")
+
+            url = "jdbc:mysql://"+uri.host+uri.path
             username = uri.userInfo.split(":")[0]
             password = uri.userInfo.split(":")[1]
         }
